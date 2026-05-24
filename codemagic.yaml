@@ -8,17 +8,18 @@ workflows:
     environment:
       flutter: stable
       xcode: latest
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.mycompany.deficitcalorico
+      vars:
+        BUNDLE_ID: com.mycompany.deficitcalorico
     scripts:
-      - name: Criar certificado e perfil Apple
+      - name: Criar certificado e perfil App Store
         script: |
-          app-store-connect fetch-signing-files com.mycompany.deficitcalorico \
+          app-store-connect certificates list --type IOS_DISTRIBUTION --save || \
+          app-store-connect certificates create --type IOS_DISTRIBUTION --save
+          app-store-connect fetch-signing-files $BUNDLE_ID \
             --type IOS_APP_STORE \
             --create
           keychain add-certificates
-      - name: Configurar assinatura iOS no Xcode
+      - name: Aplicar perfis no Xcode
         script: xcode-project use-profiles
       - name: Dependencias Flutter e CocoaPods
         script: |
@@ -28,7 +29,8 @@ workflows:
         script: |
           flutter build ipa --release \
             --build-name=1.0.2 \
-            --build-number=116
+            --build-number=116 \
+            --export-options-plist=$HOME/export_options.plist
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
