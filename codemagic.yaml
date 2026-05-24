@@ -10,11 +10,13 @@ workflows:
         distribution_type: app_store
         bundle_identifier: com.mycompany.deficitcalorico
     scripts:
-      - name: Configurar assinatura iOS no Xcode
+      - name: Configurar assinatura iOS
         script: xcode-project use-profiles
-      - name: Instalar dependencias Flutter
-        script: flutter pub get
-      - name: Gerar IPA
+      - name: Dependencias Flutter e CocoaPods
+        script: |
+          flutter pub get
+          cd ios && pod install --repo-update
+      - name: Build IPA release
         script: |
           flutter build ipa --release \
             --build-name=1.0.2 \
