@@ -12,7 +12,13 @@ workflows:
         distribution_type: app_store
         bundle_identifier: com.mycompany.deficitcalorico
     scripts:
-      - name: Configurar assinatura iOS
+      - name: Criar certificado e perfil Apple
+        script: |
+          app-store-connect fetch-signing-files com.mycompany.deficitcalorico \
+            --type IOS_APP_STORE \
+            --create
+          keychain add-certificates
+      - name: Configurar assinatura iOS no Xcode
         script: xcode-project use-profiles
       - name: Dependencias Flutter e CocoaPods
         script: |
