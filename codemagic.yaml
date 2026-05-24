@@ -8,20 +8,13 @@ workflows:
       xcode: latest
       groups:
         - ios_signing
-      vars:
-        BUNDLE_ID: com.mycompany.deficitcalorico
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.mycompany.deficitcalorico
     scripts:
-      - name: Criar certificado e perfil App Store
-        script: |
-          app-store-connect certificates list --type IOS_DISTRIBUTION --save || \
-          app-store-connect certificates create --type IOS_DISTRIBUTION --save
-          app-store-connect fetch-signing-files $BUNDLE_ID \
-            --type IOS_APP_STORE \
-            --create
-          keychain add-certificates
-      - name: Aplicar perfis no Xcode
+      - name: Aplicar assinatura no Xcode
         script: xcode-project use-profiles
-      - name: Dependencias Flutter e CocoaPods
+      - name: Dependencias
         script: |
           flutter pub get
           cd ios && pod install --repo-update
