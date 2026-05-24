@@ -3,6 +3,8 @@ workflows:
     name: Deficit Calorico iOS
     max_build_duration: 120
     instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: Deficit Calorico
     environment:
       flutter: stable
       xcode: latest
