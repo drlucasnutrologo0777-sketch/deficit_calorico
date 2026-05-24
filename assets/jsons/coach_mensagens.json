@@ -1,0 +1,746 @@
+{
+  "versao": 5,
+  "idioma": "pt-BR",
+  "frases": {
+    "bom_dia_planeamento": [
+      {
+        "titulo": "Bom dia · energia 1",
+        "corpo": "Bom dia, {nome}. O gráfico do app mostra tendências nos dois sentidos: quando a linha cai, muitas vezes houve treino mais fraco e alimentação desalinhada — aí o tom é de motivação e retorno ao eixo, sem veredito moral sobre você; quando a linha sobe, a armadilha comum é relaxar o protocolo — aí o tom muda para disciplina e humildade, para não desperdiçar a alta com excesso ou autocomplacência. Nos dois casos, é padrão humano, não falha de caráter. Pedalada 25–35 min (pode fracionar), ritmo firme nas subidas curtas. Depois, Café da manhã com ovo, pão integral ou aveia e café sem açúcar, se combine com seu plano. Hidratação logo cedo regula apetite e humor — é um gancho simples para clareza e bem-estar."
+      },
+      {
+        "titulo": "Bom dia · energia 2",
+        "corpo": "Bom dia, {nome}. O gráfico do app mostra tendências nos dois sentidos: quando a linha cai, muitas vezes houve treino mais fraco e alimentação desalinhada — aí o tom é de motivação e retorno ao eixo, sem veredito moral sobre você; quando a linha sobe, a armadilha comum é relaxar o protocolo — aí o tom muda para disciplina e humildade, para não desperdiçar a alta com excesso ou autocomplacência. Nos dois casos, é padrão humano, não falha de caráter. Caminhada rápida 12 min + 8 min de core leve em casa. Depois, Combine fruta + proteína (iogurte ou queijo magro) antes do café. Hidratação logo cedo regula apetite e humor — é um gancho simples para clareza e bem-estar."
+      },
+      {
+        "titulo": "Bom dia · energia 3",
+        "corpo": "Bom dia, {nome}. O gráfico do app mostra tendências nos dois sentidos: quando a linha cai, muitas vezes houve treino mais fraco e alimentação desalinhada — aí o tom é de motivação e retorno ao eixo, sem veredito moral sobre você; quando a linha sobe, a armadilha comum é relaxar o protocolo — aí o tom muda para disciplina e humildade, para não desperdiçar a alta com excesso ou autocomplacência. Nos dois casos, é padrão humano, não falha de caráter. Subir escadas 6 min + alongamento da cadeia posterior (glúteo e pernas). Depois, Tostas integrais + peito de peru e vegetal cru (tomate ou pepino). Hidratação logo cedo regula apetite e humor — é um gancho simples para clareza e bem-estar."
+      },
+      {
+        "titulo": "Bom dia · energia 4",
+        "corpo": "Bom dia, {nome}. O gráfico do app mostra tendências nos dois sentidos: quando a linha cai, muitas vezes houve treino mais fraco e alimentação desalinhada — aí o tom é de motivação e retorno ao eixo, sem veredito moral sobre você; quando a linha sobe, a armadilha comum é relaxar o protocolo — aí o tom muda para disciplina e humildade, para não desperdiçar a alta com excesso ou autocomplacência. Nos dois casos, é padrão humano, não falha de caráter. Corrida leve na zona 2 por 18 min (ou esteira/elíptica equivalente). Depois, Batido simples: leite ou bebida vegetal + proteína em pó ou claras (se autorizado pelo seu nutricionista). Hidratação logo cedo regula apetite e humor — é um gancho simples para clareza e bem-estar."
+      },
+      {
+        "titulo": "Bom dia · energia 5",
+        "corpo": "Bom dia, {nome}. O gráfico do app mostra tendências nos dois sentidos: quando a linha cai, muitas vezes houve treino mais fraco e alimentação desalinhada — aí o tom é de motivação e retorno ao eixo, sem veredito moral sobre você; quando a linha sobe, a armadilha comum é relaxar o protocolo — aí o tom muda para disciplina e humildade, para não desperdiçar a alta com excesso ou autocomplacência. Nos dois casos, é padrão humano, não falha de caráter. 20 min de nado tranquilo OU caminhada na areia, se você tiver acesso. Depois, Priorize fibras no prato inicial do dia para estabilizar o apetite à tarde. Hidratação logo cedo regula apetite e humor — é um gancho simples para clareza e bem-estar."
+      },
+      {
+        "titulo": "Bom dia · energia 6",
+        "corpo": "Bom dia, {nome}. O gráfico do app mostra tendências nos dois sentidos: quando a linha cai, muitas vezes houve treino mais fraco e alimentação desalinhada — aí o tom é de motivação e retorno ao eixo, sem veredito moral sobre você; quando a linha sobe, a armadilha comum é relaxar o protocolo — aí o tom muda para disciplina e humildade, para não desperdiçar a alta com excesso ou autocomplacência. Nos dois casos, é padrão humano, não falha de caráter. 15 min de yoga dinâmico: respiração consciente + costas longas. Depois, Coloque a garrafa de água ao lado da cama para já se hidratar ao acordar. Hidratação logo cedo regula apetite e humor — é um gancho simples para clareza e bem-estar."
+      },
+      {
+        "titulo": "Bom dia · energia 7",
+        "corpo": "Bom dia, {nome}. O gráfico do app mostra tendências nos dois sentidos: quando a linha cai, muitas vezes houve treino mais fraco e alimentação desalinhada — aí o tom é de motivação e retorno ao eixo, sem veredito moral sobre você; quando a linha sobe, a armadilha comum é relaxar o protocolo — aí o tom muda para disciplina e humildade, para não desperdiçar a alta com excesso ou autocomplacência. Nos dois casos, é padrão humano, não falha de caráter. Circuito curto em 4 rodadas: agachamento, prancha, remada invertida leve. Depois, Prepare a roupa de treino à noite anterior: menos atrito, mais endorfina pela manhã. Hidratação logo cedo regula apetite e humor — é um gancho simples para clareza e bem-estar."
+      },
+      {
+        "titulo": "Aristóteles · hábito",
+        "corpo": "Somos o que fazemos repetidamente; a excelência não é um ato, mas um hábito. | Aristóteles — Bom dia, {nome}. Escolha um hábito pequeno e inquebrável hoje: água ao acordar ou dez minutos a pé antes de abrir o celular.",
+        "credito": "Aristóteles (tradução livre)"
+      },
+      {
+        "titulo": "James Clear · identidade",
+        "corpo": "Inspirado em Hábitos atômicos (James Clear): você não precisa ser perfeito; precisa acumular votos a favor da sua versão disciplinada, {nome}. O gráfico do app mostra tendências nos dois sentidos: quando a linha cai, muitas vezes houve treino mais fraco e alimentação desalinhada — aí o tom é de motivação e retorno ao eixo, sem veredito moral sobre você; quando a linha sobe, a armadilha comum é relaxar o protocolo — aí o tom muda para disciplina e humildade, para não desperdiçar a alta com excesso ou autocomplacência. Nos dois casos, é padrão humano, não falha de caráter.",
+        "credito": "James Clear (paráfrase)"
+      },
+      {
+        "titulo": "Gráfico · parceiro de rota",
+        "corpo": "O gráfico do app mostra tendências nos dois sentidos: quando a linha cai, muitas vezes houve treino mais fraco e alimentação desalinhada — aí o tom é de motivação e retorno ao eixo, sem veredito moral sobre você; quando a linha sobe, a armadilha comum é relaxar o protocolo — aí o tom muda para disciplina e humildade, para não desperdiçar a alta com excesso ou autocomplacência. Nos dois casos, é padrão humano, não falha de caráter. se o gráfico mostrou vale, avance com um passo pequeno e comemorável; se mostrou alta, segure o ritmo com regras claras — treino honesto, café da manhã com proteína e hidratação cedo, sem heroísmo."
+      },
+      {
+        "titulo": "Bom dia · mantra 1",
+        "corpo": "Bom dia, {nome}. Respire fundo antes de acelerar só para agradar agendas alheias."
+      },
+      {
+        "titulo": "Bom dia · mantra 2",
+        "corpo": "Bom dia, {nome}. Escreva uma mini vitória física para hoje (ridícula de propósito)."
+      },
+      {
+        "titulo": "Bom dia · mantra 3",
+        "corpo": "Bom dia, {nome}. Escolha uma música forte para aquecer antes do primeiro exercício."
+      },
+      {
+        "titulo": "Bom dia · mantra 4",
+        "corpo": "Bom dia, {nome}. Água antes do primeiro café hidrata pele e função renal — sensação objetiva."
+      },
+      {
+        "titulo": "Bom dia · mantra 5",
+        "corpo": "Bom dia, {nome}. Proteína no café da manhã reduz binge à tarde com frequência perceptível."
+      },
+      {
+        "titulo": "Bom dia · mantra 6",
+        "corpo": "Bom dia, {nome}. Alongamento cervical protege contra dores que cancelam treino."
+      },
+      {
+        "titulo": "Bom dia · mantra 7",
+        "corpo": "Bom dia, {nome}. Sol na cara por dois minutos alinha ritmo circadiano levemente."
+      },
+      {
+        "titulo": "Bom dia · mantra 8",
+        "corpo": "Bom dia, {nome}. Deixe roupa de treino visível: menos atrito, mais probabilidade."
+      },
+      {
+        "titulo": "Bom dia · mantra 9",
+        "corpo": "Bom dia, {nome}. Marque um passeio social ativo — a companhia conta como cardio leve útil."
+      },
+      {
+        "titulo": "Bom dia · mantra 10",
+        "corpo": "Bom dia, {nome}. Repita baixinho: constância vence sprint esporádico quando o gráfico é longo."
+      },
+      {
+        "titulo": "Bom dia · mantra 11",
+        "corpo": "Bom dia, {nome}. Imaginando um técnico que enxerga dados sem bullying interno ajuda dopamina sóbria."
+      },
+      {
+        "titulo": "Bom dia · mantra 12",
+        "corpo": "Bom dia, {nome}. Escolha só um hábito novo — não três ao mesmo tempo (cérebro agradece)."
+      },
+      {
+        "titulo": "Bom dia · mantra 13",
+        "corpo": "Bom dia, {nome}. Silencie notificações durante refeições conscientes."
+      },
+      {
+        "titulo": "Bom dia · mantra 14",
+        "corpo": "Bom dia, {nome}. Hidrate primeiro em decisões sob estresse inicial do dia."
+      },
+      {
+        "titulo": "Bom dia · mantra 15",
+        "corpo": "Bom dia, {nome}. Relembrando por que esse cuidado importa — uma única linha mental basta."
+      },
+      {
+        "titulo": "Bom dia · mantra 16",
+        "corpo": "Bom dia, {nome}. Olhar no espelho com compaixão antes do insulto automático."
+      },
+      {
+        "titulo": "Bom dia · mantra 17",
+        "corpo": "Bom dia, {nome}. Déficit calórico com menos déficit emocional: prioridade válida."
+      },
+      {
+        "titulo": "Bom dia · mantra 18",
+        "corpo": "Bom dia, {nome}. Vitória silenciosa conta tanto quanto post no espelho do estúdio."
+      },
+      {
+        "titulo": "Bom dia · mantra 19",
+        "corpo": "Bom dia, {nome}. Treinar quando não há vontade forja identidade de quem volta ao trilho após dias ruins."
+      },
+      {
+        "titulo": "Bom dia · mantra 20",
+        "corpo": "Bom dia, {nome}. Uma primeira decisão física altera probabilidade do dia inteiro — vale o primeiro passo."
+      },
+      {
+        "titulo": "Bom dia · mantra 21",
+        "corpo": "Bom dia, {nome}. Use o app e o gráfico como parecer técnico, não como tribunal moral."
+      },
+      {
+        "titulo": "Bom dia · mantra 22",
+        "corpo": "Bom dia, {nome}. No vale: acolhimento e próximo passo. No pico: regras claras — vice-versa protege seu gráfico de meses."
+      },
+      {
+        "titulo": "Bom dia · mantra 23",
+        "corpo": "Bom dia, {nome}. Treino fraco hoje pode ser porta de entrada para treino honesto amanhã — curva permite subida."
+      },
+      {
+        "titulo": "Bom dia · mantra 24",
+        "corpo": "Bom dia, {nome}. Prato desalinhado é dado brutto; culpa cruel é ruído estatístico desnecessário."
+      }
+    ],
+    "meio_dia_checkin": [
+      {
+        "titulo": "Check-in do almoço",
+        "corpo": "{nome}, se o almoço fugiu do planejado, reorganize o jantar: proteína e vegetais antes de molhos densos. O gráfico soma dias; um desvio não apaga a tendência."
+      },
+      {
+        "titulo": "Hidratação estratégica",
+        "corpo": "{nome}: meio copo de água antes do prato principal reduz escolhas impulsivas e melhora a digestão — sensação de controle que o cérebro premia com calma."
+      },
+      {
+        "titulo": "Movimento express",
+        "corpo": "{nome}: seis minutos de escadas ou duas voltas no quarteirão elevam energia e ajudam a “fechar” o déficit sem dramatizar. Combine com o que o gráfico já mostrou esta semana."
+      },
+      {
+        "titulo": "Números com leveza",
+        "corpo": "Seus números hoje: meta de déficit {meta} kcal e {deficit atual} kcal já acumulados, {nome}. Ajuste o lanche com clareza, não com vergonha — isso protege o ritmo no gráfico."
+      },
+      {
+        "titulo": "Satya Nadella · ritmo sustentável",
+        "corpo": "Liderança sustentável vence maratonas, não estouros de ego — metáfora livre inspirada em Satya Nadella. Seu déficit também pede cadência: um bom gesto físico agora já muda o fim da curva.",
+        "credito": "Satya Nadella (metáfora livre)"
+      },
+      {
+        "titulo": "Angela Duckworth · consistência",
+        "corpo": "'Grit' é paixão + perseverança ao longo do tempo (Angela Duckworth). Escolha somente UM comportamento certo até o final da tarde — consistência discreta ergue o gráfico.",
+        "credito": "Angela Duckworth (paráfrase)"
+      },
+      {
+        "titulo": "Snacks conscientes",
+        "corpo": "{nome}: proteína ou vegetais antes do ultraprocesso evita picos que derrubam o déficit e desenham “vales” no gráfico sem necessidade."
+      },
+      {
+        "titulo": "Respiração em caixa",
+        "corpo": "{nome}: inspire 4 s, segure 4 s, expire 4 s, pause 4 s — duas séries antes da próxima refeição acalmam o cortisol e devolvem escolha consciente."
+      },
+      {
+        "titulo": "Vice-versa no gráfico",
+        "corpo": "{nome}: mesma curva, dois discursos saudáveis — no vale, motivação e próximo passo honesto; no pico, disciplina e menos autopermissão ociosa. Assim você navega altas e baixas sem drama."
+      },
+      {
+        "titulo": "Coach da tarde · micro 1",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Priorize sono regular antes de cortar mais calorias;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 2",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Troque sucos por água com limão ou chá sem açúcar;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 3",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Preencha metade do prato com vegetais antes do restante;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 4",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Evite molhos industrializados na última refeição;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 5",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Faça uma caminhada durante uma ligação, em vez de ficar só sentado;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 6",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Divida o cardio em dois blocos curtos — conta igual metabolismo;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 7",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Use bastante tempero e menos óleo em excesso;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 8",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Teste uma proteína magra nova na semana — variedade reforça a adesão;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 9",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Deixe garrafa de água no criado-mudo para hidratar ao acordar;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 10",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Feche mentalmente a cozinha depois da sobremesa planejada — ritual que reduz beliscões;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 11",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Troque snacks ultraprocessados por fruta + uma fonte simples de proteína;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 12",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Alongamento de quadril recupera bem treinos seguintes;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 13",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Faça três minutos de respiração diafragmática antes do próximo café;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 14",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Prefira escadas quando forem dois andares apenas;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 15",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Marque mini treino físico na agenda como promessa firme consigo;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 16",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Imagine um coach externo lendo apenas dados sem insulto;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 17",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Compare-se ao seu próprio ontem, não só ao instagram alheio;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 18",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Celebre consistência repetida antes de selfie de resultado;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 19",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Mantenha cafeína estratégica na rotina por ansiedade, não por pânico;"
+      },
+      {
+        "titulo": "Coach da tarde · micro 20",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Prefira déficit sustentável a heroísmo de dois dias apenas."
+      },
+      {
+        "titulo": "Coach da tarde · micro 21",
+        "corpo": "{nome}, ao ver {deficit atual} kcal versus meta de {meta} kcal combinados — Olhe seu gráfico como tendência média semana a semana, não apenas horário a horário."
+      }
+    ],
+    "quase_na_meta_push": [
+      {
+        "titulo": "Quase na meta · passo 1",
+        "corpo": "{nome}, falta pouco entre os {deficit atual} kcal já em déficit e os {meta} kcal combinados — troque líquidos calóricos por água com limão; Pequeno esforço, sensação objetiva de vitória."
+      },
+      {
+        "titulo": "Quase na meta · passo 2",
+        "corpo": "{nome}, falta pouco entre os {deficit atual} kcal já em déficit e os {meta} kcal combinados — some dez minutos de caminhada antes do jantar; Pequeno esforço, sensação objetiva de vitória."
+      },
+      {
+        "titulo": "Quase na meta · passo 3",
+        "corpo": "{nome}, falta pouco entre os {deficit atual} kcal já em déficit e os {meta} kcal combinados — deixe o molho cremoso só no garfo da família — não na panela; Pequeno esforço, sensação objetiva de vitória."
+      },
+      {
+        "titulo": "Quase na meta · passo 4",
+        "corpo": "{nome}, falta pouco entre os {deficit atual} kcal já em déficit e os {meta} kcal combinados — feche cozinha após sobremesa planejada: ritual que reduz beliscões; Pequeno esforço, sensação objetiva de vitória."
+      },
+      {
+        "titulo": "Quase na meta · passo 5",
+        "corpo": "{nome}, falta pouco entre os {deficit atual} kcal já em déficit e os {meta} kcal combinados — suba um lance extra de escada em cada ida ao banheiro; Pequeno esforço, sensação objetiva de vitória."
+      },
+      {
+        "titulo": "Quase na meta · passo 6",
+        "corpo": "{nome}, falta pouco entre os {deficit atual} kcal já em déficit e os {meta} kcal combinados — registre o lanche antes de mastigar — isso aumenta a adesão ao plano; Pequeno esforço, sensação objetiva de vitória."
+      },
+      {
+        "titulo": "Quase na meta · passo 7",
+        "corpo": "{nome}, falta pouco entre os {deficit atual} kcal já em déficit e os {meta} kcal combinados — um café sem açúcar depois do almoço pode substituir docinhos impulsivos; Pequeno esforço, sensação objetiva de vitória."
+      },
+      {
+        "titulo": "Quase na meta · passo 8",
+        "corpo": "{nome}, falta pouco entre os {deficit atual} kcal já em déficit e os {meta} kcal combinados — coloque metade do prato de vegetais antes de servir carboidrato; Pequeno esforço, sensação objetiva de vitória."
+      },
+      {
+        "titulo": "Quase na meta · passo 9",
+        "corpo": "{nome}, falta pouco entre os {deficit atual} kcal já em déficit e os {meta} kcal combinados — faça alongamento de quadril cinco minutos: melhora disposição para treinar amanhã; Pequeno esforço, sensação objetiva de vitória."
+      },
+      {
+        "titulo": "Quase na meta · passo 10",
+        "corpo": "{nome}, falta pouco entre os {deficit atual} kcal já em déficit e os {meta} kcal combinados — lembre: uma curva no gráfico não encerra a história — só pede ajuste fino. Pequeno esforço, sensação objetiva de vitória."
+      },
+      {
+        "titulo": "Empurrão calmo · 1",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Troque refrigerante por água com gás zero;"
+      },
+      {
+        "titulo": "Empurrão calmo · 2",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Substitua sobremesa improvisada por chá aromático e fruta fresca;"
+      },
+      {
+        "titulo": "Empurrão calmo · 3",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Retire mais uma fatia de pão se houver excesso fácil de cortar;"
+      },
+      {
+        "titulo": "Empurrão calmo · 4",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Acrescente caminhada curta antes do sono para dissipar cortisol;"
+      },
+      {
+        "titulo": "Empurrão calmo · 5",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Use menos óleo medido ou spray na frigideira;"
+      },
+      {
+        "titulo": "Empurrão calmo · 6",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Pule uma rodada opcional de bebida alcoólica hoje;"
+      },
+      {
+        "titulo": "Empurrão calmo · 7",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Durma bem: hormônio do apetite agradece;"
+      },
+      {
+        "titulo": "Empurrão calmo · 8",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Use vegetais congelidos práticos para volume saudável;"
+      },
+      {
+        "titulo": "Empurrão calmo · 9",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Priorize proteína antes de carboidrato no prato seguinte;"
+      },
+      {
+        "titulo": "Empurrão calmo · 10",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Troque maratona de série por alongamento de oito minutos;"
+      },
+      {
+        "titulo": "Empurrão calmo · 11",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Deixe bacon extra apenas visual — nem sempre precisa estar no seu prato;"
+      },
+      {
+        "titulo": "Empurrão calmo · 12",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Experimente só docinho depois da proteína saciante já comida;"
+      },
+      {
+        "titulo": "Empurrão calmo · 13",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Beba água durante a última refeição em goles conscientes;"
+      },
+      {
+        "titulo": "Empurrão calmo · 14",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Agradeça ao corpo pela mobilidade hoje mesmo — vínculo de recompensa saudável;"
+      },
+      {
+        "titulo": "Empurrão calmo · 15",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Mantenha foco médio semanal quando o déficit parecer microscópio diário;"
+      },
+      {
+        "titulo": "Empurrão calmo · 16",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Coloque música energética durante faxina/cardio improvisado;"
+      },
+      {
+        "titulo": "Empurrão calmo · 17",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Cozinha arrumada aumenta probabilidade de comer mais devagar conscientemente;"
+      },
+      {
+        "titulo": "Empurrão calmo · 18",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Troque doom scroll por dez voltas dentro de casa já rende;"
+      },
+      {
+        "titulo": "Empurrão calmo · 19",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Sono reparador pesa igual treino médio quando o gráfico olha dias de fila;"
+      },
+      {
+        "titulo": "Empurrão calmo · 20",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Aceita imperfeição sem abandonar pacto maior com você mesmo."
+      },
+      {
+        "titulo": "Empurrão calmo · 21",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Observe o vale no gráfico como lembrete: treino mais fraco costuma ir junto com comida mais solta — volta ao eixo com plano modesto."
+      },
+      {
+        "titulo": "Empurrão calmo · 22",
+        "corpo": "{nome}, já há {deficit atual} kcal em déficit rumo aos {meta} kcal combinados — Quase na meta, o ego pede folga — segure o protocolo: disciplina no detalhe fecha o dia numa linha que você respeita."
+      }
+    ],
+    "noite_meta_batida": [
+      {
+        "titulo": "Vitória silenciosa",
+        "corpo": "Boa noite, {nome}. A meta combinada era {meta} kcal e você fechou com {deficit atual} kcal efetivos — seu gráfico ganha altitude. Na linha alta, a tentação é baixar a guarda: mantenha disciplina operacional (sono de qualidade, proteína no ritmo, treinos agendados) para cristalizar o ganho. Celebração sim; licença total que apaga o protocolo, não."
+      },
+      {
+        "titulo": "Combo de hábitos à noite",
+        "corpo": "Boa noite, {nome}. A meta combinada era {meta} kcal e você fechou com {deficit atual} kcal efetivos — seu gráfico ganha altitude. Na linha alta, a tentação é baixar a guarda: mantenha disciplina operacional (sono de qualidade, proteína no ritmo, treinos agendados) para cristalizar o ganho. Celebração sim; licença total que apaga o protocolo, não."
+      },
+      {
+        "titulo": "Orgulho calmo",
+        "corpo": "Boa noite, {nome}. A meta combinada era {meta} kcal e você fechou com {deficit atual} kcal efetivos — seu gráfico ganha altitude. Na linha alta, a tentação é baixar a guarda: mantenha disciplina operacional (sono de qualidade, proteína no ritmo, treinos agendados) para cristalizar o ganho. Celebração sim; licença total que apaga o protocolo, não."
+      },
+      {
+        "titulo": "Sono estratégico",
+        "corpo": "Boa noite, {nome}. A meta combinada era {meta} kcal e você fechou com {deficit atual} kcal efetivos — seu gráfico ganha altitude. Na linha alta, a tentação é baixar a guarda: mantenha disciplina operacional (sono de qualidade, proteína no ritmo, treinos agendados) para cristalizar o ganho. Celebração sim; licença total que apaga o protocolo, não."
+      },
+      {
+        "titulo": "Coach orgulhoso",
+        "corpo": "Parabéns, {nome}! Subida boa pede humildade de quem sabe que o gráfico também oscila: use hoje à noite para consolidar — apague telas cedo, durma, e amanhã reafirme hábitos-base (hidratação, refeição alinhada, movimento). Disciplina após vitória protege a identidade que você está construindo."
+      },
+      {
+        "titulo": "Louisa May Alcott · esforço cotidiano",
+        "corpo": "“Faço o melhor que sei, da maneira que sei, até saber melhor.” — Louisa May Alcott | Boa noite, {nome}: você merece esse descanso.",
+        "credito": "Louisa May Alcott (tradução livre)"
+      },
+      {
+        "titulo": "Noite fortalecida · bloco 1",
+        "corpo": "Boa noite, {nome}. Meta {meta} kcal está cumprida com {deficit atual} kcal efetivos — Na subida, o jogo muda: menos 'eu mereço tudo' e mais protocolo que sustenta a linha média."
+      },
+      {
+        "titulo": "Noite fortalecida · bloco 2",
+        "corpo": "Boa noite, {nome}. Meta {meta} kcal está cumprida com {deficit atual} kcal efetivos — Disciplina após resultado bom evita que a próxima semana pague o preço da euforia de hoje."
+      },
+      {
+        "titulo": "Noite fortalecida · bloco 3",
+        "corpo": "Boa noite, {nome}. Meta {meta} kcal está cumprida com {deficit atual} kcal efetivos — Sono profundo reorganiza dopamina relacionada ao esforço consciente do dia seguinte."
+      },
+      {
+        "titulo": "Noite fortalecida · bloco 4",
+        "corpo": "Boa noite, {nome}. Meta {meta} kcal está cumprida com {deficit atual} kcal efetivos — Orgulho moderado aumenta probabilidade repetir comportamentos pró-curva amanhã."
+      },
+      {
+        "titulo": "Noite fortalecida · bloco 5",
+        "corpo": "Boa noite, {nome}. Meta {meta} kcal está cumprida com {deficit atual} kcal efetivos — Credibilidade interior sobe quando promessas mínimas se cumprem em sequência — inclusive após vitória."
+      },
+      {
+        "titulo": "Noite fortalecida · bloco 6",
+        "corpo": "Boa noite, {nome}. Meta {meta} kcal está cumprida com {deficit atual} kcal efetivos — Musculatura e sistema nervoso agradecem descanso intencional pós déficit bem feito."
+      },
+      {
+        "titulo": "Noite fortalecida · bloco 7",
+        "corpo": "Boa noite, {nome}. Meta {meta} kcal está cumprida com {deficit atual} kcal efetivos — A curva já mostrou vales — hoje mostrou altitude; guarde a humildade junto com o mérito."
+      },
+      {
+        "titulo": "Noite fortalecida · bloco 8",
+        "corpo": "Boa noite, {nome}. Meta {meta} kcal está cumprida com {deficit atual} kcal efetivos — Gratidão física rápida antes de dormir reforça laço benigno entre corpo e mente."
+      },
+      {
+        "titulo": "Noite fortalecida · bloco 9",
+        "corpo": "Boa noite, {nome}. Meta {meta} kcal está cumprida com {deficit atual} kcal efetivos — Combine esse sucesso com alongamento dorsal dois minutos — carinho sem exagero técnico."
+      },
+      {
+        "titulo": "Noite fortalecida · bloco 10",
+        "corpo": "Boa noite, {nome}. Meta {meta} kcal está cumprida com {deficit atual} kcal efetivos — Vitórias repetidas aparecem no gráfico como linha média subindo aos poucos, não sempre em picos mágicos."
+      }
+    ],
+    "noite_sem_meta_empatica": [
+      {
+        "titulo": "Noite compassiva",
+        "corpo": "Boa noite, {nome}. A meta combinada era {meta} kcal e você ficou em {deficit atual} kcal. O gráfico do app mostra tendências nos dois sentidos: quando a linha cai, muitas vezes houve treino mais fraco e alimentação desalinhada — aí o tom é de motivação e retorno ao eixo, sem veredito moral sobre você; quando a linha sobe, a armadilha comum é relaxar o protocolo — aí o tom muda para disciplina e humildade, para não desperdiçar a alta com excesso ou autocomplacência. Nos dois casos, é padrão humano, não falha de caráter. Replaneje o café da manhã e volte ao eixo amanhã — um dia não apaga a trajetória."
+      },
+      {
+        "titulo": "Autocompaixão ativa",
+        "corpo": "{nome}: culpa prolongada não gasta caloria — só esgotamento. Transforme arrependimento em dois itens escritos para manhã: água + dez minutos de movimento."
+      },
+      {
+        "titulo": "Carl Rogers · pessoa em processo",
+        "corpo": "Você é um processo, não um rótulo (ideia próxima de Carl Rogers). Boa noite, {nome}: durma sabendo que o gráfico amanhã pode subir outra vez.",
+        "credito": "Carl Rogers (ideia próxima)"
+      },
+      {
+        "titulo": "Reset respiratório",
+        "corpo": "{nome}: inspire pelo nariz, solte pela boca devagar, duas séries — sistema parassimpático entra para acelerar sono e cortar looping mental."
+      },
+      {
+        "titulo": "Mini replanejamento",
+        "corpo": "{nome}: defina apenas dois hábitos para acordar: hidratar e caminhada curta — baixa fricção, alto impacto emocional no gráfico."
+      },
+      {
+        "titulo": "Sono que protege o déficit",
+        "corpo": "{nome}: sono curto aumenta grelina e dificulta escolhas. Mesmo com déficit abaixo do ideal, defender o sono já é estratégia para amanhã."
+      },
+      {
+        "titulo": "Noite acolhedora · extra 1",
+        "corpo": "{nome}, leitura rápida: {deficit atual} kcal hoje ante meta de {meta} kcal — O número não carrega julgamento moral — só registra comportamento combinado até aqui."
+      },
+      {
+        "titulo": "Noite acolhedora · extra 2",
+        "corpo": "{nome}, leitura rápida: {deficit atual} kcal hoje ante meta de {meta} kcal — Pense em pensamentos ruins como tempo fechando: vai passando se você não insistir narrativa trágica."
+      },
+      {
+        "titulo": "Noite acolhedora · extra 3",
+        "corpo": "{nome}, leitura rápida: {deficit atual} kcal hoje ante meta de {meta} kcal — Um plano rápido de café da manhã reduz ansiedade de manhã no corpo físico perceptível."
+      },
+      {
+        "titulo": "Noite acolhedora · extra 4",
+        "corpo": "{nome}, leitura rápida: {deficit atual} kcal hoje ante meta de {meta} kcal — Água morna antes de beliscão noturno funciona várias vezes como teste inicial."
+      },
+      {
+        "titulo": "Noite acolhedora · extra 5",
+        "corpo": "{nome}, leitura rápida: {deficit atual} kcal hoje ante meta de {meta} kcal — Se culpa ficar dias sem dissipar, procure apoio profissional em saúde mental — isso também é coragem."
+      },
+      {
+        "titulo": "Noite acolhedora · extra 6",
+        "corpo": "{nome}, leitura rápida: {deficit atual} kcal hoje ante meta de {meta} kcal — Música lenta ajuda a reduzir excitação excessiva do sistema nervoso antes de dormir."
+      },
+      {
+        "titulo": "Noite acolhedora · extra 7",
+        "corpo": "{nome}, leitura rápida: {deficit atual} kcal hoje ante meta de {meta} kcal — Aceite fadiga como dado físico primeiro, não etiqueta moral de preguiça."
+      },
+      {
+        "titulo": "Noite acolhedora · extra 8",
+        "corpo": "{nome}, leitura rápida: {deficit atual} kcal hoje ante meta de {meta} kcal — Durma mesmo que imperfeito: paralisia por perfeição também desloca média semanal."
+      },
+      {
+        "titulo": "Noite acolhedora · extra 9",
+        "corpo": "{nome}, leitura rápida: {deficit atual} kcal hoje ante meta de {meta} kcal — Humildade de plano menor amanhã às vezes supera ego ferido esta noite só em utilidade objetiva."
+      },
+      {
+        "titulo": "Noite acolhedora · extra 10",
+        "corpo": "{nome}, leitura rápida: {deficit atual} kcal hoje ante meta de {meta} kcal — Respiração longa prende últimas ideias ruins antes da última volta no travesseiro."
+      },
+      {
+        "titulo": "Noite acolhedora · extra 11",
+        "corpo": "{nome}, leitura rápida: {deficit atual} kcal hoje ante meta de {meta} kcal — Observe o vale no app amanhã com curiosidade técnica: treino mais leve mais comida solta combinam lá — volta com duas mudanças pequenas por dia."
+      }
+    ],
+    "resiliencia_pontuacao_caiu": [
+      {
+        "titulo": "Vale no gráfico — motivação",
+        "corpo": "O gráfico do app mostra tendências nos dois sentidos: quando a linha cai, muitas vezes houve treino mais fraco e alimentação desalinhada — aí o tom é de motivação e retorno ao eixo, sem veredito moral sobre você; quando a linha sobe, a armadilha comum é relaxar o protocolo — aí o tom muda para disciplina e humildade, para não desperdiçar a alta com excesso ou autocomplacência. Nos dois casos, é padrão humano, não falha de caráter. Se a pontuação caiu, este é o momento de lembrar por que você começou — e montar só o próximo bloco honesto: treino médio bem feito, jantar alinhado. Motivação aqui é método, não discurso vazio."
+      },
+      {
+        "titulo": "Pico recente — domine o impulso",
+        "corpo": "{nome}: se o app mostrou alta recente, cuide do impulso de ‘já mereço soltar tudo’. Disciplina no momento bom prolonga a subida; a euforia permissiva é quem costuma desenhar o próximo vale."
+      },
+      {
+        "corpo": "“Sempre parece impossível até que se faz.” — Nelson Mandela | {nome}, o próximo café da manhã com proteína pode ser esse passo modesto que reabre a curva.",
+        "credito": "Nelson Mandela (tradução livre)"
+      },
+      {
+        "titulo": "Winston Churchill · coragem",
+        "corpo": "“O sucesso não é definitivo, o fracasso não é fatal: o que conta é a coragem de continuar.” — Winston Churchill | Volte devagar, mas volte, {nome}.",
+        "credito": "Winston Churchill (tradução livre)"
+      },
+      {
+        "titulo": "Thomas Edison · experimento",
+        "corpo": "“Não falhei — encontrei dez mil caminhos que não funcionam.” — Thomas Edison | Cada dia fora da meta vira dado no gráfico, não sentença.",
+        "credito": "Thomas Edison (tradução livre)"
+      },
+      {
+        "titulo": "Michelangelo · aprendizado",
+        "corpo": "“Ainda estou aprendendo.” — atribuída a Michelangelo | {nome}, o próximo treino mediano já reescreve a história por cima da queda anterior.",
+        "credito": "Michelangelo (atribuição)"
+      },
+      {
+        "titulo": "Viktor Frankl · sentido",
+        "corpo": "“Quem tem um porquê suporta quase qualquer como.” — Viktor Frankl | Relembre seu porquê saudável quando a linha oscila, {nome}.",
+        "credito": "Viktor Frankl (tradução livre)"
+      },
+      {
+        "titulo": "Lao Tsé · primeiro passo",
+        "corpo": "“Uma jornada de mil quilômetros começa com um único passo.” — Lao Tsé | {nome}, o passo de hoje basta.",
+        "credito": "Lao Tsé (tradução livre)"
+      },
+      {
+        "titulo": "Nietzsche · lição sem crueldade",
+        "corpo": "“O que não me mata…” (Nietzsche) só funciona como lema se tirar sabedoria sem autopunição brutal, {nome}.",
+        "credito": "Friedrich Nietzsche (uso prudencial)"
+      },
+      {
+        "titulo": "Confiança acumulada",
+        "corpo": "{nome}: confiança é somatório de micro promessas cumpridas ao longo do tempo — o gráfico só precisa voltar ao ritmo médio semana a semana."
+      },
+      {
+        "titulo": "Equipe interior",
+        "corpo": "{nome}: treinador racional + atleta cansado + fisiologista paciente devem dialogar sem gritos — sobretudo após dias de treino ruim e comida mais solta."
+      }
+    ],
+    "citacoes_filosoficas": [
+      {
+        "titulo": "Epicteto · narrativa",
+        "corpo": "Não são os fatos sozinhos que derrubam — é o discurso acelerado que você cria sobre eles | {nome}, escreva mentalmente uma frase mais compassiva aos seus números.",
+        "credito": "Epicteto (paráfrase)"
+      },
+      {
+        "titulo": "Sêneca · tempo",
+        "corpo": "“Não temos pouco tempo, desperdiçamos muito.” — Sêneca | Use o próximo minuto como prova gentil ao seu projeto, {nome}.",
+        "credito": "Sêneca (tradução livre)"
+      },
+      {
+        "titulo": "Marco Aurélio · treino moral",
+        "corpo": "Obstáculos podem tornar-se ginásio interior — ideia próxima de Marco Aurélio | {nome}, trate esta queda no gráfico como série difícil, não como expulsão do time.",
+        "credito": "Marco Aurélio (ideia próxima)"
+      },
+      {
+        "titulo": "Rumi · reinício",
+        "corpo": "Feche ciclos ruins com gratidão e abra ciclo novo com intenção (eco de Rumi) | {nome}, gesto físico singelo já marca recomeço.",
+        "credito": "Rumi (parafrase)"
+      },
+      {
+        "titulo": "Confúcio · persistência",
+        "corpo": "“Não importa ir devagar, desde que não pare.” — Confúcio | Persistência média ergue gráficos reais mais que picos rasos.",
+        "credito": "Confúcio (tradução livre)"
+      },
+      {
+        "titulo": "Henry David Thoreau · simplicidade",
+        "corpo": "“Simplifique, simplifique.” — Thoreau | Pratos claros bem executados muitas vezes superam protocolos mirabolantes, {nome}.",
+        "credito": "Henry David Thoreau"
+      },
+      {
+        "titulo": "Maya Angelou · coragem ínfima",
+        "corpo": "“Você pode encontrar enorme coragem em um gesto diminuto.” — parafrase de Maya Angelou | Faça esse gesto físico diminuto já, {nome}.",
+        "credito": "Maya Angelou (parafrase)"
+      },
+      {
+        "titulo": "Helen Keller · otimismo ativo",
+        "corpo": "“O otimismo é a fé que conduz à realização.” — Helen Keller | {nome}, acredite no processo mesmo quando a curva despenca um dia.",
+        "credito": "Helen Keller (tradução livre)"
+      },
+      {
+        "titulo": "William Ernest Henley · comando íntimo",
+        "corpo": "Sou senhor das minhas escolhas pequenas — eco livre do poema Invictus (Henley) | {nome}, hoje comando é água, proteína e movimento modesto planejados.",
+        "credito": "William Ernest Henley (eco livre)"
+      },
+      {
+        "titulo": "Simon Sinek · porquê",
+        "corpo": "Comece pelo porquê (Simon Sinek): quando déficit parece frio demais, ligue número ao sentido vital — assim o gráfico respira junto com você.",
+        "credito": "Simon Sinek (referência livre)"
+      },
+      {
+        "titulo": "Heraclito · eco livre",
+        "corpo": "“Ninguém entra duas vezes no mesmo rio” — você também não repete mesmo corpo dois dias. | {nome}, faça só uma decisão física pequena agora.",
+        "credito": "Heraclito (referência livre)"
+      },
+      {
+        "titulo": "Plutarco · eco livre",
+        "corpo": "Causas miúdas, somadas, viram grandes efeitos no gráfico de meses. | {nome}, faça só uma decisão física pequena agora.",
+        "credito": "Plutarco (referência livre)"
+      },
+      {
+        "titulo": "Montaigne · eco livre",
+        "corpo": "“Eu sou o tema do meu livro” — estude hábitos com curiosidade, não com chicote. | {nome}, faça só uma decisão física pequena agora.",
+        "credito": "Montaigne (referência livre)"
+      },
+      {
+        "titulo": "Spinoza · eco livre",
+        "corpo": "Compreender fome hormonal antes de julgamento moral acelera ajustes melhores. | {nome}, faça só uma decisão física pequena agora.",
+        "credito": "Spinoza (referência livre)"
+      },
+      {
+        "titulo": "Susan Cain · eco livre",
+        "corpo": "Introversão profunda também sustenta hábitos de longo prazo bem desenhados. | {nome}, faça só uma decisão física pequena agora.",
+        "credito": "Susan Cain (referência livre)"
+      },
+      {
+        "titulo": "Daniel Kahneman · eco livre",
+        "corpo": "Atrasar autopiloto rápido na cozinha evita arrependimento caro aos macro nutrientes. | {nome}, faça só uma decisão física pequena agora.",
+        "credito": "Daniel Kahneman (referência livre)"
+      },
+      {
+        "titulo": "Carol Dweck · eco livre",
+        "corpo": "Mentalidade de crescimento lê vale no app como briefing técnico, não sentença final. | {nome}, faça só uma decisão física pequena agora.",
+        "credito": "Carol Dweck (referência livre)"
+      },
+      {
+        "titulo": "Richard Thaler · eco livre",
+        "corpo": "Pequenos empurrões no ambiente (prato menor, jarra à vista) somam bem ao longo das semanas. | {nome}, faça só uma decisão física pequena agora.",
+        "credito": "Richard Thaler (referência livre)"
+      }
+    ],
+    "madrugada_leve": [
+      {
+        "titulo": "Modo recuperação",
+        "corpo": "{nome}: madrugadas longas aumentam compulsão alimentar no dia seguinte — desligue a tela agora e proteja a curva de amanhã."
+      },
+      {
+        "titulo": "Luz âmbar",
+        "corpo": "{nome}: diminua luz azul antes de dormir; melatonina sossega decisões que amanhã aparecem no seu gráfico."
+      },
+      {
+        "titulo": "Água antes do episódio",
+        "corpo": "{nome}: uma água calma antes do último estímulo digital melhora probabilidade de descansar — sono é hormônio estratégico."
+      },
+      {
+        "titulo": "Respiração 4-6",
+        "corpo": "{nome}: inspire contando até quatro e solte até seis duas vezes — aciona parassimpático e fecha o dia sem autopunição extra."
+      },
+      {
+        "titulo": "Vitória miúda amanhã",
+        "corpo": "{nome}: combine alongamento de noventa segundos já ao acordar — vínculo mínimo com movimento já devolve dopamina esperançosa."
+      }
+    ],
+    "cruzamento_falta_meta_cardio": [
+      {
+        "titulo": "Dados da tela · falta para a meta",
+        "corpo": "{nome}, cruzando déficit atual ({deficit atual} kcal) com a meta ({meta} kcal), faltam cerca de {falta kcal} kcal para fechar o combinado do dia. Que tal uma corrida fácil ao ar livre — ou caminhada firme por uns 25–40 min, em ritmo confortável? Esse tipo de cardio costuma encaixar bem esse ‘buraco’ entre o que você já fez e o alvo."
+      },
+      {
+        "titulo": "Cruzamento · cardio leve",
+        "corpo": "Pelos números da tela, {nome}, você ainda precisa de cerca de {falta kcal} kcal de déficit para alinhar ao combinado ({meta} kcal). Uma voltinha de corrida ao ar livre, ou bike com vento na cara, costuma devolver sensação de controle sem precisar passar fome."
+      },
+      {
+        "titulo": "Meta e movimento",
+        "corpo": "{nome}: leitura rápida — déficit em {deficit atual} kcal, meta {meta} kcal, faltando cerca de {falta kcal} kcal. Se o corpo permitir, encaixe agora um bloco aeróbico moderado ao ar livre: é o tipo de ação que o app ‘fecha’ com dados, não com sorte."
+      }
+    ],
+    "cruzamento_carb_alto_fechamento": [
+      {
+        "titulo": "Macros da tela · carboidrato em evidência",
+        "corpo": "{nome}, cruzando o dia: {carboidrato g} g de carboidrato e {proteina g} g de proteína — o carboidrato veio forte frente à proteína. Que tal fechar o dia com refeições mais ricas em proteína magra, volume de salada e opções menos densas em caloria? Assim você alinha saciedade ao gráfico, sem ‘apagar’ o que já registrou."
+      },
+      {
+        "titulo": "Tela · ajuste de fechamento",
+        "corpo": "Pelos dados que você vê aí, {nome}, carboidrato no patamar de {carboidrato g} g e proteína em {proteina g} g sugerem deslocar o próximo prato: priorize proteína, vegetais e líquidos sem caloria — menos calorias ‘vazias’ e mais estrutura para o déficit combinado."
+      },
+      {
+        "titulo": "Check-in inteligente",
+        "corpo": "{nome}: a combinação na tela aponta carboidrato elevado ({carboidrato g} g) em relação à proteína ({proteina g} g). Use o jantar ou o último lanche para inverter a proporção: peixe, ovo, iogurte grego ou tofu + monte de vegetal — menos açúcar solto no fim do dia."
+      }
+    ],
+    "cruzamento_falta_e_carb_alto": [
+      {
+        "titulo": "Cruzamento · déficit + macros",
+        "corpo": "{nome}, juntando tudo o que a tela mostra: ainda faltam cerca de {falta kcal} kcal para bater a meta ({meta} kcal), e o carboidrato ({carboidrato g} g) está alto frente à proteína ({proteina g} g). Combinação clássica: encaixe uma corrida leve ao ar livre (ou caminhada bem ritmada) e, no jantar, volte o prato para proteína magra + vegetais — menos calorias concentradas e mais saciedade."
+      },
+      {
+        "titulo": "Plano duplo (tela)",
+        "corpo": "Leitura dos seus números, {nome}: déficit em {deficit atual} kcal, faltando cerca de {falta kcal} kcal, enquanto o carboidrato aparece com {carboidrato g} g e a proteína com {proteina g} g. Movimento aeróbico moderado fora de casa ajuda no buraco calórico; fechar com proteína e menos líquido calórico alinha o restante do déficit com consciência."
+      },
+      {
+        "titulo": "Coach · dados cruzados",
+        "corpo": "{nome}, os dados batem duas coisas: (1) ainda faltam ~{falta kcal} kcal para o combinado de {meta} kcal; (2) carboidrato em {carboidrato g} g puxa mais que proteína ({proteina g} g). Sugestão objetiva: 20–35 min de corrida ou caminhada rápida ao ar livre + refeição final enxuta em carboidrato refinado e generosa em proteína e fibra."
+      }
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+FOTO NO NAVEGADOR (WEB) — obrigatório uma vez no Google Cloud
+
+O app no TELEFONE (114.aab) funciona sem isto.
+Na WEB a foto sobe para Firebase Storage; o browser exige CORS no bucket.
+
+1) Instale Google Cloud SDK (gsutil) ou use Cloud Shell no console Google Cloud.
+
+2) Na pasta firebase deste projecto, execute:
+
+   gsutil cors set cors.json gs://deficit-calorico-52663.firebasestorage.app
+
+3) Firestore Console → Regras — confirme publicado:
+
+   match /users/{userId} {
+     allow create, update: if request.auth != null && request.auth.uid == userId;
+     allow read: if true;
+   }
+
+4) Storage Console → Regras — confirme:
+
+   match /users/{userId}/{allPaths=**} {
+     allow read: if true;
+     allow write: if request.auth != null && request.auth.uid == userId;
+   }
+
+Sem CORS + regras publicadas, a WEB dá erro na foto mesmo com código certo.

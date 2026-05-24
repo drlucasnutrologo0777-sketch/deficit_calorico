@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "987021976902",
+    "firebase_url": "https://deficit-calorico-52663-default-rtdb.firebaseio.com",
+    "project_id": "deficit-calorico-52663",
+    "storage_bucket": "deficit-calorico-52663.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:987021976902:android:a95f14709f63290ca7f147",
+        "android_client_info": {
+          "package_name": "com.mycompany.deficitcalorico"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "987021976902-3tdldlijr4n0t0qme6sf16r7rkm1jb53.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.deficitcalorico",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "987021976902-qhuaf9dbtvagjnniufggcsmqpqi6ot65.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5l17f0DiFCBSIT7pjL17D0KDXYONxzqE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "987021976902-qhuaf9dbtvagjnniufggcsmqpqi6ot65.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "987021976902-ofv5us55vu2qpprfsc9re8m3bcgvthj1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.deficitcalorico"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

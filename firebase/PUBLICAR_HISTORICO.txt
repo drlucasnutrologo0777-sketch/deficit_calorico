@@ -1,0 +1,10 @@
+PUBLICAR NO FIREBASE CONSOLE (só isto — NÃO alterar regras de cadastro que já funcionam)
+
+Firestore → Regras → dentro do bloco match /users/{userId} { ... } acrescentar:
+
+      match /historico_resumo_diario/{diaKey} {
+        allow read, create, update: if request.auth != null && request.auth.uid == userId;
+      }
+
+Isto permite gravar o histórico do gráfico e do Zerar/virada de dia.
+O cadastro continua com as regras que já tens publicadas (AAB 114).

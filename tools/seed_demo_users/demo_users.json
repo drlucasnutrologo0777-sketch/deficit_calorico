@@ -1,0 +1,82 @@
+[
+  {
+    "email": "ana.silva@demo-deficit.app",
+    "password": "Demo2026!1",
+    "displayName": "Ana Silva",
+    "sexo": "Feminino",
+    "peso": 62,
+    "altura": 1.65,
+    "tmb": 1380,
+    "nivelAtividade": 1.375
+  },
+  {
+    "email": "bruno.costa@demo-deficit.app",
+    "password": "Demo2026!2",
+    "displayName": "Bruno Costa",
+    "sexo": "Masculino",
+    "peso": 82,
+    "altura": 1.78,
+    "tmb": 1820,
+    "nivelAtividade": 1.55
+  },
+  {
+    "email": "carla.mendes@demo-deficit.app",
+    "password": "Demo2026!3",
+    "displayName": "Carla Mendes",
+    "sexo": "Feminino",
+    "peso": 71,
+    "altura": 1.68,
+    "tmb": 1450,
+    "nivelAtividade": 1.375
+  },
+  {
+    "email": "diego.ferreira@demo-deficit.app",
+    "password": "Demo2026!4",
+    "displayName": "Diego Ferreira",
+    "sexo": "Masculino",
+    "peso": 90,
+    "altura": 1.81,
+    "tmb": 1920,
+    "nivelAtividade": 1.725
+  },
+  {
+    "email": "elisa.rocha@demo-deficit.app",
+    "password": "Demo2026!5",
+    "displayName": "Elisa Rocha",
+    "sexo": "Feminino",
+    "peso": 58,
+    "altura": 1.62,
+    "tmb": 1310,
+    "nivelAtividade": 1.2
+  },
+  {
+    "email": "felipe.alves@demo-deficit.app",
+    "password": "Demo2026!6",
+    "displayName": "Felipe Alves",
+    "sexo": "Masculino",
+    "peso": 76,
+    "altura": 1.74,
+    "tmb": 1720,
+    "nivelAtividade": 1.55
+  },
+  {
+    "email": "gabi.santos@demo-deficit.app",
+    "password": "Demo2026!7",
+    "displayName": "Gabi Santos",
+    "sexo": "Feminino",
+    "peso": 67,
+    "altura": 1.7,
+    "tmb": 1420,
+    "nivelAtividade": 1.375
+  },
+  {
+    "email": "henrique.lima@demo-deficit.app",
+    "password": "Demo2026!8",
+    "displayName": "Henrique Lima",
+    "sexo": "Masculino",
+    "peso": 95,
+    "altura": 1.83,
+    "tmb": 1980,
+    "nivelAtividade": 1.375
+  }
+]

@@ -1,0 +1,189 @@
+{
+  "meta": {
+    "version": 2,
+    "descricao": "Catálogo de musculação — nomes canon para registos_treinos.categoria por categoria.slug"
+  },
+  "categorias": [
+    {
+      "slug": "peitoral",
+      "categoriaRegisto": "Peitoral",
+      "exercicios": [
+        { "nome": "Supino reto com barra", "ordem": 0 },
+        { "nome": "Supino reto com halteres", "ordem": 1 },
+        { "nome": "Supino inclinado com barra", "ordem": 2 },
+        { "nome": "Supino inclinado com halteres", "ordem": 3 },
+        { "nome": "Supino declinado", "ordem": 4 },
+        { "nome": "Crucifixo reto com halteres", "ordem": 5 },
+        { "nome": "Crucifixo inclinado com halteres", "ordem": 6 },
+        { "nome": "Cross-over alta na polia", "ordem": 7 },
+        { "nome": "Cross-over baixa na polia", "ordem": 8 },
+        { "nome": "Peck deck / máquina voador", "ordem": 9 },
+        { "nome": "Flexão tradicional no solo", "ordem": 10 },
+        { "nome": "Encolher / mergulhos em paralelas (peito)", "ordem": 11 },
+        { "nome": "Press com braços alternados cabo alto", "ordem": 12 },
+        { "nome": "Pullover com haltere na horizontal", "ordem": 13 }
+      ]
+    },
+    {
+      "slug": "abdomen",
+      "categoriaRegisto": "Abdômen",
+      "exercicios": [
+        { "nome": "Abdominal crunch no solo", "ordem": 0 },
+        { "nome": "Crunch na bola suíça", "ordem": 1 },
+        { "nome": "Crunch oblíquo alternado", "ordem": 2 },
+        { "nome": "Prancha frontal isométrica", "ordem": 3 },
+        { "nome": "Prancha lateral com sustentação", "ordem": 4 },
+        { "nome": "Elevação de pernas deitado", "ordem": 5 },
+        { "nome": "Elevação de pernas na barra", "ordem": 6 },
+        { "nome": "Russian twist com peso", "ordem": 7 },
+        { "nome": "Bicicleta no solo", "ordem": 8 },
+        { "nome": "Mountain climber", "ordem": 9 },
+        { "nome": "Dragon flag regressivo", "ordem": 10 },
+        { "nome": "Hanging leg raises / joelhos ao peito na barra", "ordem": 11 },
+        { "nome": "Cable crunch na polia alta", "ordem": 12 },
+        { "nome": "Vacuo abdominal de pé", "ordem": 13 },
+        { "nome": "Dead bug contra-resistência", "ordem": 14 }
+      ]
+    },
+    {
+      "slug": "biceps",
+      "categoriaRegisto": "Bíceps",
+      "exercicios": [
+        { "nome": "Rosca direta com barra reta", "ordem": 0 },
+        { "nome": "Rosca EZ bar em pé", "ordem": 1 },
+        { "nome": "Rosca alternada com halteres", "ordem": 2 },
+        { "nome": "Rosca martelo", "ordem": 3 },
+        { "nome": "Rosca concentrada no banco Scott", "ordem": 4 },
+        { "nome": "Rosca no banco inclinado com halteres", "ordem": 5 },
+        { "nome": "Rosca na polia baixa barra reta", "ordem": 6 },
+        { "nome": "Rosca na polia alta corda inclinado", "ordem": 7 },
+        { "nome": "Rosca spider com halteres", "ordem": 8 },
+        { "nome": "Rosca 21 séries barra EZ", "ordem": 9 },
+        { "nome": "Rosca isométrica na barra", "ordem": 10 },
+        { "nome": "Rosca com cabo atrás das costas", "ordem": 11 },
+        { "nome": "Chin-up supinado (ênfase em bíceps)", "ordem": 12 },
+        { "nome": "Rosca pré-exaustão máquina", "ordem": 13 }
+      ]
+    },
+    {
+      "slug": "triceps",
+      "categoriaRegisto": "Tríceps",
+      "exercicios": [
+        { "nome": "Extensão de tríceps corda na polia alta", "ordem": 0 },
+        { "nome": "Barra reta empurrando na polia alta", "ordem": 1 },
+        { "nome": "Tríceps testa com barra EZ", "ordem": 2 },
+        { "nome": "Tríceps testa com haltere", "ordem": 3 },
+        { "nome": "Francês atrás da nuca haltere ou corda", "ordem": 4 },
+        { "nome": "Mergulho em paralelas com peso", "ordem": 5 },
+        { "nome": "Mergulho entre bancos (bench dip)", "ordem": 6 },
+        { "nome": "Kick-back haltere joelhos no banco", "ordem": 7 },
+        { "nome": "Kick-back bilateral na polia baixa", "ordem": 8 },
+        { "nome": "Supino fechado (empurrar fechado)", "ordem": 9 },
+        { "nome": "Extensões overhead estendido máquina", "ordem": 10 },
+        { "nome": "Diamond push-up", "ordem": 11 },
+        { "nome": "JM press leve ênfase tríceps", "ordem": 12 },
+        { "nome": "Tríceps unilateral polia alta", "ordem": 13 }
+      ]
+    },
+    {
+      "slug": "costas",
+      "categoriaRegisto": "Costas",
+      "exercicios": [
+        { "nome": "Puxada frontal pronada larga", "ordem": 0 },
+        { "nome": "Puxada frontal supinada", "ordem": 1 },
+        { "nome": "Puxada ao peito triângulo", "ordem": 2 },
+        { "nome": "Remada curvada com barra", "ordem": 3 },
+        { "nome": "Remada unilateral com haltere", "ordem": 4 },
+        { "nome": "Remada baixa triângulo na polia", "ordem": 5 },
+        { "nome": "Remada T-bar com apoio peito", "ordem": 6 },
+        { "nome": "Pullover na polia alta", "ordem": 7 },
+        { "nome": "Levantamento terra romeno com barra", "ordem": 8 },
+        { "nome": "Pull-up / dominada pronada", "ordem": 9 },
+        { "nome": "Face pull na polia alta", "ordem": 10 },
+        { "nome": "Hiperextensão lombar no banco 45°", "ordem": 11 },
+        { "nome": "Encolhimento de trapézio com halteres", "ordem": 12 },
+        { "nome": "Remada máquina pegada neutra", "ordem": 13 }
+      ]
+    },
+    {
+      "slug": "ombro",
+      "categoriaRegisto": "Ombro",
+      "exercicios": [
+        { "nome": "Desenvolvimento com halteres sentado", "ordem": 0 },
+        { "nome": "Desenvolvimento Arnold", "ordem": 1 },
+        { "nome": "Desenvolvimento na máquina Smith", "ordem": 2 },
+        { "nome": "Elevação lateral com halteres", "ordem": 3 },
+        { "nome": "Elevação lateral na polia baixa", "ordem": 4 },
+        { "nome": "Elevação frontal com barra ou haltere", "ordem": 5 },
+        { "nome": "Elevação frontal alternada", "ordem": 6 },
+        { "nome": "Crucifixo inverso inclinado halteres", "ordem": 7 },
+        { "nome": "Face pull para deltóide posterior", "ordem": 8 },
+        { "nome": "Remada alta com barra (cuidado técnica)", "ordem": 9 },
+        { "nome": "Encolhimento shrugs barra", "ordem": 10 },
+        { "nome": "Push press com impulso de pernas", "ordem": 11 },
+        { "nome": "Landmine press unilateral", "ordem": 12 },
+        { "nome": "Elevação em Y no banco inclinado", "ordem": 13 }
+      ]
+    },
+    {
+      "slug": "gluteo",
+      "categoriaRegisto": "Glúteo",
+      "exercicios": [
+        { "nome": "Agachamento livre barra alta", "ordem": 0 },
+        { "nome": "Agachamento sumô com haltere", "ordem": 1 },
+        { "nome": "Hip thrust com barra", "ordem": 2 },
+        { "nome": "Hip thrust unilateral", "ordem": 3 },
+        { "nome": "Avanço alternado com halteres", "ordem": 4 },
+        { "nome": "Passada caminhando longa", "ordem": 5 },
+        { "nome": "Abdução de quadril na máquina", "ordem": 6 },
+        { "nome": "Extensão de quadril na polia baixa", "ordem": 7 },
+        { "nome": "Good morning com barra leve", "ordem": 8 },
+        { "nome": "Glute bridge solo com pausa", "ordem": 9 },
+        { "nome": "Step-up alto no banco", "ordem": 10 },
+        { "nome": "Kick-back glúteo na polia", "ordem": 11 },
+        { "nome": "Agachamento búlgaro com pé elevado", "ordem": 12 },
+        { "nome": "Kettlebell swing com ênfase quadril", "ordem": 13 }
+      ]
+    },
+    {
+      "slug": "perna1",
+      "categoriaRegisto": "Perna 1",
+      "exercicios": [
+        { "nome": "Agachamento livre com barra", "ordem": 0 },
+        { "nome": "Agachamento frontal com barra", "ordem": 1 },
+        { "nome": "Leg press 45 graus", "ordem": 2 },
+        { "nome": "Leg press horizontal", "ordem": 3 },
+        { "nome": "Hack squat máquina", "ordem": 4 },
+        { "nome": "Afundo búlgaro com halteres", "ordem": 5 },
+        { "nome": "Extensão de joelhos máquina", "ordem": 6 },
+        { "nome": "Agachamento goblet com kettlebell", "ordem": 7 },
+        { "nome": "Agachamento na Smith guiada", "ordem": 8 },
+        { "nome": "Sissy squat assistido", "ordem": 9 },
+        { "nome": "Extensão unilateral de joelhos", "ordem": 10 },
+        { "nome": "Wall sit isométrico", "ordem": 11 },
+        { "nome": "Zercher squat leve", "ordem": 12 },
+        { "nome": "Agachamento caixa (box squat)", "ordem": 13 }
+      ]
+    },
+    {
+      "slug": "perna2",
+      "categoriaRegisto": "Perna 2",
+      "exercicios": [
+        { "nome": "Stiff / levantamento terra pernas rígidas barra", "ordem": 0 },
+        { "nome": "Stiff com halteres", "ordem": 1 },
+        { "nome": "Mesa flexora deitado", "ordem": 2 },
+        { "nome": "Mesa flexora sentado", "ordem": 3 },
+        { "nome": "Flexão plantar máquina sentado", "ordem": 4 },
+        { "nome": "Elevação de panturrilha em pé livre", "ordem": 5 },
+        { "nome": "Elevação de panturrilha sentado", "ordem": 6 },
+        { "nome": "Elevação de panturrilha no leg press", "ordem": 7 },
+        { "nome": "Donkey calf raise parceiro", "ordem": 8 },
+        { "nome": "Good morning para isquiotibiais", "ordem": 9 },
+        { "nome": "Flexão plantar unilateral", "ordem": 10 },
+        { "nome": "Nordic curl assistido", "ordem": 11 },
+        { "nome": "RDL com halteres", "ordem": 12 },
+        { "nome": "Panturrilha no degrau excursão longa", "ordem": 13 }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ==========================================
+    // FUNÇÕES AUXILIARES DE SEGURANÇA
+    // ==========================================
+    
+    // Verifica se a requisição vem de um usuário autenticado
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Verifica se o documento na coleção /users/ pertence ao usuário logado
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Valida se o campo 'user_ref' do documento aponta exatamente para o usuário logado
+    function matchesUserRef(data) {
+      return isAuthenticated() && 
+             data.user_ref == /databases/$(database)/documents/users/$(request.auth.uid);
+    }
+
+    // ==========================================
+    // REGRAS POR COLEÇÃO
+    // ==========================================
+
+    // Usuários: O usuário autenticado cria seu perfil. Apenas o dono lê e atualiza.
+    match /users/{userId} {
+      allow create: if isAuthenticated() && request.auth.uid == userId; 
+      allow read, update: if isOwner(userId); 
+      allow delete: if false;
+
+      // Histórico diário do painel (subcoleção herdando a segurança do dono)
+      match /historico_resumo_diario/{diaId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+    
+    // Alimentos: Catálogo global para consulta
+    match /alimentos/{document} {
+      allow read: if isAuthenticated(); 
+      allow create, update, delete: if false; 
+    }
+
+    // Exercícios: Catálogo global para consulta
+    match /exercicios/{document} {
+      allow read: if isAuthenticated(); 
+      allow create, update, delete: if false; 
+    }
+    
+    // Treinos: Catálogo global de fichas de treino
+    match /treinos/{document} {
+      allow read: if isAuthenticated(); 
+      allow create, update, delete: if false; 
+    }
+    
+    // Registros de Consumo: Histórico diário amarrado ao user_ref
+    match /registros_consumo/{document} {
+      allow create: if isAuthenticated() && matchesUserRef(request.resource.data);
+      allow read, update, delete: if isAuthenticated() && matchesUserRef(resource.data);
+    }
+    
+    // Registros de Treinos: Histórico de treinos amarrado ao user_ref
+    match /registros_treinos/{document} {
+      allow create: if isAuthenticated() && matchesUserRef(request.resource.data);
+      allow read, update, delete: if isAuthenticated() && matchesUserRef(resource.data);
+    }
+    
+    // Registros de Bioimpedancia: Evolução corporal amarrada ao user_ref
+    match /registros_bioimpedancia/{document} {
+      allow create: if isAuthenticated() && matchesUserRef(request.resource.data);
+      allow read, update, delete: if isAuthenticated() && matchesUserRef(resource.data);
+    }
+    
+    // Salas de Chat: Lista de canais disponíveis
+    match /salas_chat/{document} {
+      allow read: if isAuthenticated(); 
+      allow write: if false; 
+    }
+
+    // Presença na sala (quem está online agora)
+    match /presenca_sala/{document} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && matchesUserRef(request.resource.data);
+      allow delete: if isAuthenticated() && matchesUserRef(resource.data);
+    }
+    
+    // Mensagens de Chat: qualquer utilizador autenticado lê mensagens da sala;
+    // só o autor edita/apaga a própria mensagem.
+    match /mensagens_chat/{document} {
+      allow create: if isAuthenticated() && matchesUserRef(request.resource.data);
+      allow read: if isAuthenticated();
+      allow update, delete: if isAuthenticated() && matchesUserRef(resource.data);
+    }
+    
+    // Bloqueios: Sistema de segurança de usuários
+    match /bloqueios/{document} {
+      allow read, create: if isAuthenticated();
+      allow delete: if isAuthenticated() && 
+                    resource.data.bloqueador_ref == /databases/$(database)/documents/users/$(request.auth.uid);
+    }
+    
+    // Regra implícita de fallback
+    match /_config/{document} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+    }
+  }
+}
