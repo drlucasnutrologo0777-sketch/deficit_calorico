@@ -1,6 +1,3 @@
-# SE O LOG MOSTRAR "no-codesign" O CODEMAGIC NAO ESTA LENDO ESTE ARQUIVO.
-# App Settings → Build → Configuration = codemagic.yaml → Save
-#
 workflows:
   default-workflow:
     name: ">>> USAR ESTE - iOS App Store <<<"
@@ -12,33 +9,45 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
+      vars:
+        BUNDLE_ID: com.mycompany.deficitcalorico
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.mycompany.deficitcalorico
     scripts:
-      - name: "0 - CONFIRMA YAML (se nao ver isto, build errado)"
+      - name: Confirmar chave Apple
         script: |
           set -e
-          echo "=============================================="
-          echo "OK: codemagic.yaml ESTA RODANDO"
-          echo "WORKFLOW: default-workflow"
-          echo "PROXIMO: flutter build ipa --release"
-          echo "=============================================="
+          echo "OK: codemagic.yaml rodando"
           if [ -z "$APP_STORE_CONNECT_KEY_IDENTIFIER" ] || [ -z "$APP_STORE_CONNECT_ISSUER_ID" ]; then
-            echo "ERRO: No Codemagic, cadastre a chave Apple com nome: DeficitApple"
+            echo "ERRO: Cadastre integracao DeficitApple (Team settings → Developer Portal)"
             exit 1
           fi
-      - name: Assinatura Apple no Xcode
+          app-store-connect apps list --limit 3
+      - name: Criar certificado Distribution
+        script: |
+          set -e
+          keychain initialize
+          app-store-connect certificates list --type IOS_DISTRIBUTION --save \
+            || app-store-connect certificates create --type IOS_DISTRIBUTION --save
+      - name: Criar perfil App Store
+        script: |
+          set -e
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create \
+            --delete-stale-profiles
+          keychain add-certificates
+      - name: Aplicar perfil no Xcode
         script: xcode-project use-profiles
       - name: Dependencias
         script: |
           set -e
           flutter pub get
           cd ios && pod install --repo-update
-      - name: Gerar IPA App Store
+      - name: Gerar IPA
         script: |
           set -e
-          echo "BUILD=flutter build ipa --release"
           BUILD_NAME=$(grep '^version:' pubspec.yaml | sed 's/version: //;s/+.*//')
           BUILD_NUMBER=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
           flutter build ipa --release \
@@ -47,3 +56,4 @@ workflows:
             --export-options-plist=/Users/builder/export_options.plist
     artifacts:
       - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
