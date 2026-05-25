@@ -33,8 +33,9 @@ workflows:
               echo "Apple: 3 certificados cheios. Apagando 1 Distribution antigo..."
               CERT_ID=$(app-store-connect certificates list --type IOS_DISTRIBUTION --json | python3 -c "
           import json, sys
-          data = json.load(sys.stdin).get('data') or []
-          print(data[-1]['id'] if data else '')
+          raw = json.load(sys.stdin)
+          items = raw if isinstance(raw, list) else (raw.get('data') or [])
+          print(items[-1]['id'] if items else '')
           ")
               if [ -z "$CERT_ID" ]; then
                 echo "ERRO: nao foi possivel apagar certificado automaticamente."
