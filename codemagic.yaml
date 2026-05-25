@@ -1,8 +1,3 @@
-# UMA VEZ no Codemagic (antes do build):
-# Team settings > codemagic.yaml settings > Code signing identities
-#   iOS certificates > Generate certificate > Distribution > API key DeficitApple > Create
-#   iOS provisioning profiles > Fetch profiles > App Store > com.mycompany.deficitcalorico
-#
 workflows:
   default-workflow:
     name: ">>> USAR ESTE - iOS App Store <<<"
@@ -14,17 +9,48 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.mycompany.deficitcalorico
       vars:
         BUNDLE_ID: com.mycompany.deficitcalorico
     scripts:
-      - name: Assinatura (usa certificado salvo no Codemagic)
+      - name: "Assinatura v3 (limpa certs Apple e cria 1)"
         script: |
           set -e
+          echo "=== BUILD CONFIG v3 - se nao ver isto, build ANTIGO ==="
+          keychain initialize
+          openssl genpkey -algorithm RSA -out /tmp/cm_dist.key -pkeyopt rsa_keygen_bits:2048
+
+          echo "Apagando TODOS certificados Distribution na Apple..."
+          app-store-connect certificates list --type IOS_DISTRIBUTION --json > /tmp/certs.json 2>/dev/null || echo "[]" > /tmp/certs.json
+          python3 << 'PY'
+          import json, subprocess
+          with open("/tmp/certs.json") as f:
+              raw = json.load(f)
+          items = raw if isinstance(raw, list) else (raw.get("data") or [])
+          for item in items:
+              cid = item["id"]
+              print("Delete", cid)
+              subprocess.run(
+                  ["app-store-connect", "certificates", "delete", cid, "--ignore-not-found"],
+                  check=False,
+              )
+          PY
+          sleep 15
+
+          echo "Criando 1 certificado novo com chave privada..."
+          app-store-connect certificates create --type IOS_DISTRIBUTION --save \
+            --certificate-key @file:/tmp/cm_dist.key
+
+          echo "Criando perfil App Store..."
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create \
+            --delete-stale-profiles \
+            --strict-match-identifier \
+            --certificate-key @file:/tmp/cm_dist.key
+
+          keychain add-certificates
           xcode-project use-profiles
-          echo "OK: perfil aplicado"
+          echo "OK: assinatura v3 pronta"
       - name: Build IPA
         script: |
           set -e
