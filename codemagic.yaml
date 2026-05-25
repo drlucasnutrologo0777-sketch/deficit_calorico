@@ -69,5 +69,14 @@ workflows:
           flutter build appbundle --release \
             --build-name="$BUILD_NAME" \
             --build-number="$BUILD_NUMBER"
+          AAB="build/app/outputs/bundle/release/app-release.aab"
+          if [ -n "$CM_KEYSTORE_PATH" ] && [ -f "$AAB" ]; then
+            jarsigner -sigalg SHA256withRSA -digestalg SHA-256 \
+              -keystore "$CM_KEYSTORE_PATH" -storepass "$CM_KEYSTORE_PASSWORD" \
+              -keypass "$CM_KEY_PASSWORD" "$AAB" "$CM_KEY_ALIAS"
+            jarsigner -verify "$AAB"
+          else
+            echo "AVISO: CM_KEYSTORE_* nao definido; AAB sai sem assinatura."
+          fi
     artifacts:
       - build/app/outputs/bundle/release/*.aab
