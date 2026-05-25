@@ -1,0 +1,25 @@
+SEU ERRO (Development Team / no-codesign)
+============================================
+O Codemagic esta rodando o build PADRAO (sem assinatura).
+O nosso arquivo codemagic.yaml NAO esta sendo usado.
+
+CORRIGIR EM 2 CLIQUES
+=====================
+1. codemagic.io/apps → deficit_calorico → Settings (engrenagem)
+2. Build → "Build configuration" → escolha codemagic.yaml → SAVE
+
+ANTES DE GASTAR CREDITO DE NOVO
+===============================
+Start new build → workflow deve ser:
+   >>> USAR ESTE - iOS App Store <<<
+
+No LOG, linha 1 do build tem que aparecer:
+   OK: codemagic.yaml ESTA RODANDO
+
+Se aparecer "codesigning disabled" ou "no-codesign" → PAROU no passo 2.
+
+CHAVE APPLE (DeficitApple)
+==========================
+Team settings → Integrations → Developer Portal
+Nome: DeficitApple
+Arquivo: AuthKey_JKJWFZT3S8.p8
