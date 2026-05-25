@@ -1,3 +1,8 @@
+# UMA VEZ no Codemagic (antes do build):
+# Team settings > codemagic.yaml settings > Code signing identities
+#   iOS certificates > Generate certificate > Distribution > API key DeficitApple > Create
+#   iOS provisioning profiles > Fetch profiles > App Store > com.mycompany.deficitcalorico
+#
 workflows:
   default-workflow:
     name: ">>> USAR ESTE - iOS App Store <<<"
@@ -9,51 +14,17 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.mycompany.deficitcalorico
       vars:
         BUNDLE_ID: com.mycompany.deficitcalorico
     scripts:
-      - name: Assinatura Apple (certificado + perfil)
+      - name: Assinatura (usa certificado salvo no Codemagic)
         script: |
           set -e
-          keychain initialize
-          openssl genpkey -algorithm RSA -out /tmp/cm_dist.key -pkeyopt rsa_keygen_bits:2048
-          echo "Bundle: $BUNDLE_ID"
-
-          run_signing() {
-            app-store-connect fetch-signing-files "$BUNDLE_ID" \
-              --type IOS_APP_STORE \
-              --create \
-              --delete-stale-profiles \
-              --strict-match-identifier \
-              --certificate-key @file:/tmp/cm_dist.key
-          }
-
-          if ! run_signing 2>/tmp/sign_err.log; then
-            if grep -qE "409|already have a current Distribution" /tmp/sign_err.log; then
-              echo "Apple: 3 certificados cheios. Apagando 1 Distribution antigo..."
-              CERT_ID=$(app-store-connect certificates list --type IOS_DISTRIBUTION --json | python3 -c "
-          import json, sys
-          raw = json.load(sys.stdin)
-          items = raw if isinstance(raw, list) else (raw.get('data') or [])
-          print(items[-1]['id'] if items else '')
-          ")
-              if [ -z "$CERT_ID" ]; then
-                echo "ERRO: nao foi possivel apagar certificado automaticamente."
-                echo "Abra: https://developer.apple.com/account/resources/certificates/list"
-                echo "Revogue 1 certificado Apple Distribution e rode o build de novo."
-                exit 1
-              fi
-              app-store-connect certificates delete "$CERT_ID"
-              run_signing
-            else
-              cat /tmp/sign_err.log
-              exit 1
-            fi
-          fi
-
-          keychain add-certificates
           xcode-project use-profiles
-          echo "OK: assinatura pronta"
+          echo "OK: perfil aplicado"
       - name: Build IPA
         script: |
           set -e
