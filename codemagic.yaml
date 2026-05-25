@@ -12,53 +12,61 @@ workflows:
       vars:
         BUNDLE_ID: com.mycompany.deficitcalorico
     scripts:
-      - name: "Assinatura v4"
+      - name: "Assinatura v5 (auto-retry 409)"
         script: |
           set -e
-          echo "=== BUILD v4 ==="
+          echo "=== BUILD v5 ==="
           keychain initialize
           openssl genpkey -algorithm RSA -out /tmp/cm_dist.key -pkeyopt rsa_keygen_bits:2048
 
-          delete_all_dist_certs() {
-            for ctype in IOS_DISTRIBUTION DISTRIBUTION; do
-              app-store-connect certificates list --type "$ctype" --json > /tmp/c.json 2>/dev/null || echo "[]" > /tmp/c.json
-              python3 << 'PY'
+          delete_all() {
+            app-store-connect certificates list --type IOS_DISTRIBUTION --json > /tmp/c.json 2>/dev/null || echo "[]" > /tmp/c.json
+            python3 << 'PY'
           import json, subprocess
           with open("/tmp/c.json") as f:
               raw = json.load(f)
           items = raw if isinstance(raw, list) else (raw.get("data") or [])
           for item in items:
-              subprocess.run(
-                  ["app-store-connect", "certificates", "delete", item["id"], "--ignore-not-found"],
-                  check=False,
-              )
+              subprocess.run(["app-store-connect","certificates","delete",item["id"],"--ignore-not-found"], check=False)
           PY
-            done
+            app-store-connect certificates list --type DISTRIBUTION --json > /tmp/c2.json 2>/dev/null || echo "[]" > /tmp/c2.json
+            python3 << 'PY'
+          import json, subprocess
+          with open("/tmp/c2.json") as f:
+              raw = json.load(f)
+          items = raw if isinstance(raw, list) else (raw.get("data") or [])
+          for item in items:
+              subprocess.run(["app-store-connect","certificates","delete",item["id"],"--ignore-not-found"], check=False)
+          PY
           }
 
-          delete_all_dist_certs
-          echo "Aguardando 60s (pedido pendente Apple)..."
-          sleep 60
-          delete_all_dist_certs
+          OK=0
+          T=1
+          while [ "$T" -le 10 ]; do
+            echo "Tentativa $T/10..."
+            delete_all
+            sleep 90
+            if app-store-connect fetch-signing-files "$BUNDLE_ID" \
+              --type IOS_APP_STORE \
+              --create \
+              --delete-stale-profiles \
+              --strict-match-identifier \
+              --certificate-key @file:/tmp/cm_dist.key 2>/tmp/sign.log; then
+              OK=1
+              break
+            fi
+            cat /tmp/sign.log
+            T=$((T+1))
+          done
 
-          echo "Criando certificado..."
-          if ! app-store-connect certificates create --type IOS_DISTRIBUTION --save \
-              --certificate-key @file:/tmp/cm_dist.key 2>/tmp/cerr.log; then
-            cat /tmp/cerr.log
-            echo "409/pending: rode LIMPAR-CERTIFICADOS-APPLE.bat no PC, espere 30 min, build de novo."
+          if [ "$OK" -ne 1 ]; then
+            echo "FALHOU apos 10 tentativas. Espere 1 hora sem clicar Create certificate e rode build de novo."
             exit 1
           fi
 
-          app-store-connect fetch-signing-files "$BUNDLE_ID" \
-            --type IOS_APP_STORE \
-            --create \
-            --delete-stale-profiles \
-            --strict-match-identifier \
-            --certificate-key @file:/tmp/cm_dist.key
-
           keychain add-certificates
           xcode-project use-profiles
-          echo "OK v4"
+          echo "OK v5"
       - name: Build IPA
         script: |
           set -e
