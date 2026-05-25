@@ -11,8 +11,11 @@ workflows:
     scripts:
       - name: Criar certificado e perfil App Store
         script: |
+          set -e
           keychain initialize
-          app-store-connect fetch-signing-files $BUNDLE_ID \
+          app-store-connect certificates list --type IOS_DISTRIBUTION --save || \
+          app-store-connect certificates create --type IOS_DISTRIBUTION --save
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
             --create
           keychain add-certificates
