@@ -11,21 +11,40 @@ workflows:
       cocoapods: default
       vars:
         BUNDLE_ID: com.mycompany.deficitcalorico
+        # Tem que bater com o .p8 cadastrado em DeficitApple:
+        EXPECTED_KEY_ID: 8NWZ4B392L
     scripts:
+      - name: Testar chave Apple (401 = chave errada no Codemagic)
+        script: |
+          set -e
+          echo "Key no build: $APP_STORE_CONNECT_KEY_IDENTIFIER"
+          echo "Esperado: $EXPECTED_KEY_ID"
+          if [ "$APP_STORE_CONNECT_KEY_IDENTIFIER" != "$EXPECTED_KEY_ID" ]; then
+            echo "ERRO: Key ID no Codemagic NAO e 8NWZ4B392L."
+            echo "Team settings > Integrations > DeficitApple > apague e cadastre de novo:"
+            echo "  Key ID: 8NWZ4B392L"
+            echo "  Arquivo: AuthKey_8NWZ4B392L.p8"
+            echo "  Issuer ID: copiar do topo da pagina API da Apple"
+            exit 1
+          fi
+          if [ -z "$APP_STORE_CONNECT_ISSUER_ID" ]; then
+            echo "ERRO: Issuer ID vazio. Recadastre DeficitApple."
+            exit 1
+          fi
+          echo "Testando API Apple..."
+          app-store-connect apps list --limit 1
+          echo "OK: chave Apple autenticou."
       - name: Keychain
         script: keychain initialize
       - name: Certificado Distribution (chave privada NOVA)
         script: |
           set -e
-          echo "Criando certificado Apple Distribution com chave privada..."
           openssl genpkey -algorithm RSA -out /tmp/cm_dist.key -pkeyopt rsa_keygen_bits:2048
           app-store-connect certificates create --type IOS_DISTRIBUTION --save \
             --certificate-key @file:/tmp/cm_dist.key
-          echo "Certificado criado com chave privada."
       - name: Perfil App Store
         script: |
           set -e
-          echo "Bundle: $BUNDLE_ID"
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
             --create \
@@ -51,4 +70,3 @@ workflows:
             --export-options-plist=/Users/builder/export_options.plist
     artifacts:
       - build/ios/ipa/*.ipa
-      - /tmp/xcodebuild_logs/*.log
