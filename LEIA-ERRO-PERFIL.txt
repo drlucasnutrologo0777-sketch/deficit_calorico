@@ -1,0 +1,34 @@
+ERRO: No matching profiles found for bundle identifier
+======================================================
+
+Significa: na conta Apple NAO existe perfil App Store para
+com.mycompany.deficitcalorico
+
+NAO rode build de novo ate fazer A ou B:
+
+A) CRIAR O BUNDLE ID NA APPLE (mais comum)
+-----------------------------------------
+1. https://developer.apple.com/account/resources/identifiers/list
+2. Botao +  →  App IDs  →  App
+3. Description: Deficit Calorico
+4. Bundle ID (Explicit): com.mycompany.deficitcalorico
+5. Capabilities: marque "Sign in with Apple" (o app usa isso)
+6. Register / Continue / Save
+
+Depois: Start new build no Codemagic.
+
+B) OU pelo Codemagic (sem developer.apple.com)
+----------------------------------------------
+1. codemagic.io/apps → deficit_calorico
+2. Menu Distribution (nao Settings)
+3. iOS code signing → Automatic
+4. API key: DeficitApple
+5. Profile type: App Store
+6. Bundle ID: escolha com.mycompany.deficitcalorico
+   (se nao aparecer, faca o passo A primeiro)
+7. Save
+
+CHAVE DeficitApple
+------------------
+Team settings → Integrations → Developer Portal
+Tem que ser Admin ou App Manager (senao nao cria perfil).
