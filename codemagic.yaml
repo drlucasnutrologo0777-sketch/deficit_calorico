@@ -11,26 +11,31 @@ workflows:
       cocoapods: default
       vars:
         BUNDLE_ID: com.mycompany.deficitcalorico
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.mycompany.deficitcalorico
     scripts:
-      - name: Confirmar chave Apple
+      - name: Confirmar API Apple
         script: |
           set -e
-          echo "OK: codemagic.yaml rodando"
-          if [ -z "$APP_STORE_CONNECT_KEY_IDENTIFIER" ] || [ -z "$APP_STORE_CONNECT_ISSUER_ID" ]; then
-            echo "ERRO: Cadastre integracao DeficitApple (Team settings → Developer Portal)"
-            exit 1
-          fi
+          echo "OK: workflow iOS assinado (sem ios_signing pre-upload)"
+          test -n "$APP_STORE_CONNECT_KEY_IDENTIFIER"
+          test -n "$APP_STORE_CONNECT_ISSUER_ID"
           app-store-connect apps list --limit 3
-      - name: Criar certificado Distribution
+      - name: Registrar Bundle ID na Apple
         script: |
           set -e
           keychain initialize
+          if ! app-store-connect bundle-ids list | grep -q "$BUNDLE_ID"; then
+            app-store-connect bundle-ids create "$BUNDLE_ID" \
+              --name "Deficit Calorico" \
+              --enable-sign-in-with-apple
+          else
+            echo "Bundle ID ja existe: $BUNDLE_ID"
+          fi
+      - name: Certificado Distribution
+        script: |
+          set -e
           app-store-connect certificates list --type IOS_DISTRIBUTION --save \
             || app-store-connect certificates create --type IOS_DISTRIBUTION --save
-      - name: Criar perfil App Store
+      - name: Perfil App Store (criar e baixar)
         script: |
           set -e
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
@@ -38,8 +43,12 @@ workflows:
             --create \
             --delete-stale-profiles
           keychain add-certificates
-      - name: Aplicar perfil no Xcode
-        script: xcode-project use-profiles
+          echo "Perfis baixados:"
+          ls -la ~/Library/MobileDevice/Provisioning\ Profiles/ || true
+      - name: Aplicar assinatura no Xcode
+        script: |
+          set -e
+          xcode-project use-profiles
       - name: Dependencias
         script: |
           set -e
