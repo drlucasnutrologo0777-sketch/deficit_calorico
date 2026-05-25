@@ -3,32 +3,63 @@ workflows:
     name: Deficit Calorico iOS
     max_build_duration: 120
     instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: DeficitApple
     environment:
       flutter: stable
       xcode: latest
+      cocoapods: default
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.mycompany.deficitcalorico
       vars:
         BUNDLE_ID: com.mycompany.deficitcalorico
     scripts:
-      - name: Criar certificado e perfil App Store
+      - name: Certificado e perfil App Store
         script: |
           set -e
           keychain initialize
           app-store-connect certificates list --type IOS_DISTRIBUTION --save || \
-          app-store-connect certificates create --type IOS_DISTRIBUTION --save
+            app-store-connect certificates create --type IOS_DISTRIBUTION --save
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
-            --create
+            --create \
+            --delete-stale-profiles
           keychain add-certificates
-      - name: Aplicar assinatura no Xcode
-        script: xcode-project use-profiles
+      - name: Assinatura no Xcode
+        script: |
+          xcode-project use-profiles
+          xcode-project update-project-settings
       - name: Dependencias
         script: |
           flutter pub get
-          cd ios && pod install --repo-update
-      - name: Build IPA release
+          cd ios && pod install
+      - name: Build IPA release assinado
         script: |
+          BUILD_NAME=$(grep '^version:' pubspec.yaml | sed 's/version: //;s/+.*//')
+          BUILD_NUMBER=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
           flutter build ipa --release \
-            --build-name=1.0.2 \
-            --build-number=116
+            --build-name="$BUILD_NAME" \
+            --build-number="$BUILD_NUMBER" \
+            --export-method=app-store
     artifacts:
       - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+
+  deficit-calorico-android:
+    name: Deficit Calorico Android
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+    scripts:
+      - name: Build AAB
+        script: |
+          flutter pub get
+          BUILD_NAME=$(grep '^version:' pubspec.yaml | sed 's/version: //;s/+.*//')
+          BUILD_NUMBER=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
+          flutter build appbundle --release \
+            --build-name="$BUILD_NAME" \
+            --build-number="$BUILD_NUMBER"
+    artifacts:
+      - build/app/outputs/bundle/release/*.aab
