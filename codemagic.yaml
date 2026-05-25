@@ -24,22 +24,22 @@ workflows:
           echo "Testando API Apple..."
           app-store-connect apps list
           echo "OK: chave Apple autenticou."
-      - name: Keychain
-        script: keychain initialize
-      - name: Certificado Distribution (chave privada NOVA)
+      - name: Certificado e perfil App Store (mesma chave privada)
         script: |
           set -e
+          keychain initialize
           openssl genpkey -algorithm RSA -out /tmp/cm_dist.key -pkeyopt rsa_keygen_bits:2048
+          echo "Criando certificado Distribution..."
           app-store-connect certificates create --type IOS_DISTRIBUTION --save \
             --certificate-key @file:/tmp/cm_dist.key
-      - name: Perfil App Store
-        script: |
-          set -e
+          echo "Criando perfil App Store para $BUNDLE_ID ..."
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
             --create \
             --delete-stale-profiles \
-            --strict-match-identifier
+            --strict-match-identifier \
+            --certificate-key @file:/tmp/cm_dist.key
+          echo "OK: certificado + perfil prontos."
       - name: Instalar certificados
         script: keychain add-certificates
       - name: Aplicar perfil no Xcode
