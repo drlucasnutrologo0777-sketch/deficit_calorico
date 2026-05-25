@@ -8,14 +8,11 @@ workflows:
       xcode: latest
       groups:
         - ios_signing
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.mycompany.deficitcalorico
     scripts:
-      - name: Criar perfil e certificado Apple
-        script: |
-          app-store-connect fetch-signing-files com.mycompany.deficitcalorico \
-            --type IOS_APP_STORE \
-            --create
-          keychain add-certificates
-      - name: Aplicar assinatura no Xcode
+      - name: Aplicar assinatura
         script: xcode-project use-profiles
       - name: Dependencias
         script: |
