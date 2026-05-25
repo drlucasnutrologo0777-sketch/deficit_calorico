@@ -1,28 +1,16 @@
 @echo off
-title Deficit Calorico - iPhone Codemagic
+title Deficit Calorico - iPhone
 color 0A
 echo.
-echo  ============================================
-echo    SO CLIQUE E ESPERE - iPhone no Codemagic
-echo  ============================================
+echo  IPHONE - 3 passos (arquivo completo abrindo agora)
 echo.
-echo  Abrindo o site do Codemagic no navegador...
+start notepad "C:\Users\drluc\Downloads\IPHONE-CODEMAGIC-3-PASSOS.txt"
 start https://codemagic.io/apps
 echo.
-echo  O QUE FAZER NA TELA QUE ABRIR:
+echo  1) Settings do app - usar codemagic.yaml (NAO Workflow Editor)
+echo  2) Integracao DeficitApple ligada
+echo  3) Start build - workflow "Build iOS App Store"
 echo.
-echo  1) Entre na sua conta (se pedir)
-echo  2) Clique no app "deficit_calorico"
-echo  3) Botao azul "Start new build"
-echo  4) Workflow: Deficit Calorico iOS
-echo  5) Start build
-echo  6) Espere ficar VERDE (20-40 min)
-echo  7) Clique Artifacts - baixe o .ipa
-echo.
-echo  ANDROID ja esta pronto:
-echo  C:\Users\drluc\Downloads\116.aab
-echo.
-echo  Se o build falhar de novo, o nome da chave Apple
-echo  no Codemagic TEM que ser: DeficitApple
+echo  Android assinado: C:\Users\drluc\Downloads\116-signed.aab
 echo.
 pause
