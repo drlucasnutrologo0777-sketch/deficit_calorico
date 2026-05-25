@@ -22,7 +22,7 @@ workflows:
             exit 1
           fi
           echo "Testando API Apple..."
-          app-store-connect apps list --limit 1
+          app-store-connect apps list
           echo "OK: chave Apple autenticou."
       - name: Keychain
         script: keychain initialize
