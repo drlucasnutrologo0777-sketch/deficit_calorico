@@ -3,16 +3,20 @@ workflows:
     name: Deficit Calorico iOS
     max_build_duration: 120
     instance_type: mac_mini_m2
-    integrations:
-      app_store_connect: apple
     environment:
       flutter: stable
       xcode: latest
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.mycompany.deficitcalorico
+      vars:
+        BUNDLE_ID: com.mycompany.deficitcalorico
     scripts:
-      - name: Aplicar assinatura
+      - name: Criar certificado e perfil App Store
+        script: |
+          keychain initialize
+          app-store-connect fetch-signing-files $BUNDLE_ID \
+            --type IOS_APP_STORE \
+            --create
+          keychain add-certificates
+      - name: Aplicar assinatura no Xcode
         script: xcode-project use-profiles
       - name: Dependencias
         script: |
