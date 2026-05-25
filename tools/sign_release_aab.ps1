@@ -10,7 +10,7 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$KeyPass,
     [string]$Alias = "upload",
-    [string]$ExpectedSha1 = "75:B4:8D:F4:FB:FA:11:47:08:49:05:3D:60:BE:27:AF:48:E3:08:6F"
+    [string]$ExpectedSha1 = "75:B4:88:E9:F0:FA:13:47:00:49:D5:2C:6D:D1:27:AF:48:83:D0:6F"
 )
 
 $ErrorActionPreference = "Stop"

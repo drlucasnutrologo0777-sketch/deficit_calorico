@@ -1,33 +1,73 @@
 workflows:
-  default-workflow:
-    name: Build
+  deficit-calorico-ios:
+    name: Deficit Calorico iOS
     max_build_duration: 120
     instance_type: mac_mini_m2
     integrations:
       app_store_connect: DeficitApple
     environment:
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.mycompany.deficitcalorico
       flutter: stable
       xcode: latest
-      cocoapods: default
+      vars:
+        BUNDLE_ID: com.mycompany.deficitcalorico
     scripts:
-      - name: Xcode signing
+      - name: Verificar ligacao Apple
+        script: |
+          set -e
+          if [ -z "$APP_STORE_CONNECT_KEY_IDENTIFIER" ] || [ -z "$APP_STORE_CONNECT_ISSUER_ID" ]; then
+            echo "ERRO: Chave Apple nao ligada."
+            echo "Codemagic > Team settings > Integrations > Developer Portal"
+            echo "API key name: DeficitApple | Key ID: JKJWFZT3S8 | upload AuthKey_JKJWFZT3S8.p8"
+            exit 1
+          fi
+          app-store-connect apps list --limit 1
+      - name: Keychain
+        script: keychain initialize
+      - name: Certificado Distribution
+        script: |
+          set -e
+          if ! app-store-connect certificates list --type IOS_DISTRIBUTION --save; then
+            app-store-connect certificates create --type IOS_DISTRIBUTION --save
+          fi
+      - name: Perfil App Store
+        script: |
+          set -e
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+      - name: Instalar certificados
+        script: keychain add-certificates
+      - name: Assinatura no Xcode
         script: xcode-project use-profiles
-      - name: Dependencies
+      - name: Dependencias
         script: |
           flutter pub get
-          cd ios && pod install
-      - name: IPA App Store
+          cd ios && pod install --repo-update
+      - name: Build IPA release
         script: |
-          echo "BUILD=flutter build ipa --release (NOT no-codesign)"
+          BUILD_NAME=$(grep '^version:' pubspec.yaml | sed 's/version: //;s/+.*//')
+          BUILD_NUMBER=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
           flutter build ipa --release \
-            --export-options-plist=/Users/builder/export_options.plist
-      - name: Android AAB
-        script: |
-          flutter pub get
-          flutter build appbundle --release
+            --build-name="$BUILD_NAME" \
+            --build-number="$BUILD_NUMBER" \
+            --export-method=app-store
     artifacts:
       - build/ios/ipa/*.ipa
+
+  deficit-calorico-android:
+    name: Deficit Calorico Android
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+    scripts:
+      - name: Build AAB
+        script: |
+          flutter pub get
+          BUILD_NAME=$(grep '^version:' pubspec.yaml | sed 's/version: //;s/+.*//')
+          BUILD_NUMBER=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
+          flutter build appbundle --release \
+            --build-name="$BUILD_NAME" \
+            --build-number="$BUILD_NUMBER"
+    artifacts:
       - build/app/outputs/bundle/release/*.aab

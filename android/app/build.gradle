@@ -68,13 +68,14 @@ android {
            keyAlias keystoreProperties['keyAlias']
            keyPassword keystoreProperties['keyPassword']
            storePassword keystoreProperties['storePassword']
-           storeFile keystoreProperties['storeFile'] ? file("${rootProject.projectDir}/app/${keystoreProperties['storeFile']}") : null
+           storeFile keystoreProperties['storeFile'] ? file("${projectDir}/${keystoreProperties['storeFile']}") : null
        }
    }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            // Unsigned bundle; sign in CI (codemagic.yaml) or tools/sign_release_aab.ps1 locally.
+            signingConfig null
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
