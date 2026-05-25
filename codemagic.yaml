@@ -12,46 +12,26 @@ workflows:
       vars:
         BUNDLE_ID: com.mycompany.deficitcalorico
     scripts:
-      - name: Testar chave Apple
-        script: |
-          set -e
-          KEY_ID="$(echo "$APP_STORE_CONNECT_KEY_IDENTIFIER" | tr -d '[:space:]')"
-          echo "Key ID: [$KEY_ID]"
-          if [ -z "$APP_STORE_CONNECT_ISSUER_ID" ]; then
-            echo "ERRO: Issuer ID vazio. Recadastre DeficitApple no Codemagic."
-            exit 1
-          fi
-          echo "Testando API Apple..."
-          app-store-connect apps list
-          echo "OK: chave Apple autenticou."
-      - name: Certificado e perfil App Store (mesma chave privada)
+      - name: Assinatura Apple (certificado + perfil)
         script: |
           set -e
           keychain initialize
           openssl genpkey -algorithm RSA -out /tmp/cm_dist.key -pkeyopt rsa_keygen_bits:2048
-          echo "Criando certificado Distribution..."
-          app-store-connect certificates create --type IOS_DISTRIBUTION --save \
-            --certificate-key @file:/tmp/cm_dist.key
-          echo "Criando perfil App Store para $BUNDLE_ID ..."
+          echo "Bundle: $BUNDLE_ID | Key: $APP_STORE_CONNECT_KEY_IDENTIFIER"
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
             --create \
             --delete-stale-profiles \
             --strict-match-identifier \
             --certificate-key @file:/tmp/cm_dist.key
-          echo "OK: certificado + perfil prontos."
-      - name: Instalar certificados
-        script: keychain add-certificates
-      - name: Aplicar perfil no Xcode
-        script: xcode-project use-profiles
-      - name: Dependencias Flutter
+          keychain add-certificates
+          xcode-project use-profiles
+          echo "OK: assinatura pronta"
+      - name: Build IPA
         script: |
           set -e
           flutter pub get
           cd ios && pod install --repo-update
-      - name: Gerar IPA
-        script: |
-          set -e
           BUILD_NAME=$(grep '^version:' pubspec.yaml | sed 's/version: //;s/+.*//')
           BUILD_NUMBER=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
           flutter build ipa --release \
