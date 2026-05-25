@@ -1,12 +1,6 @@
-# USE ESTE WORKFLOW NO CODEMAGIC: "PUBLICAR IPHONE"
-# NAO use "default", "Flutter iOS unsigned" nem Workflow Editor.
-#
-# Codemagic → Team settings → Integrations → Developer Portal
-# A chave API deve existir (qualquer nome) — troque "DeficitApple" abaixo pelo nome EXATO da sua chave.
-#
 workflows:
-  publicar-iphone:
-    name: PUBLICAR IPHONE
+  default-workflow:
+    name: Build
     max_build_duration: 120
     instance_type: mac_mini_m2
     integrations:
@@ -18,34 +12,22 @@ workflows:
       flutter: stable
       xcode: latest
       cocoapods: default
-      vars:
-        BUNDLE_ID: com.mycompany.deficitcalorico
     scripts:
-      - name: Assinatura Xcode
+      - name: Xcode signing
         script: xcode-project use-profiles
-      - name: Flutter pub get
-        script: flutter pub get
-      - name: CocoaPods
+      - name: Dependencies
         script: |
+          flutter pub get
           cd ios && pod install
-      - name: Build IPA assinado
+      - name: IPA App Store
         script: |
+          echo "BUILD=flutter build ipa --release (NOT no-codesign)"
           flutter build ipa --release \
             --export-options-plist=/Users/builder/export_options.plist
-    artifacts:
-      - build/ios/ipa/*.ipa
-      - /tmp/xcodebuild_logs/*.log
-
-  publicar-android:
-    name: PUBLICAR ANDROID
-    max_build_duration: 60
-    instance_type: mac_mini_m2
-    environment:
-      flutter: stable
-    scripts:
-      - name: Build AAB
+      - name: Android AAB
         script: |
           flutter pub get
           flutter build appbundle --release
     artifacts:
+      - build/ios/ipa/*.ipa
       - build/app/outputs/bundle/release/*.aab
