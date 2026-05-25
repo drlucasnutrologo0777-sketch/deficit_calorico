@@ -31,9 +31,10 @@ workflows:
         script: |
           set -e
           flutter pub get
-          cd ios && pod install --repo-update
           BUILD_NAME=$(grep '^version:' pubspec.yaml | sed 's/version: //;s/+.*//')
           BUILD_NUMBER=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
+          echo "Version: $BUILD_NAME ($BUILD_NUMBER)"
+          (cd ios && pod install --repo-update)
           flutter build ipa --release \
             --build-name="$BUILD_NAME" \
             --build-number="$BUILD_NUMBER" \
