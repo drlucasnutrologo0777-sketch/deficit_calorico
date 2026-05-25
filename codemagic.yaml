@@ -1,4 +1,56 @@
+# OBRIGATORIO no Codemagic (uma vez):
+# App deficit_calorico → Settings → Build → Configuration = "codemagic.yaml"
+# (desligar Workflow Editor / Flutter default unsigned)
+#
+# Team settings → Integrations → Developer Portal → chave com nome EXATO: DeficitApple
+# Arquivo: AuthKey_JKJWFZT3S8.p8 | Key ID: JKJWFZT3S8
+#
 workflows:
+  # Substitui o build padrao que roda: flutter build ios --debug --no-codesign
+  default-workflow:
+    name: Build iOS App Store
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: DeficitApple
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.mycompany.deficitcalorico
+    scripts:
+      - name: Abortar se chave Apple ausente
+        script: |
+          set -e
+          echo "=== WORKFLOW: default-workflow (IPA assinado) ==="
+          if [ -z "$APP_STORE_CONNECT_KEY_IDENTIFIER" ] || [ -z "$APP_STORE_CONNECT_ISSUER_ID" ]; then
+            echo "ERRO: Integracao DeficitApple nao configurada no Codemagic."
+            echo "Team settings → Integrations → Developer Portal → Add key → nome: DeficitApple"
+            exit 1
+          fi
+      - name: Assinatura Xcode
+        script: xcode-project use-profiles
+      - name: Dependencias
+        script: |
+          set -e
+          flutter pub get
+          cd ios && pod install --repo-update
+      - name: IPA App Store release
+        script: |
+          set -e
+          echo "BUILD=flutter build ipa --release (NAO no-codesign)"
+          BUILD_NAME=$(grep '^version:' pubspec.yaml | sed 's/version: //;s/+.*//')
+          BUILD_NUMBER=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
+          flutter build ipa --release \
+            --build-name="$BUILD_NAME" \
+            --build-number="$BUILD_NUMBER" \
+            --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+
   deficit-calorico-ios:
     name: Deficit Calorico iOS
     max_build_duration: 120
@@ -8,49 +60,35 @@ workflows:
     environment:
       flutter: stable
       xcode: latest
-      vars:
-        BUNDLE_ID: com.mycompany.deficitcalorico
+      cocoapods: default
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.mycompany.deficitcalorico
     scripts:
-      - name: Verificar ligacao Apple
+      - name: Abortar se chave Apple ausente
         script: |
           set -e
+          echo "=== WORKFLOW: deficit-calorico-ios (IPA assinado) ==="
           if [ -z "$APP_STORE_CONNECT_KEY_IDENTIFIER" ] || [ -z "$APP_STORE_CONNECT_ISSUER_ID" ]; then
-            echo "ERRO: Chave Apple nao ligada."
-            echo "Codemagic > Team settings > Integrations > Developer Portal"
-            echo "API key name: DeficitApple | Key ID: JKJWFZT3S8 | upload AuthKey_JKJWFZT3S8.p8"
+            echo "ERRO: Integracao DeficitApple nao configurada."
             exit 1
           fi
-          app-store-connect apps list --limit 1
-      - name: Keychain
-        script: keychain initialize
-      - name: Certificado Distribution
-        script: |
-          set -e
-          if ! app-store-connect certificates list --type IOS_DISTRIBUTION --save; then
-            app-store-connect certificates create --type IOS_DISTRIBUTION --save
-          fi
-      - name: Perfil App Store
-        script: |
-          set -e
-          app-store-connect fetch-signing-files "$BUNDLE_ID" \
-            --type IOS_APP_STORE \
-            --create
-      - name: Instalar certificados
-        script: keychain add-certificates
-      - name: Assinatura no Xcode
+      - name: Assinatura Xcode
         script: xcode-project use-profiles
       - name: Dependencias
         script: |
+          set -e
           flutter pub get
           cd ios && pod install --repo-update
-      - name: Build IPA release
+      - name: IPA App Store release
         script: |
+          set -e
           BUILD_NAME=$(grep '^version:' pubspec.yaml | sed 's/version: //;s/+.*//')
           BUILD_NUMBER=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
           flutter build ipa --release \
             --build-name="$BUILD_NAME" \
             --build-number="$BUILD_NUMBER" \
-            --export-method=app-store
+            --export-options-plist=/Users/builder/export_options.plist
     artifacts:
       - build/ios/ipa/*.ipa
 
@@ -75,8 +113,6 @@ workflows:
               -keystore "$CM_KEYSTORE_PATH" -storepass "$CM_KEYSTORE_PASSWORD" \
               -keypass "$CM_KEY_PASSWORD" "$AAB" "$CM_KEY_ALIAS"
             jarsigner -verify "$AAB"
-          else
-            echo "AVISO: CM_KEYSTORE_* nao definido; AAB sai sem assinatura."
           fi
     artifacts:
       - build/app/outputs/bundle/release/*.aab
