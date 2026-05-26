@@ -427,12 +427,15 @@ class FFRoute {
               : builder(context, ffParams);
           final child = appStateNotifier.loading
               ? Container(
-                  color: FlutterFlowTheme.of(context).primaryBackground,
+                  color: const Color(0xFF0B0B0C),
                   alignment: Alignment.center,
                   child: const SizedBox(
                     width: 48,
                     height: 48,
-                    child: CircularProgressIndicator(strokeWidth: 3),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      color: Color(0xFFC6A969),
+                    ),
                   ),
                 )
               : page;

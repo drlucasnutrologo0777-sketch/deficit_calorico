@@ -29,7 +29,12 @@ void main() async {
   final appState = FFAppState(); // Initialize FFAppState
   await appState.initializePersistedState();
 
-  await LocalNotificationService.initialize();
+  try {
+    await LocalNotificationService.initialize()
+        .timeout(const Duration(seconds: 5));
+  } catch (e) {
+    debugPrint('Notificacoes locais: init ignorado ($e)');
+  }
 
   runApp(ChangeNotifierProvider(
     create: (context) => appState,
@@ -93,7 +98,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       });
     jwtTokenStream.listen((_) {});
     Future.delayed(
-      Duration(milliseconds: 1000),
+      const Duration(milliseconds: 800),
+      () => _appStateNotifier.stopShowingSplashImage(),
+    );
+    // Se Firebase/auth travar, nao deixa tela branca para sempre
+    Future.delayed(
+      const Duration(seconds: 4),
       () => _appStateNotifier.stopShowingSplashImage(),
     );
   }
@@ -138,7 +148,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         brightness: Brightness.dark,
         useMaterial3: false,
       ),
-      themeMode: _themeMode,
+      themeMode: ThemeMode.dark,
       routerConfig: _router,
     );
   }
