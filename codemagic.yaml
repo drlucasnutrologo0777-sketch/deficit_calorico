@@ -73,6 +73,9 @@ workflows:
         script: |
           flutter --version
           flutter pub get
+      - name: Icones do app (peach, nao logo Flutter)
+        script: |
+          dart run flutter_launcher_icons
       - name: CocoaPods
         script: |
           set -e
