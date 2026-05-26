@@ -88,5 +88,24 @@ workflows:
             --build-name="$BUILD_NAME" \
             --build-number="$BUILD_NUMBER" \
             --export-options-plist=/Users/builder/export_options.plist
+      - name: "ENVIAR para Apple (TestFlight) — obrigatorio"
+        script: |
+          set -e
+          IPA=$(find build/ios/ipa -name '*.ipa' | head -1)
+          if [ -z "$IPA" ]; then
+            echo "ERRO: arquivo .ipa nao encontrado em build/ios/ipa/"
+            ls -la build/ios/ipa/ || true
+            exit 1
+          fi
+          echo "Enviando para App Store Connect: $IPA"
+          app-store-connect publish --path "$IPA" --testflight
+          echo "OK: upload iniciado. Em 15-60 min aparece no TestFlight."
     artifacts:
       - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        auth: integration
+        # Envia o .ipa para App Store Connect (TestFlight) apos o build
+        submit_to_testflight: true
+        # Nao envia direto para revisao da loja — voce escolhe a build no Connect
+        submit_to_app_store: false
