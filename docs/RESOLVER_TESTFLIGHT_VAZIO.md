@@ -34,12 +34,15 @@ git push
 
 ---
 
-## Passo 3 — Esperar e escolher no site da Apple
+## Passo 3 — No App Store Connect (build 117 ja enviada)
 
-1. Espere **15 a 60 minutos**  
-2. App Store Connect → seu app → **TestFlight**  
-3. Deve aparecer build **1.0.2 (117)** — primeiro "Processando", depois pronta  
-4. **App Store** → versão **1.0.2** → **Selecionar compilação** → escolher **117** → **Enviar para revisão**
+Se o Codemagic mostrou **Processing state: VALID** e **Version: 117**, o upload **deu certo** (mesmo se o passo ficou vermelho por e-mail do TestFlight).
+
+1. **TestFlight** → build **117** → se pedir **Export Compliance** / criptografia:
+   - Pergunta: o app usa criptografia além do HTTPS padrão? → em geral **Não**
+2. **App Store** → versão **1.0.2** → **Selecionar compilação** → **117** → **Enviar para revisão**
+
+(TestFlight externo e e-mail de feedback sao opcionais — nao bloqueiam publicar na loja.)
 
 ---
 
