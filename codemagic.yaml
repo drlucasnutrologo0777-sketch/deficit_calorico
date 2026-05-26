@@ -12,6 +12,7 @@ workflows:
       cocoapods: default
       vars:
         BUNDLE_ID: com.mycompany.deficitcalorico
+        APP_STORE_APPLE_ID: "6772267019"
     scripts:
       - name: "Assinatura v5 (auto-retry 409)"
         script: |
@@ -97,10 +98,13 @@ workflows:
             ls -la build/ios/ipa/ || true
             exit 1
           fi
-          echo "Enviando IPA para App Store Connect: $IPA"
-          # So upload — sem --testflight (evita erro de e-mail/nome do beta)
-          app-store-connect publish --path "$IPA"
-          echo "OK: IPA enviado. Build 117+ deve aparecer no Connect em alguns minutos."
+          echo "Enviando IPA: $IPA"
+          # SEM --testflight = sobe o app, nao pede email/nome de beta externo
+          app-store-connect publish \
+            --path "$IPA" \
+            --apple-id "$APP_STORE_APPLE_ID" \
+            --max-build-processing-wait 30
+          echo "SUCESSO: IPA na Apple. Veja TestFlight build 118 em ~20 min."
     artifacts:
       - build/ios/ipa/*.ipa
     # Upload do IPA ja e feito no script acima. Publishing desligado para nao falhar
