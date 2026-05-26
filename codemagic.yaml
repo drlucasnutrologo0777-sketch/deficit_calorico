@@ -6,7 +6,8 @@ workflows:
     integrations:
       app_store_connect: DeficitApple
     environment:
-      flutter: stable
+      # Evita Flutter "stable" muito novo que quebra IconData final + page_transition
+      flutter: 3.29.3
       xcode: latest
       cocoapods: default
       vars:
@@ -68,7 +69,9 @@ workflows:
           xcode-project use-profiles
           echo "OK v5"
       - name: Flutter pub get
-        script: flutter pub get
+        script: |
+          flutter --version
+          flutter pub get
       - name: CocoaPods
         script: |
           set -e
