@@ -6,8 +6,8 @@ workflows:
     integrations:
       app_store_connect: DeficitApple
     environment:
-      # Evita Flutter "stable" muito novo que quebra IconData final + page_transition
-      flutter: 3.29.3
+      # Dart 3.9+: font_awesome 11 + google_fonts 6.3.3 + page_transition 2.2.2
+      flutter: 3.35.4
       xcode: latest
       cocoapods: default
       vars:
