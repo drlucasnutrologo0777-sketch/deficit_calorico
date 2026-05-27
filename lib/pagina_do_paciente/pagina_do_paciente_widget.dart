@@ -291,7 +291,12 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
           gastoPainel,
           ingestaoPainel,
         );
-        final gorduraEmGanho = saldoCaloricoDia < 0;
+        // Gordura: sem TMB — só exercício/atividade vs o que comeu.
+        final saldoGorduraDia = functions.painelSaldoGorduraDia(
+          gastoPainel,
+          ingestaoPainel,
+        );
+        final gorduraEmGanho = saldoGorduraDia < 0;
         final gorduraLabel =
             gorduraEmGanho ? 'Gordura a ganhar' : 'Gordura a queimar';
         final gorduraValorColor =
@@ -299,7 +304,7 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
         final gorduraUnidadeColor =
             gorduraEmGanho ? Color(0xFFEF4444) : Color(0xFF0EDC63);
         final gorduraGramasTexto = functions
-            .gramasGorduraDeKcal(saldoCaloricoDia)
+            .gramasGorduraDeKcal(saldoGorduraDia)
             .toStringAsFixed(0);
         final deficitValorColor =
             gorduraEmGanho ? Color(0xFFEF4444) : Color(0xFF30D158);

@@ -186,6 +186,14 @@ double painelSaldoCaloricoDia(
   return (tmb + gastoDia) - ingestao;
 }
 
+/// Gordura a queimar/ganhar: só atividade vs ingestão (TMB mantém o corpo, não queima gordura).
+double painelSaldoGorduraDia(
+  double gastoDia,
+  double ingestao,
+) {
+  return gastoDia - ingestao;
+}
+
 /// Gramas de gordura equivalentes às kcal (1 g ≈ 9 kcal).
 double gramasGorduraDeKcal(double kcal) {
   return kcal.abs() / 9;
