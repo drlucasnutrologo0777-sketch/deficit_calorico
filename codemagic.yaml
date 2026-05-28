@@ -30,32 +30,78 @@ workflows:
             echo "Bundle ID ja existe."
           fi
 
-          echo "=== Sign in with Apple (app usa login Apple) ==="
+          echo "=== Sign in with Apple ==="
           app-store-connect bundle-ids enable-capability \
             --bundle-id-identifier "$BUNDLE_ID" \
-            --capability-type SIGN_IN_WITH_APPLE 2>/dev/null || echo "Capability OK ou ja ativa."
+            --capability-type SIGN_IN_WITH_APPLE 2>/dev/null || true
 
           echo "=== Certificado + perfil App Store ==="
-          openssl genpkey -algorithm RSA -out /tmp/cm_dist.key -pkeyopt rsa_keygen_bits:2048
+          KEY_FILE=/tmp/cm_dist.key
+          if [ -n "${CERTIFICATE_PRIVATE_KEY:-}" ]; then
+            printf '%s\n' "$CERTIFICATE_PRIVATE_KEY" > "$KEY_FILE"
+            echo "Usando CERTIFICATE_PRIVATE_KEY do Codemagic (mesma chave sempre)."
+          else
+            openssl genpkey -algorithm RSA -out "$KEY_FILE" -pkeyopt rsa_keygen_bits:2048
+            echo "Chave nova gerada neste build."
+          fi
 
-          app-store-connect fetch-signing-files "$BUNDLE_ID" \
-            --type IOS_APP_STORE \
-            --create \
-            --delete-stale-profiles \
-            --certificate-key @file:/tmp/cm_dist.key
+          fetch_signing() {
+            app-store-connect fetch-signing-files "$BUNDLE_ID" \
+              --type IOS_APP_STORE \
+              --delete-stale-profiles \
+              --certificate-key "@file:$KEY_FILE" \
+              "$@"
+          }
+
+          if fetch_signing; then
+            echo "OK: perfil/cert baixados."
+          elif fetch_signing --create; then
+            echo "OK: cert+perfil criados."
+          else
+            echo "409 ou limite: revogando certs Distribution antigos..."
+            python3 << 'PY'
+          import json, subprocess, sys, time
+
+          def run(cmd):
+              return subprocess.run(cmd, capture_output=True, text=True)
+
+          ids = []
+          for ctype in ("DISTRIBUTION", "IOS_DISTRIBUTION"):
+              r = run(["app-store-connect", "certificates", "list", "--certificate-type", ctype, "--json"])
+              if r.returncode != 0:
+                  continue
+              try:
+                  data = json.loads(r.stdout or "[]")
+              except json.JSONDecodeError:
+                  continue
+              items = data if isinstance(data, list) else data.get("data", [])
+              for item in items:
+                  cid = item.get("id")
+                  if cid:
+                      ids.append(cid)
+
+          if not ids:
+              print("Nenhum cert Distribution para revogar.", flush=True)
+          for cid in ids:
+              print(f"Revogando {cid}...", flush=True)
+              run(["app-store-connect", "certificates", "delete", cid])
+
+          print(f"Revogados: {len(ids)}. Aguardando Apple...", flush=True)
+          PY
+            sleep 25
+            fetch_signing --create
+          fi
 
           keychain add-certificates
 
-          echo "=== Verificar perfil baixado ==="
           PROFILE_DIR="$HOME/Library/MobileDevice/Provisioning Profiles"
           mkdir -p "$PROFILE_DIR"
           COUNT=$(find "$PROFILE_DIR" -name "*.mobileprovision" 2>/dev/null | wc -l | tr -d ' ')
           echo "Perfis em disco: $COUNT"
           if [ "$COUNT" = "0" ]; then
-            echo "ERRO: fetch-signing-files nao baixou perfil. Confira API key DeficitApple (Admin/App Manager)."
+            echo "ERRO: sem perfil .mobileprovision"
             exit 1
           fi
-          app-store-connect profiles list --json 2>/dev/null | grep -F "$BUNDLE_ID" || true
           echo "Assinatura OK."
       - name: Flutter pub get
         script: |
@@ -79,9 +125,6 @@ workflows:
             --export-options-plist="$CM_BUILD_DIR/ios/ExportOptions.plist" \
             --archive-method app-store \
             --code-signing-setup-verbose-logging
-
-          echo "=== ExportOptions.plist ==="
-          cat "$CM_BUILD_DIR/ios/ExportOptions.plist"
 
           BUILD_NAME=$(grep '^version:' pubspec.yaml | sed 's/version: //;s/+.*//')
           BUILD_NUMBER=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
