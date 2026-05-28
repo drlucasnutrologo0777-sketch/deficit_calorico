@@ -48,7 +48,7 @@ workflows:
             NORMALIZED_KEY="$(printf '%s' "$NORMALIZED_KEY" | sed 's/\\n/\n/g')"
           fi
           printf '%s\n' "$NORMALIZED_KEY" > "$KEY_FILE"
-          if ! grep -Eq '-----BEGIN (RSA )?PRIVATE KEY-----' "$KEY_FILE"; then
+          if ! grep -Eq -- '-----BEGIN (RSA )?PRIVATE KEY-----' "$KEY_FILE"; then
             echo "ERRO: CERTIFICATE_PRIVATE_KEY invalida (PEM incompleto)."
             echo "Precisa comecar com -----BEGIN PRIVATE KEY----- e terminar com -----END PRIVATE KEY-----."
             exit 1
