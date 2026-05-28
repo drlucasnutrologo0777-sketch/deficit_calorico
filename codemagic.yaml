@@ -37,11 +37,22 @@ workflows:
             echo "Sem chave fixa, entra no ciclo 409 de certificados."
             exit 1
           fi
-          if ! printf '%s' "$CERTIFICATE_PRIVATE_KEY" | grep -q 'BEGIN.*PRIVATE KEY'; then
+          # Normaliza formatos comuns no Codemagic:
+          # - multiline real
+          # - string unica com '\n' literal
+          # - com aspas acidentais nas pontas
+          NORMALIZED_KEY="$(printf '%s' "$CERTIFICATE_PRIVATE_KEY" | sed 's/\\r$//')"
+          NORMALIZED_KEY="${NORMALIZED_KEY#\"}"
+          NORMALIZED_KEY="${NORMALIZED_KEY%\"}"
+          if printf '%s' "$NORMALIZED_KEY" | grep -q '\\n'; then
+            NORMALIZED_KEY="$(printf '%s' "$NORMALIZED_KEY" | sed 's/\\n/\n/g')"
+          fi
+          printf '%s\n' "$NORMALIZED_KEY" > "$KEY_FILE"
+          if ! grep -Eq '-----BEGIN (RSA )?PRIVATE KEY-----' "$KEY_FILE"; then
             echo "ERRO: CERTIFICATE_PRIVATE_KEY invalida (PEM incompleto)."
+            echo "Precisa comecar com -----BEGIN PRIVATE KEY----- e terminar com -----END PRIVATE KEY-----."
             exit 1
           fi
-          printf '%s\n' "$CERTIFICATE_PRIVATE_KEY" > "$KEY_FILE"
           echo "Chave fixa carregada do Codemagic."
           chmod 600 "$KEY_FILE"
 
