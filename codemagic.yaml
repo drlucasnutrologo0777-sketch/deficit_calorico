@@ -15,6 +15,35 @@ workflows:
       vars:
         BUNDLE_ID: com.mycompany.deficitcalorico
         APP_STORE_APPLE_ID: "6772267019"
+        CERTIFICATE_PRIVATE_KEY: |-
+          -----BEGIN PRIVATE KEY-----
+          MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDNHHFstotNcVBY
+          6RXtL+ZxXAAUzCxERSbKziMI96tzvjQa4n+mHKaPxyXGdmvoiKIL9H3NO2mAMDAn
+          Vjkgn/3MiZ0kziUXiWWrBTdY+qydJ5DfiEmyhVOWfE2/dfJXyCBv15S+wpuSA1WR
+          B6dEw9lXZVnDsMtmath9DMLs4Gr0X2wpElcDSYhiti8HAT8STDWZw2s1qGlgpP14
+          R4ePUI9ttNIEQoWMEtpIJPegdIPaxRa+y6ZIRJooEbvEQzeh+H75PvSFEiLwyTKp
+          KdIHyp6W1mW+kYlPhaQMjTc6q1NmgHYSiHok5CVO0wBnVd62KhJM+Z9++k/1uZ3j
+          oCRbHI+VAgMBAAECggEAKwlXxz66FeK7wBwQDLdrO8fZAIQimaSE0jLUaRJGeD+l
+          gSqbLAiA7lQT2gOI+r6IecewCbr4lPwHbomJ7Q2E3EDXpxxV7g1XNr4ecd4PD954
+          aF6ZUArnkgC883pVAhQssiriu+/rYoSulIKtlyEc3liWsBfNZczvZbWixL8F0gY/
+          BJG9q5P7tS6VTRD/lQZTf4e35PcMKjT1Hyu3MdyOKaCovwUuma6eY04VgSinKywj
+          BZHO7+AS1z8W5N+v1Qt1tqe92EIeuR/uI5o+SqTftNzhy3ZWGNczR6t2ATaSdkyX
+          7aj3IVVQN30bmBp8D0vvtoxqLVvncmCiYDuaxiIpdQKBgQD7EQryAm/GJY52MMbw
+          3NWnwu4SL//6ltGxBuXXR9M5Iu9fgUVlK2Ooy09LSY5IjYQ+2EqDFi1HKcB07g/V
+          hkWWl1txlUT3Crg+lL3nFndfHwZ7wVN22mvoMMRGGg/z+8+v+FoaqOo9TPFz0vhX
+          5EpvW4vTk7nAu7JTLnEn94xnqwKBgQDRJDo2yljU9t8Ibid0BOmA1CYGcZlxnQfw
+          3UTmcYfyvpcCjlisJ8TE11wIzgHChN/rqIg9W7MT7ql7Cfte5HnVQsC+mol7JV6x
+          QQn6AXtEf9y/VOgbmFFqHU1oHRPd66X0BnfIdYIFtHKXX5XNYbUPQ++w90u27l5B
+          cGUMjZ6lvwKBgD+ohZbxSTf7g9Cx829U/xNnWIfiBcya+xYgwpxASO0+z2Tu2RKa
+          2s0Mp9FWGC6LO1HX86SjNd3KV1MOnZMtVW2mePgmufLNlAPCIRh72M6UhkdQsIH9
+          Rcj8vHdt2kepvHJIzUffNm1OmhYdEvzuFHWBx8VguoOE0+VFbEmO+dm7AoGAKyrW
+          FS8IzNQzztKltA27gIrJWnUiHdAyrmWNbh8q11C9bJqi9M20kIh/B5Y1yMeSTFrZ
+          3AhMWyXct3ek+b4g44LGs9DD5bYd6GorO/4ISmg10QweaGu1CjkIHCA8VIbqFwcq
+          vCZ88t5+9H2XNvAe5gq4s4cnipeCvvEK+l9UypMCgYAq9bhPZnZDbyoiNOQ5NEGE
+          1N0lZu2Kpcti+yf3HYCfDxcTxyTP8OM7TUmbZLeQcQckZQrrhVD4FQOGnJJczgI4
+          UdeiHkdEjV3XLE4kDRhblIfgGJAiC9UUjfW268Y9gDcmysr6xJEeumKk92rk9EYH
+          6gOwBs1U53qBQWaKLg1m3w==
+          -----END PRIVATE KEY-----
     scripts:
       - name: iOS assinatura automatica
         script: |
