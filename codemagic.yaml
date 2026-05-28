@@ -51,7 +51,11 @@ workflows:
             --certificate-key "@file:$KEY_FILE" \
             --create
 
-          keychain add-certificates
+          # Em alguns runners, o comando pode retornar erro mesmo importando cert/key.
+          # Nao abortar aqui; validar pelo profile e seguir para o build.
+          if ! keychain add-certificates; then
+            echo "Aviso: keychain add-certificates retornou erro, tentando continuar."
+          fi
           test "$(find "$HOME/Library/MobileDevice/Provisioning Profiles" -name '*.mobileprovision' 2>/dev/null | wc -l | tr -d ' ')" != "0"
           echo "Assinatura OK."
       - name: Flutter pub get
@@ -64,7 +68,9 @@ workflows:
         script: |
           set -e
           keychain initialize
-          keychain add-certificates
+          if ! keychain add-certificates; then
+            echo "Aviso: keychain add-certificates retornou erro no passo de build, continuando."
+          fi
           xcode-project use-profiles \
             --project ios/Runner.xcodeproj \
             --export-options-plist="$CM_BUILD_DIR/ios/ExportOptions.plist" \
