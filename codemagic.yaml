@@ -18,27 +18,31 @@ workflows:
           set -e
           keychain initialize
 
-          echo "=== Bundle IDs na conta ==="
+          echo "=== Bundle ID $BUNDLE_ID ==="
           app-store-connect bundle-ids list --json > /tmp/bundle_ids.json || echo "[]" > /tmp/bundle_ids.json
-          cat /tmp/bundle_ids.json | head -c 4000 || true
-
           if ! grep -q "$BUNDLE_ID" /tmp/bundle_ids.json; then
-            echo "Criando Bundle ID $BUNDLE_ID ..."
+            echo "Criando Bundle ID..."
             app-store-connect bundle-ids create \
               --identifier "$BUNDLE_ID" \
               --name "Deficit Calorico" \
-              --platform IOS || true
+              --platform IOS
+          else
+            echo "Bundle ID ja existe."
           fi
 
-          echo "=== Buscando/criando certificado + perfil IOS_APP_STORE ==="
+          echo "=== Certificado + perfil (com chave privada) ==="
+          openssl genpkey -algorithm RSA -out /tmp/cm_dist.key -pkeyopt rsa_keygen_bits:2048
+
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
             --create \
-            --delete-stale-profiles
+            --delete-stale-profiles \
+            --strict-match-identifier \
+            --certificate-key @file:/tmp/cm_dist.key
 
           keychain add-certificates
           xcode-project use-profiles
-          echo "Assinatura App Store configurada."
+          echo "Assinatura OK."
       - name: Flutter pub get
         script: |
           flutter --version
@@ -71,6 +75,6 @@ workflows:
             --path "$IPA" \
             --apple-id "$APP_STORE_APPLE_ID" \
             --max-build-processing-wait 30
-          echo "Upload OK. Build $BUILD_NUMBER no App Store Connect."
+          echo "Upload OK."
     artifacts:
       - build/ios/ipa/*.ipa
