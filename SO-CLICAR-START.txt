@@ -1,0 +1,43 @@
+═══════════════════════════════════════════════════════════════
+  VOCE NAO PRECISA COLAR CHAVE NEM SABER POWER SHELL
+═══════════════════════════════════════════════════════════════
+
+O projeto foi arrumado. O Codemagic CRIA a chave sozinho.
+
+═══════════════════════════════════════════════════════════════
+  FACA SO ISTO (2 cliques)
+═══════════════════════════════════════════════════════════════
+
+1) Abra no navegador:
+
+   https://codemagic.io/apps
+
+2) Entre na sua conta (login).
+
+3) Clique no quadrado do app (deficit_calorico).
+
+4) Clique no botao verde grande:
+
+   START NEW BUILD
+
+5) Escolha o workflow:
+
+   >>> USAR ESTE - iOS App Store <<<
+
+6) Clique START BUILD de novo.
+
+7) Espere 15-20 minutos (pode ir tomar cafe).
+
+8) Se ficar VERDE / finished = deu certo.
+
+═══════════════════════════════════════════════════════════════
+
+NAO precisa:
+- Colar chave
+- PowerShell
+- Git
+- Apple certificados (ja apagou)
+
+Se falhar, mande PRINT da tela do Codemagic (nao precisa log inteiro).
+
+═══════════════════════════════════════════════════════════════

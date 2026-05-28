@@ -17,26 +17,7 @@ workflows:
       - name: iOS assinatura automatica
         script: |
           set -e
-          echo "=== iOS signing BUILD_SIGNING_V8 ==="
-
-          if [ -z "${CERTIFICATE_PRIVATE_KEY:-}" ]; then
-            echo ""
-            echo "ERRO: falta CERTIFICATE_PRIVATE_KEY no Codemagic."
-            echo "Voce apagou os certificados na Apple — precisa da CHAVE para criar um novo."
-            echo ""
-            echo "1) No PC: duplo-clique em tools\\SETUP-IOS-DEFINITIVO.bat"
-            echo "2) Abre o arquivo: Downloads\\deficit_ios_dist_private.key"
-            echo "3) Codemagic > seu app > Environment variables"
-            echo "   Nome: CERTIFICATE_PRIVATE_KEY"
-            echo "   Valor: cole o arquivo INTEIRO (BEGIN PRIVATE KEY ... END)"
-            echo "   Marque Secure. NAO use grupo — variavel solta no app."
-            echo "4) Save e Start new build de novo."
-            exit 1
-          fi
-          if ! printf '%s' "$CERTIFICATE_PRIVATE_KEY" | grep -q 'BEGIN.*PRIVATE KEY'; then
-            echo "ERRO: CERTIFICATE_PRIVATE_KEY invalida. Cole o PEM completo."
-            exit 1
-          fi
+          echo "=== iOS signing BUILD_SIGNING_V9 (sem colar chave) ==="
 
           keychain initialize
 
@@ -49,9 +30,15 @@ workflows:
             --capability-type SIGN_IN_WITH_APPLE 2>/dev/null || true
 
           KEY_FILE=/tmp/cm_dist.key
-          printf '%s\n' "$CERTIFICATE_PRIVATE_KEY" > "$KEY_FILE"
+          if [ -n "${CERTIFICATE_PRIVATE_KEY:-}" ] && printf '%s' "$CERTIFICATE_PRIVATE_KEY" | grep -q 'BEGIN.*PRIVATE KEY'; then
+            printf '%s\n' "$CERTIFICATE_PRIVATE_KEY" > "$KEY_FILE"
+            echo "Chave: Codemagic (CERTIFICATE_PRIVATE_KEY)."
+          else
+            echo "Chave: gerada automaticamente — voce nao precisa fazer nada."
+            openssl genpkey -algorithm RSA -out "$KEY_FILE" -pkeyopt rsa_keygen_bits:2048
+            cp "$KEY_FILE" "$CM_BUILD_DIR/deficit_ios_dist_private.key"
+          fi
           chmod 600 "$KEY_FILE"
-          echo "CERTIFICATE_PRIVATE_KEY: OK"
 
           echo "--- Certificados Distribution na Apple ---"
           app-store-connect certificates list \
@@ -94,3 +81,4 @@ workflows:
             --max-build-processing-wait 30
     artifacts:
       - build/ios/ipa/*.ipa
+      - deficit_ios_dist_private.key
