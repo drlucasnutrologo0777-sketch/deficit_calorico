@@ -5,7 +5,7 @@ workflows:
     max_build_duration: 120
     instance_type: mac_mini_m2
     integrations:
-      app_store_connect: "deficit calorico"
+      app_store_connect: "Deficit Calorico"
     environment:
       groups:
         - ios_signing
