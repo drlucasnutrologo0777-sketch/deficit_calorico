@@ -7,6 +7,10 @@ workflows:
     integrations:
       app_store_connect: DeficitApple
     environment:
+      # Grupos que VOCE ja criou no Codemagic (SETUP-IOS-DEFINITIVO.bat)
+      groups:
+        - ios_code_signing      # CERTIFICATE_PRIVATE_KEY
+        - app_store_credentials # Issuer / Key ID / .p8 (se usar vars em vez de so integracao)
       flutter: 3.35.4
       xcode: latest
       cocoapods: default
@@ -17,6 +21,20 @@ workflows:
       - name: iOS assinatura automatica
         script: |
           set -e
+          echo "=== iOS signing BUILD_SIGNING_V6 (para no 1o erro, sem loop) ==="
+
+          if [ -z "${CERTIFICATE_PRIVATE_KEY:-}" ]; then
+            echo "ERRO: CERTIFICATE_PRIVATE_KEY nao chegou no build."
+            echo "Voce ja colou no grupo ios_code_signing — falta este yaml com:"
+            echo "  environment.groups: [ios_code_signing]"
+            echo "Faca git push do codemagic.yaml e rode build de novo."
+            exit 1
+          fi
+          if ! printf '%s' "$CERTIFICATE_PRIVATE_KEY" | grep -q 'BEGIN.*PRIVATE KEY'; then
+            echo "ERRO: CERTIFICATE_PRIVATE_KEY invalida (cole o PEM completo BEGIN/END)."
+            exit 1
+          fi
+
           keychain initialize
 
           app-store-connect bundle-ids create \
@@ -28,23 +46,25 @@ workflows:
             --capability-type SIGN_IN_WITH_APPLE 2>/dev/null || true
 
           KEY_FILE=/tmp/cm_dist.key
-          if [ -n "${CERTIFICATE_PRIVATE_KEY:-}" ]; then
-            printf '%s\n' "$CERTIFICATE_PRIVATE_KEY" > "$KEY_FILE"
-          else
-            openssl genpkey -algorithm RSA -out "$KEY_FILE" -pkeyopt rsa_keygen_bits:2048
-          fi
+          printf '%s\n' "$CERTIFICATE_PRIVATE_KEY" > "$KEY_FILE"
+          chmod 600 "$KEY_FILE"
 
+          echo "--- Certificados Distribution na conta Apple ---"
+          app-store-connect certificates list \
+            --type IOS_DISTRIBUTION --type DISTRIBUTION || true
+
+          REVOKED=0
           revoke_certs() {
             app-store-connect certificates list \
               --type DISTRIBUTION --type IOS_DISTRIBUTION \
-              --json -s > /tmp/certs.json || true
-            python3 << 'PY'
-          import json, subprocess
+              --json > /tmp/certs.json 2>/tmp/certs.list.err || true
+            REVOKED=$(python3 << 'PY'
+          import json, subprocess, sys
           from pathlib import Path
           raw = Path("/tmp/certs.json").read_text(encoding="utf-8", errors="replace").strip()
           if not raw:
-              print("Nenhum cert na lista.", flush=True)
-              raise SystemExit(0)
+              print("0", flush=True)
+              sys.exit(0)
           i = min(x for x in (raw.find("["), raw.find("{")) if x >= 0)
           data = json.loads(raw[i:])
           items = data if isinstance(data, list) else data.get("data", [])
@@ -53,12 +73,21 @@ workflows:
               cid = item.get("id")
               t = (item.get("attributes") or {}).get("certificateType", "")
               if cid and t in ("DISTRIBUTION", "IOS_DISTRIBUTION"):
-                  print(f"DELETE {t} {cid}", flush=True)
-                  r = subprocess.run(["app-store-connect", "certificates", "delete", cid, "-s"])
+                  print(f"DELETE {t} {cid}", file=sys.stderr, flush=True)
+                  r = subprocess.run(
+                      ["app-store-connect", "certificates", "delete", cid],
+                      capture_output=True,
+                      text=True,
+                  )
                   if r.returncode == 0:
                       n += 1
-          print(f"Revogados: {n}", flush=True)
+                  else:
+                      err = (r.stderr or r.stdout or "").strip()
+                      print(f"  FALHA delete {cid}: {err}", file=sys.stderr, flush=True)
+          print(n, flush=True)
           PY
+          )
+            echo "Revogados: $REVOKED"
           }
 
           sign_app_store() {
@@ -69,15 +98,35 @@ workflows:
               --create
           }
 
+          fail_manual() {
+            echo ""
+            echo "=========================================="
+            echo " PARE - NAO RODE OUTRO BUILD AINDA"
+            echo "=========================================="
+            echo "Causa: 2 certificados na Apple + chave do Codemagic nao combina."
+            echo "API nao apagou (Revogados: 0) = apague VOCE na Apple:"
+            echo "  https://developer.apple.com/account/resources/certificates/list"
+            echo "Apague TODOS Apple Distribution / iOS Distribution."
+            echo "Espere 30 minutos."
+            echo "Confirme CERTIFICATE_PRIVATE_KEY = deficit_ios_dist_private.key (Secure)."
+            echo "Integracao DeficitApple = Admin ou App Manager."
+            echo "Depois: Start new build (workflow iOS App Store)."
+            exit 1
+          }
+
           set +e
           sign_app_store
           RC=$?
           set -e
           if [ "$RC" -ne 0 ]; then
-            echo "Limpando certificados antigos na Apple..."
+            echo "Assinatura falhou (RC=$RC). Tentando revogar certificados pela API..."
             revoke_certs
-            sleep 30
-            sign_app_store
+            if [ "${REVOKED:-0}" = "0" ]; then
+              fail_manual
+            fi
+            echo "Aguardando 45s para Apple processar revogacao..."
+            sleep 45
+            sign_app_store || fail_manual
           fi
 
           keychain add-certificates
