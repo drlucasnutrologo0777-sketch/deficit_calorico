@@ -7,6 +7,8 @@
 	<key>uploadSymbols</key>
 	<true/>
 	<key>signingStyle</key>
-	<string>manual</string>
+	<string>automatic</string>
+	<key>destination</key>
+	<string>export</string>
 </dict>
 </plist>

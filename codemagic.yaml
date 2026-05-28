@@ -6,109 +6,68 @@ workflows:
     integrations:
       app_store_connect: DeficitApple
     environment:
-      # Dart 3.9+: font_awesome 11 + google_fonts 6.3.3 + page_transition 2.2.2
       flutter: 3.35.4
       xcode: latest
       cocoapods: default
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.mycompany.deficitcalorico
       vars:
         BUNDLE_ID: com.mycompany.deficitcalorico
         APP_STORE_APPLE_ID: "6772267019"
     scripts:
-      - name: "Assinatura v5 (auto-retry 409)"
+      - name: Assinatura App Store (distribuicao)
         script: |
           set -e
-          echo "=== BUILD v5 ==="
           keychain initialize
-          openssl genpkey -algorithm RSA -out /tmp/cm_dist.key -pkeyopt rsa_keygen_bits:2048
-
-          delete_all() {
-            app-store-connect certificates list --type IOS_DISTRIBUTION --json > /tmp/c.json 2>/dev/null || echo "[]" > /tmp/c.json
-            python3 << 'PY'
-          import json, subprocess
-          with open("/tmp/c.json") as f:
-              raw = json.load(f)
-          items = raw if isinstance(raw, list) else (raw.get("data") or [])
-          for item in items:
-              subprocess.run(["app-store-connect","certificates","delete",item["id"],"--ignore-not-found"], check=False)
-          PY
-            app-store-connect certificates list --type DISTRIBUTION --json > /tmp/c2.json 2>/dev/null || echo "[]" > /tmp/c2.json
-            python3 << 'PY'
-          import json, subprocess
-          with open("/tmp/c2.json") as f:
-              raw = json.load(f)
-          items = raw if isinstance(raw, list) else (raw.get("data") or [])
-          for item in items:
-              subprocess.run(["app-store-connect","certificates","delete",item["id"],"--ignore-not-found"], check=False)
-          PY
-          }
-
-          OK=0
-          T=1
-          while [ "$T" -le 10 ]; do
-            echo "Tentativa $T/10..."
-            delete_all
-            sleep 90
-            if app-store-connect fetch-signing-files "$BUNDLE_ID" \
-              --type IOS_APP_STORE \
-              --create \
-              --delete-stale-profiles \
-              --strict-match-identifier \
-              --certificate-key @file:/tmp/cm_dist.key 2>/tmp/sign.log; then
-              OK=1
-              break
-            fi
-            cat /tmp/sign.log
-            T=$((T+1))
-          done
-
-          if [ "$OK" -ne 1 ]; then
-            echo "FALHOU apos 10 tentativas. Espere 1 hora sem clicar Create certificate e rode build de novo."
-            exit 1
-          fi
-
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create \
+            --delete-stale-profiles \
+            --strict-match-identifier
           keychain add-certificates
           xcode-project use-profiles
-          echo "OK v5"
+          echo "Perfis de distribuicao instalados."
       - name: Flutter pub get
         script: |
           flutter --version
           flutter pub get
-      - name: Icones do app (peach, nao logo Flutter)
+      - name: Icones do app
         script: |
           dart run flutter_launcher_icons
       - name: CocoaPods
         script: |
           set -e
-          cd ios
-          pod install --repo-update
-      - name: Build IPA
+          cd ios && pod install --repo-update
+      - name: Build IPA assinado para App Store
         script: |
           set -e
           BUILD_NAME=$(grep '^version:' pubspec.yaml | sed 's/version: //;s/+.*//')
           BUILD_NUMBER=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
-          test -n "$BUILD_NAME" && test -n "$BUILD_NUMBER"
           echo "Version: $BUILD_NAME ($BUILD_NUMBER)"
           flutter build ipa --release \
             --build-name="$BUILD_NAME" \
             --build-number="$BUILD_NUMBER" \
-            --export-options-plist=/Users/builder/export_options.plist
-      - name: "ENVIAR para Apple (upload IPA)"
+            --export-options-plist="$CM_BUILD_DIR/ios/ExportOptions.plist"
+          IPA=$(find build/ios/ipa -name '*.ipa' | head -1)
+          test -n "$IPA"
+          echo "Verificando assinatura do IPA..."
+          unzip -q "$IPA" -d /tmp/ipa_check
+          codesign -dv --verbose=4 /tmp/ipa_check/Payload/*.app 2>&1 | tee /tmp/codesign.log
+          if grep -qi "iPhone Developer" /tmp/codesign.log && ! grep -qi "Distribution" /tmp/codesign.log; then
+            echo "ERRO: IPA parece assinado com certificado de DESENVOLVIMENTO."
+            exit 1
+          fi
+          echo "IPA OK: $IPA"
+      - name: ENVIAR para Apple (upload IPA)
         script: |
           set -e
           IPA=$(find build/ios/ipa -name '*.ipa' | head -1)
-          if [ -z "$IPA" ]; then
-            echo "ERRO: arquivo .ipa nao encontrado em build/ios/ipa/"
-            ls -la build/ios/ipa/ || true
-            exit 1
-          fi
-          echo "Enviando IPA: $IPA"
-          # SEM --testflight = sobe o app, nao pede email/nome de beta externo
+          echo "Enviando: $IPA"
           app-store-connect publish \
             --path "$IPA" \
             --apple-id "$APP_STORE_APPLE_ID" \
             --max-build-processing-wait 30
-          echo "SUCESSO: IPA na Apple. Veja TestFlight build 118 em ~20 min."
+          echo "Upload concluido. Use build novo no App Store Connect (nao o 117)."
     artifacts:
       - build/ios/ipa/*.ipa
-    # Upload do IPA ja e feito no script acima. Publishing desligado para nao falhar
-    # por falta de e-mail/nome do TestFlight externo.
