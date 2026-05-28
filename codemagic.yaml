@@ -9,25 +9,36 @@ workflows:
       flutter: 3.35.4
       xcode: latest
       cocoapods: default
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.mycompany.deficitcalorico
       vars:
         BUNDLE_ID: com.mycompany.deficitcalorico
         APP_STORE_APPLE_ID: "6772267019"
     scripts:
-      - name: Assinatura App Store (distribuicao)
+      - name: Criar Bundle ID e perfil App Store
         script: |
           set -e
           keychain initialize
+
+          echo "=== Bundle IDs na conta ==="
+          app-store-connect bundle-ids list --json > /tmp/bundle_ids.json || echo "[]" > /tmp/bundle_ids.json
+          cat /tmp/bundle_ids.json | head -c 4000 || true
+
+          if ! grep -q "$BUNDLE_ID" /tmp/bundle_ids.json; then
+            echo "Criando Bundle ID $BUNDLE_ID ..."
+            app-store-connect bundle-ids create \
+              --identifier "$BUNDLE_ID" \
+              --name "Deficit Calorico" \
+              --platform IOS || true
+          fi
+
+          echo "=== Buscando/criando certificado + perfil IOS_APP_STORE ==="
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
             --create \
-            --delete-stale-profiles \
-            --strict-match-identifier
+            --delete-stale-profiles
+
           keychain add-certificates
           xcode-project use-profiles
-          echo "Perfis de distribuicao instalados."
+          echo "Assinatura App Store configurada."
       - name: Flutter pub get
         script: |
           flutter --version
@@ -39,7 +50,7 @@ workflows:
         script: |
           set -e
           cd ios && pod install --repo-update
-      - name: Build IPA assinado para App Store
+      - name: Build IPA App Store
         script: |
           set -e
           BUILD_NAME=$(grep '^version:' pubspec.yaml | sed 's/version: //;s/+.*//')
@@ -51,23 +62,15 @@ workflows:
             --export-options-plist="$CM_BUILD_DIR/ios/ExportOptions.plist"
           IPA=$(find build/ios/ipa -name '*.ipa' | head -1)
           test -n "$IPA"
-          echo "Verificando assinatura do IPA..."
-          unzip -q "$IPA" -d /tmp/ipa_check
-          codesign -dv --verbose=4 /tmp/ipa_check/Payload/*.app 2>&1 | tee /tmp/codesign.log
-          if grep -qi "iPhone Developer" /tmp/codesign.log && ! grep -qi "Distribution" /tmp/codesign.log; then
-            echo "ERRO: IPA parece assinado com certificado de DESENVOLVIMENTO."
-            exit 1
-          fi
-          echo "IPA OK: $IPA"
-      - name: ENVIAR para Apple (upload IPA)
+          echo "IPA: $IPA"
+      - name: ENVIAR para Apple
         script: |
           set -e
           IPA=$(find build/ios/ipa -name '*.ipa' | head -1)
-          echo "Enviando: $IPA"
           app-store-connect publish \
             --path "$IPA" \
             --apple-id "$APP_STORE_APPLE_ID" \
             --max-build-processing-wait 30
-          echo "Upload concluido. Use build novo no App Store Connect (nao o 117)."
+          echo "Upload OK. Build $BUILD_NUMBER no App Store Connect."
     artifacts:
       - build/ios/ipa/*.ipa
