@@ -88,23 +88,27 @@ workflows:
           echo "Limpando certificados Distribution antigos (mesma conta da integracao)..."
           app-store-connect certificates list \
             --type DISTRIBUTION --type IOS_DISTRIBUTION \
-            --json > /tmp/certs.json 2>/dev/null || true
+            --json -s > /tmp/certs.json 2>/tmp/certs.err || true
           python3 <<'PY'
-          import json, subprocess
+          import json, subprocess, sys
           from pathlib import Path
           raw = Path("/tmp/certs.json").read_text(encoding="utf-8", errors="replace").strip()
           if not raw:
+              err = Path("/tmp/certs.err").read_text(encoding="utf-8", errors="replace").strip()
+              if err:
+                  print(f"DELETE LIST FAIL: {err}")
               print("Revogados: 0 (lista vazia)")
               raise SystemExit(0)
           i = min(x for x in (raw.find("["), raw.find("{")) if x >= 0)
           data = json.loads(raw[i:])
           items = data if isinstance(data, list) else data.get("data", [])
+          print(f"Certificados listados: {len(items)}")
           n = 0
           for item in items:
               cid = item.get("id")
               ctype = (item.get("attributes") or {}).get("certificateType", "")
               if cid and ctype in ("DISTRIBUTION", "IOS_DISTRIBUTION"):
-                  r = subprocess.run(["app-store-connect", "certificates", "delete", cid], capture_output=True, text=True)
+                  r = subprocess.run(["app-store-connect", "certificates", "delete", cid, "-s"], capture_output=True, text=True)
                   if r.returncode == 0:
                       n += 1
                       print(f"DELETE OK: {cid}")
@@ -112,6 +116,9 @@ workflows:
                       err = (r.stderr or r.stdout or "").strip()
                       print(f"DELETE FAIL: {cid} :: {err}")
           print(f"Revogados: {n}")
+          if len(items) > 0 and n == 0:
+              print("ERRO: API key sem permissao de apagar certificados ou team incorreto.")
+              sys.exit(3)
           PY
           echo "Aguardando 30s para Apple processar revogacoes..."
           sleep 30
