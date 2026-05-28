@@ -9,9 +9,6 @@ workflows:
       flutter: 3.35.4
       xcode: latest
       cocoapods: default
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.mycompany.deficitcalorico
       vars:
         BUNDLE_ID: com.mycompany.deficitcalorico
         APP_STORE_APPLE_ID: "6772267019"
@@ -33,17 +30,32 @@ workflows:
             echo "Bundle ID ja existe."
           fi
 
-          echo "=== Certificado + perfil (com chave privada) ==="
+          echo "=== Sign in with Apple (app usa login Apple) ==="
+          app-store-connect bundle-ids enable-capability \
+            --bundle-id-identifier "$BUNDLE_ID" \
+            --capability-type SIGN_IN_WITH_APPLE 2>/dev/null || echo "Capability OK ou ja ativa."
+
+          echo "=== Certificado + perfil App Store ==="
           openssl genpkey -algorithm RSA -out /tmp/cm_dist.key -pkeyopt rsa_keygen_bits:2048
 
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
             --create \
             --delete-stale-profiles \
-            --strict-match-identifier \
             --certificate-key @file:/tmp/cm_dist.key
 
           keychain add-certificates
+
+          echo "=== Verificar perfil baixado ==="
+          PROFILE_DIR="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$PROFILE_DIR"
+          COUNT=$(find "$PROFILE_DIR" -name "*.mobileprovision" 2>/dev/null | wc -l | tr -d ' ')
+          echo "Perfis em disco: $COUNT"
+          if [ "$COUNT" = "0" ]; then
+            echo "ERRO: fetch-signing-files nao baixou perfil. Confira API key DeficitApple (Admin/App Manager)."
+            exit 1
+          fi
+          app-store-connect profiles list --json 2>/dev/null | grep -F "$BUNDLE_ID" || true
           echo "Assinatura OK."
       - name: Flutter pub get
         script: |
