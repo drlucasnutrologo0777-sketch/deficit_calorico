@@ -21,8 +21,7 @@ Correcao = perfil IOS_APP_STORE + method app-store (ja no projeto).
 2) Apague certificados na Apple (link que o .bat abre)
 
 3) Cole a chave no Codemagic:
-   Grupo: ios_code_signing
-   Variavel: CERTIFICATE_PRIVATE_KEY (Secure)
+   Variavel: CERTIFICATE_PRIVATE_KEY (Secure, sem grupo obrigatorio)
    Valor: arquivo Downloads\deficit_ios_dist_private.key
 
 4) Codemagic > Start new build
