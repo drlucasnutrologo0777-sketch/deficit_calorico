@@ -41,11 +41,51 @@ workflows:
           chmod 600 "$KEY_FILE"
 
           echo "Criando certificado + perfil App Store..."
-          app-store-connect fetch-signing-files "$BUNDLE_ID" \
-            --type IOS_APP_STORE \
-            --delete-stale-profiles \
-            --certificate-key "@file:$KEY_FILE" \
-            --create
+          sign_fetch() {
+            app-store-connect fetch-signing-files "$BUNDLE_ID" \
+              --type IOS_APP_STORE \
+              --delete-stale-profiles \
+              --certificate-key "@file:$KEY_FILE" \
+              --create
+          }
+
+          purge_distribution_certs() {
+            app-store-connect certificates list \
+              --type DISTRIBUTION --type IOS_DISTRIBUTION \
+              --json > /tmp/certs.json 2>/dev/null || true
+            python3 <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          raw = Path("/tmp/certs.json").read_text(encoding="utf-8", errors="replace").strip()
+          if not raw:
+              print("Revogados: 0")
+              raise SystemExit(0)
+          i = min(x for x in (raw.find("["), raw.find("{")) if x >= 0)
+          data = json.loads(raw[i:])
+          items = data if isinstance(data, list) else data.get("data", [])
+          n = 0
+          for item in items:
+              cid = item.get("id")
+              ctype = (item.get("attributes") or {}).get("certificateType", "")
+              if cid and ctype in ("DISTRIBUTION", "IOS_DISTRIBUTION"):
+                  r = subprocess.run(["app-store-connect", "certificates", "delete", cid], capture_output=True, text=True)
+                  if r.returncode == 0:
+                      n += 1
+          print(f"Revogados: {n}")
+          PY
+          }
+
+          set +e
+          sign_fetch
+          RC=$?
+          set -e
+          if [ "$RC" -ne 0 ]; then
+            echo "Assinatura falhou (RC=$RC). Tentando limpar certificados Distribution na Apple..."
+            purge_distribution_certs
+            echo "Aguardando 45s para Apple processar revogacao..."
+            sleep 45
+            sign_fetch
+          fi
 
           XCODE_PROFILES="$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles"
           MOBILE_PROFILES="$HOME/Library/MobileDevice/Provisioning Profiles"
