@@ -17,7 +17,7 @@ workflows:
       - name: iOS assinatura automatica
         script: |
           set -e
-          echo "=== iOS signing BUILD_SIGNING_V11 ==="
+          echo "=== iOS signing BUILD_SIGNING_STABLE_V1 ==="
 
           keychain initialize
 
@@ -30,62 +30,25 @@ workflows:
             --capability-type SIGN_IN_WITH_APPLE 2>/dev/null || true
 
           KEY_FILE=/tmp/cm_dist.key
-          if [ -n "${CERTIFICATE_PRIVATE_KEY:-}" ] && printf '%s' "$CERTIFICATE_PRIVATE_KEY" | grep -q 'BEGIN.*PRIVATE KEY'; then
-            printf '%s\n' "$CERTIFICATE_PRIVATE_KEY" > "$KEY_FILE"
-            echo "Chave: Codemagic (CERTIFICATE_PRIVATE_KEY)."
-          else
-            echo "Chave: gerada automaticamente."
-            openssl genpkey -algorithm RSA -out "$KEY_FILE" -pkeyopt rsa_keygen_bits:2048
-            cp "$KEY_FILE" "$CM_BUILD_DIR/deficit_ios_dist_private.key"
+          if [ -z "${CERTIFICATE_PRIVATE_KEY:-}" ]; then
+            echo "ERRO: CERTIFICATE_PRIVATE_KEY nao configurada no Codemagic."
+            echo "Sem chave fixa, entra no ciclo 409 de certificados."
+            exit 1
           fi
+          if ! printf '%s' "$CERTIFICATE_PRIVATE_KEY" | grep -q 'BEGIN.*PRIVATE KEY'; then
+            echo "ERRO: CERTIFICATE_PRIVATE_KEY invalida (PEM incompleto)."
+            exit 1
+          fi
+          printf '%s\n' "$CERTIFICATE_PRIVATE_KEY" > "$KEY_FILE"
+          echo "Chave fixa carregada do Codemagic."
           chmod 600 "$KEY_FILE"
 
-          echo "Criando certificado + perfil App Store..."
-          sign_fetch() {
-            app-store-connect fetch-signing-files "$BUNDLE_ID" \
-              --type IOS_APP_STORE \
-              --delete-stale-profiles \
-              --certificate-key "@file:$KEY_FILE" \
-              --create
-          }
-
-          purge_distribution_certs() {
-            app-store-connect certificates list \
-              --type DISTRIBUTION --type IOS_DISTRIBUTION \
-              --json > /tmp/certs.json 2>/dev/null || true
-            python3 <<'PY'
-          import json, subprocess
-          from pathlib import Path
-          raw = Path("/tmp/certs.json").read_text(encoding="utf-8", errors="replace").strip()
-          if not raw:
-              print("Revogados: 0")
-              raise SystemExit(0)
-          i = min(x for x in (raw.find("["), raw.find("{")) if x >= 0)
-          data = json.loads(raw[i:])
-          items = data if isinstance(data, list) else data.get("data", [])
-          n = 0
-          for item in items:
-              cid = item.get("id")
-              ctype = (item.get("attributes") or {}).get("certificateType", "")
-              if cid and ctype in ("DISTRIBUTION", "IOS_DISTRIBUTION"):
-                  r = subprocess.run(["app-store-connect", "certificates", "delete", cid], capture_output=True, text=True)
-                  if r.returncode == 0:
-                      n += 1
-          print(f"Revogados: {n}")
-          PY
-          }
-
-          set +e
-          sign_fetch
-          RC=$?
-          set -e
-          if [ "$RC" -ne 0 ]; then
-            echo "Assinatura falhou (RC=$RC). Tentando limpar certificados Distribution na Apple..."
-            purge_distribution_certs
-            echo "Aguardando 45s para Apple processar revogacao..."
-            sleep 45
-            sign_fetch
-          fi
+          echo "Criando certificado + perfil App Store com chave fixa..."
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --delete-stale-profiles \
+            --certificate-key "@file:$KEY_FILE" \
+            --create
 
           XCODE_PROFILES="$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles"
           MOBILE_PROFILES="$HOME/Library/MobileDevice/Provisioning Profiles"
@@ -134,4 +97,3 @@ workflows:
             --max-build-processing-wait 30
     artifacts:
       - build/ios/ipa/*.ipa
-      - deficit_ios_dist_private.key
