@@ -53,9 +53,16 @@ workflows:
               "$@"
           }
 
-          if fetch_signing; then
+          set +e
+          fetch_signing
+          FETCH_OK=$?
+          fetch_signing --create
+          FETCH_CREATE_OK=$?
+          set -e
+
+          if [ "$FETCH_OK" -eq 0 ]; then
             echo "OK: perfil/cert baixados."
-          elif fetch_signing --create; then
+          elif [ "$FETCH_CREATE_OK" -eq 0 ]; then
             echo "OK: cert+perfil criados."
           else
             echo "409 ou limite: revogando certs Distribution antigos..."
