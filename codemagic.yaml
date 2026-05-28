@@ -1,9 +1,4 @@
-# iOS App Store — assinatura CORRETA (sem gerar chave nova a cada build)
-#
-# OBRIGATORIO UMA VEZ: Area de Trabalho > CLIQUE-IOS-DEFICIT.bat
-# Codemagic > Environment variables (sem grupo obrigatorio):
-#   CERTIFICATE_PRIVATE_KEY = conteudo do arquivo .key (Secure)
-#
+# iOS App Store — automatico (voce so clica Start new build no Codemagic)
 workflows:
   default-workflow:
     name: ">>> USAR ESTE - iOS App Store <<<"
@@ -19,28 +14,11 @@ workflows:
         BUNDLE_ID: com.mycompany.deficitcalorico
         APP_STORE_APPLE_ID: "6772267019"
     scripts:
-      - name: iOS assinatura App Store
+      - name: iOS assinatura automatica
         script: |
           set -e
-          if [ -z "${CERTIFICATE_PRIVATE_KEY:-}" ]; then
-            echo ""
-            echo "============================================================"
-            echo " FALTA CONFIGURAR ASSINATURA iOS (uma vez no Codemagic)"
-            echo "============================================================"
-            echo "1) No PC: rode tools\\SETUP-IOS-DEFINITIVO.bat"
-            echo "2) Codemagic > Environment variables"
-            echo "   Nome:  CERTIFICATE_PRIVATE_KEY (pode ser sem grupo)"
-            echo "   Valor: cole o arquivo deficit_ios_dist_private.key (Secure)"
-            echo "3) Start new build de novo"
-            echo "============================================================"
-            exit 1
-          fi
-
           keychain initialize
-          KEY_FILE=/tmp/cm_dist.key
-          printf '%s\n' "$CERTIFICATE_PRIVATE_KEY" > "$KEY_FILE"
 
-          echo "=== Bundle ID ==="
           app-store-connect bundle-ids create \
             --identifier "$BUNDLE_ID" \
             --name "Deficit Calorico" \
@@ -49,48 +27,68 @@ workflows:
             --bundle-id-identifier "$BUNDLE_ID" \
             --capability-type SIGN_IN_WITH_APPLE 2>/dev/null || true
 
-          echo "=== Baixar ou criar certificado + perfil IOS_APP_STORE ==="
-          set +e
-          app-store-connect fetch-signing-files "$BUNDLE_ID" \
-            --type IOS_APP_STORE \
-            --delete-stale-profiles \
-            --certificate-key "@file:$KEY_FILE"
-          FETCH_RC=$?
-          set -e
+          KEY_FILE=/tmp/cm_dist.key
+          if [ -n "${CERTIFICATE_PRIVATE_KEY:-}" ]; then
+            printf '%s\n' "$CERTIFICATE_PRIVATE_KEY" > "$KEY_FILE"
+          else
+            openssl genpkey -algorithm RSA -out "$KEY_FILE" -pkeyopt rsa_keygen_bits:2048
+          fi
 
-          if [ "$FETCH_RC" -ne 0 ]; then
-            echo "Criando certificado novo (primeira vez ou apos limpar na Apple)..."
+          revoke_certs() {
+            app-store-connect certificates list \
+              --type DISTRIBUTION --type IOS_DISTRIBUTION \
+              --json -s > /tmp/certs.json || true
+            python3 << 'PY'
+          import json, subprocess
+          from pathlib import Path
+          raw = Path("/tmp/certs.json").read_text(encoding="utf-8", errors="replace").strip()
+          if not raw:
+              print("Nenhum cert na lista.", flush=True)
+              raise SystemExit(0)
+          i = min(x for x in (raw.find("["), raw.find("{")) if x >= 0)
+          data = json.loads(raw[i:])
+          items = data if isinstance(data, list) else data.get("data", [])
+          n = 0
+          for item in items:
+              cid = item.get("id")
+              t = (item.get("attributes") or {}).get("certificateType", "")
+              if cid and t in ("DISTRIBUTION", "IOS_DISTRIBUTION"):
+                  print(f"DELETE {t} {cid}", flush=True)
+                  r = subprocess.run(["app-store-connect", "certificates", "delete", cid, "-s"])
+                  if r.returncode == 0:
+                      n += 1
+          print(f"Revogados: {n}", flush=True)
+          PY
+          }
+
+          sign_app_store() {
             app-store-connect fetch-signing-files "$BUNDLE_ID" \
               --type IOS_APP_STORE \
               --delete-stale-profiles \
               --certificate-key "@file:$KEY_FILE" \
-              --create || {
-              echo ""
-              echo "ERRO 409: Apple ja tem 2 certificados Distribution."
-              echo "Apague TODOS em (uma vez no navegador):"
-              echo "https://developer.apple.com/account/resources/certificates/list"
-              echo "Espere 20 min e rode o build de novo."
-              exit 1
-            }
+              --create
+          }
+
+          set +e
+          sign_app_store
+          RC=$?
+          set -e
+          if [ "$RC" -ne 0 ]; then
+            echo "Limpando certificados antigos na Apple..."
+            revoke_certs
+            sleep 30
+            sign_app_store
           fi
 
           keychain add-certificates
-          PROFILE_DIR="$HOME/Library/MobileDevice/Provisioning Profiles"
-          COUNT=$(find "$PROFILE_DIR" -name "*.mobileprovision" 2>/dev/null | wc -l | tr -d ' ')
-          echo "Perfis: $COUNT"
-          test "$COUNT" != "0"
-          echo "Assinatura App Store OK."
+          test "$(find "$HOME/Library/MobileDevice/Provisioning Profiles" -name '*.mobileprovision' 2>/dev/null | wc -l | tr -d ' ')" != "0"
+          echo "Assinatura OK."
       - name: Flutter pub get
-        script: |
-          flutter --version
-          flutter pub get
+        script: flutter pub get
       - name: Icones do app
-        script: |
-          dart run flutter_launcher_icons
+        script: dart run flutter_launcher_icons
       - name: CocoaPods
-        script: |
-          set -e
-          cd ios && pod install --repo-update
+        script: cd ios && pod install --repo-update
       - name: Build IPA App Store
         script: |
           set -e
@@ -100,28 +98,15 @@ workflows:
             --project ios/Runner.xcodeproj \
             --export-options-plist="$CM_BUILD_DIR/ios/ExportOptions.plist" \
             --archive-method app-store
-
-          BUILD_NAME=$(grep '^version:' pubspec.yaml | sed 's/version: //;s/+.*//')
-          BUILD_NUMBER=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
-          echo "Version: $BUILD_NAME ($BUILD_NUMBER)"
-
-          flutter build ipa --release \
-            --build-name="$BUILD_NAME" \
-            --build-number="$BUILD_NUMBER" \
+          BN=$(grep '^version:' pubspec.yaml | sed 's/.*+//')
+          BV=$(grep '^version:' pubspec.yaml | sed 's/version: //;s/+.*//')
+          flutter build ipa --release --build-name="$BV" --build-number="$BN" \
             --export-options-plist="$CM_BUILD_DIR/ios/ExportOptions.plist"
-
-          IPA=$(find build/ios/ipa -name '*.ipa' | head -1)
-          test -n "$IPA"
-          codesign -dvv "$IPA" 2>&1 | head -20
-          echo "IPA: $IPA"
+          test -n "$(find build/ios/ipa -name '*.ipa' | head -1)"
       - name: ENVIAR para Apple
         script: |
-          set -e
           IPA=$(find build/ios/ipa -name '*.ipa' | head -1)
-          app-store-connect publish \
-            --path "$IPA" \
-            --apple-id "$APP_STORE_APPLE_ID" \
+          app-store-connect publish --path "$IPA" --apple-id "$APP_STORE_APPLE_ID" \
             --max-build-processing-wait 30
-          echo "Upload OK."
     artifacts:
       - build/ios/ipa/*.ipa
