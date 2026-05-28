@@ -7,10 +7,6 @@ workflows:
     integrations:
       app_store_connect: DeficitApple
     environment:
-      # Grupos que VOCE ja criou no Codemagic (SETUP-IOS-DEFINITIVO.bat)
-      groups:
-        - ios_code_signing      # CERTIFICATE_PRIVATE_KEY
-        - app_store_credentials # Issuer / Key ID / .p8 (se usar vars em vez de so integracao)
       flutter: 3.35.4
       xcode: latest
       cocoapods: default
@@ -21,19 +17,7 @@ workflows:
       - name: iOS assinatura automatica
         script: |
           set -e
-          echo "=== iOS signing BUILD_SIGNING_V6 (para no 1o erro, sem loop) ==="
-
-          if [ -z "${CERTIFICATE_PRIVATE_KEY:-}" ]; then
-            echo "ERRO: CERTIFICATE_PRIVATE_KEY nao chegou no build."
-            echo "Voce ja colou no grupo ios_code_signing — falta este yaml com:"
-            echo "  environment.groups: [ios_code_signing]"
-            echo "Faca git push do codemagic.yaml e rode build de novo."
-            exit 1
-          fi
-          if ! printf '%s' "$CERTIFICATE_PRIVATE_KEY" | grep -q 'BEGIN.*PRIVATE KEY'; then
-            echo "ERRO: CERTIFICATE_PRIVATE_KEY invalida (cole o PEM completo BEGIN/END)."
-            exit 1
-          fi
+          echo "=== iOS signing BUILD_SIGNING_V7 (sem grupos no yaml) ==="
 
           keychain initialize
 
@@ -46,8 +30,15 @@ workflows:
             --capability-type SIGN_IN_WITH_APPLE 2>/dev/null || true
 
           KEY_FILE=/tmp/cm_dist.key
-          printf '%s\n' "$CERTIFICATE_PRIVATE_KEY" > "$KEY_FILE"
-          chmod 600 "$KEY_FILE"
+          USE_KEY=0
+          if [ -n "${CERTIFICATE_PRIVATE_KEY:-}" ] && printf '%s' "$CERTIFICATE_PRIVATE_KEY" | grep -q 'BEGIN.*PRIVATE KEY'; then
+            printf '%s\n' "$CERTIFICATE_PRIVATE_KEY" > "$KEY_FILE"
+            chmod 600 "$KEY_FILE"
+            USE_KEY=1
+            echo "Usando CERTIFICATE_PRIVATE_KEY (variavel do app, sem grupo)."
+          else
+            echo "Sem CERTIFICATE_PRIVATE_KEY — assinatura so pela integracao DeficitApple."
+          fi
 
           echo "--- Certificados Distribution na conta Apple ---"
           app-store-connect certificates list \
@@ -91,11 +82,18 @@ workflows:
           }
 
           sign_app_store() {
-            app-store-connect fetch-signing-files "$BUNDLE_ID" \
-              --type IOS_APP_STORE \
-              --delete-stale-profiles \
-              --certificate-key "@file:$KEY_FILE" \
-              --create
+            if [ "$USE_KEY" = "1" ]; then
+              app-store-connect fetch-signing-files "$BUNDLE_ID" \
+                --type IOS_APP_STORE \
+                --delete-stale-profiles \
+                --certificate-key "@file:$KEY_FILE" \
+                --create
+            else
+              app-store-connect fetch-signing-files "$BUNDLE_ID" \
+                --type IOS_APP_STORE \
+                --delete-stale-profiles \
+                --create
+            fi
           }
 
           fail_manual() {
@@ -108,8 +106,8 @@ workflows:
             echo "  https://developer.apple.com/account/resources/certificates/list"
             echo "Apague TODOS Apple Distribution / iOS Distribution."
             echo "Espere 30 minutos."
-            echo "Confirme CERTIFICATE_PRIVATE_KEY = deficit_ios_dist_private.key (Secure)."
-            echo "Integracao DeficitApple = Admin ou App Manager."
+            echo "Opcional: Environment variables > CERTIFICATE_PRIVATE_KEY (Secure, sem grupo)."
+            echo "Integracao DeficitApple = Admin ou App Manager (obrigatorio)."
             echo "Depois: Start new build (workflow iOS App Store)."
             exit 1
           }
