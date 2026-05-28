@@ -147,6 +147,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         useMaterial3: false,
+        scaffoldBackgroundColor: const Color(0xFF0B0B0C),
       ),
       themeMode: ThemeMode.dark,
       routerConfig: _router,

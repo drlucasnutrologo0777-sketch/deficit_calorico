@@ -1,0 +1,45 @@
+═══════════════════════════════════════════════════════════════
+  APPLE REJEITOU — O QUE ERA E O QUE FAZER
+═══════════════════════════════════════════════════════════════
+
+POR QUE REJEITOU (as fotos que voce mandou):
+
+  2.3.8 Metadados errados
+  → Icone era o logo AZUL do FLUTTER (app incompleto / template).
+  → CORRIGIDO: icone do pessego (mesmo do app).
+
+  2.1.0 App incompleto
+  → No IPAD da Apple o app abria TELA BRANCA (voce nao tem iPad,
+    mas a Apple testa no iPad porque o app estava como iPhone+iPad).
+  → CORRIGIDO: app agora e so IPHONE na loja + tela preta ao abrir.
+
+NAO E GAMBIARRA DO CODEMAGIC. Era icone e iPad.
+
+═══════════════════════════════════════════════════════════════
+  O QUE VOCE FAZ (sem PowerShell)
+═══════════════════════════════════════════════════════════════
+
+1) Codemagic: https://codemagic.io/apps
+   Start new build → >>> USAR ESTE - iOS App Store <<<
+   (build 142 — numero novo)
+
+2) Quando terminar, TestFlight no iPhone:
+   - Icone tem que ser PESSEGO (nao Flutter azul)
+   - App abre login escuro
+
+3) App Store Connect:
+   - Versao 1.0.2 → build 142
+   - Em "O que ha de novo": escreva que corrigiu icone e iPad
+   - Screenshots: use fotos do IPHONE (tela de login / painel)
+   - Nao use print de tela branca nem icone Flutter
+   - Em "Informacoes para a equipe de revisao" (notas), cole:
+
+     Conta de teste:
+     E-mail: ana.silva@demo-deficit.app
+     Senha: Demo2026!1
+
+     (ou crie uma conta sua e passe e-mail/senha)
+
+4) Enviar para revisao de novo.
+
+═══════════════════════════════════════════════════════════════
