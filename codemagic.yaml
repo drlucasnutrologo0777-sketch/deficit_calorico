@@ -39,64 +39,72 @@ workflows:
           KEY_FILE=/tmp/cm_dist.key
           if [ -n "${CERTIFICATE_PRIVATE_KEY:-}" ]; then
             printf '%s\n' "$CERTIFICATE_PRIVATE_KEY" > "$KEY_FILE"
-            echo "Usando CERTIFICATE_PRIVATE_KEY do Codemagic (mesma chave sempre)."
+            echo "Usando CERTIFICATE_PRIVATE_KEY do Codemagic."
           else
             openssl genpkey -algorithm RSA -out "$KEY_FILE" -pkeyopt rsa_keygen_bits:2048
             echo "Chave nova gerada neste build."
           fi
 
-          fetch_signing() {
-            app-store-connect fetch-signing-files "$BUNDLE_ID" \
-              --type IOS_APP_STORE \
-              --delete-stale-profiles \
-              --certificate-key "@file:$KEY_FILE" \
-              "$@"
-          }
-
-          set +e
-          fetch_signing
-          FETCH_OK=$?
-          fetch_signing --create
-          FETCH_CREATE_OK=$?
-          set -e
-
-          if [ "$FETCH_OK" -eq 0 ]; then
-            echo "OK: perfil/cert baixados."
-          elif [ "$FETCH_CREATE_OK" -eq 0 ]; then
-            echo "OK: cert+perfil criados."
-          else
-            echo "409 ou limite: revogando certs Distribution antigos..."
+          revoke_distribution_certs() {
+            echo "=== Revogar certs Distribution (limite Apple / 409) ==="
+            app-store-connect certificates list \
+              --type DISTRIBUTION \
+              --type IOS_DISTRIBUTION \
+              --json -s > /tmp/certs.json 2>/tmp/certs_err.txt || true
+            cat /tmp/certs.json
             python3 << 'PY'
-          import json, subprocess, sys, time
+          import json, subprocess, sys
+          from pathlib import Path
 
           def run(cmd):
               return subprocess.run(cmd, capture_output=True, text=True)
 
-          ids = []
-          for ctype in ("DISTRIBUTION", "IOS_DISTRIBUTION"):
-              r = run(["app-store-connect", "certificates", "list", "--certificate-type", ctype, "--json"])
-              if r.returncode != 0:
+          raw = Path("/tmp/certs.json").read_text(encoding="utf-8", errors="replace").strip()
+          if not raw:
+              err = Path("/tmp/certs_err.txt").read_text(encoding="utf-8", errors="replace")
+              print("Lista vazia.", err[:500], flush=True)
+              sys.exit(1)
+          idx = min(i for i in (raw.find("["), raw.find("{")) if i >= 0)
+          data = json.loads(raw[idx:])
+          items = data if isinstance(data, list) else data.get("data", [])
+          deleted = 0
+          for item in items:
+              cid = item.get("id")
+              ctype = (item.get("attributes") or {}).get("certificateType", "")
+              if not cid or ctype not in ("DISTRIBUTION", "IOS_DISTRIBUTION"):
                   continue
-              try:
-                  data = json.loads(r.stdout or "[]")
-              except json.JSONDecodeError:
-                  continue
-              items = data if isinstance(data, list) else data.get("data", [])
-              for item in items:
-                  cid = item.get("id")
-                  if cid:
-                      ids.append(cid)
-
-          if not ids:
-              print("Nenhum cert Distribution para revogar.", flush=True)
-          for cid in ids:
-              print(f"Revogando {cid}...", flush=True)
-              run(["app-store-connect", "certificates", "delete", cid])
-
-          print(f"Revogados: {len(ids)}. Aguardando Apple...", flush=True)
+              print(f"DELETE {ctype} {cid}", flush=True)
+              r = run(["app-store-connect", "certificates", "delete", cid, "-s"])
+              if r.returncode == 0:
+                  deleted += 1
+              else:
+                  print(r.stderr or r.stdout, flush=True)
+          print(f"Revogados: {deleted}", flush=True)
+          if deleted == 0:
+              print("ERRO: API nao revogou. Apague manualmente:", flush=True)
+              print("https://developer.apple.com/account/resources/certificates/list", flush=True)
+              sys.exit(1)
           PY
-            sleep 25
-            fetch_signing --create
+          }
+
+          fetch_create() {
+            app-store-connect fetch-signing-files "$BUNDLE_ID" \
+              --type IOS_APP_STORE \
+              --delete-stale-profiles \
+              --certificate-key "@file:$KEY_FILE" \
+              --create
+          }
+
+          set +e
+          fetch_create
+          FETCH_RC=$?
+          set -e
+
+          if [ "$FETCH_RC" -ne 0 ]; then
+            revoke_distribution_certs
+            echo "Aguardando 45s (Apple processar)..."
+            sleep 45
+            fetch_create
           fi
 
           keychain add-certificates

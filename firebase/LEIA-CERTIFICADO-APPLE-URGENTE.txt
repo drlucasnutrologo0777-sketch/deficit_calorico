@@ -1,0 +1,21 @@
+═══════════════════════════════════════════════════════════════
+  SE O CODEMAGIC FALHAR NO CERTIFICADO (409)
+═══════════════════════════════════════════════════════════════
+
+Abra no navegador (conta Apple do app):
+
+  https://developer.apple.com/account/resources/certificates/list
+
+1) Em "Apple Distribution" / "iOS Distribution" — apague TODOS
+   (pode ter 2; a Apple permite no maximo 3).
+
+2) Se existir pedido "Pending" — espere sumir ou apague tambem.
+
+3) Aguarde 20-30 minutos.
+
+4) Codemagic > Start new build de novo.
+
+A API key "DeficitApple" precisa permissao Admin ou App Manager
+para criar/apagar certificados.
+
+═══════════════════════════════════════════════════════════════
