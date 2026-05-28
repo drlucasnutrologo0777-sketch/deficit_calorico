@@ -1,0 +1,45 @@
+═══════════════════════════════════════════════════════════════
+  ERRO: Cannot save Signing Certificates without certificate private key
+═══════════════════════════════════════════════════════════════
+
+Significa: no Codemagic NAO tem a variavel CERTIFICATE_PRIVATE_KEY.
+
+Voce apagou os certificados na Apple (certo). Agora precisa da CHAVE
+para o Codemagic CRIAR um certificado novo.
+
+═══════════════════════════════════════════════════════════════
+  PASSO A PASSO (5 minutos)
+═══════════════════════════════════════════════════════════════
+
+1) No PC, duplo-clique:
+   tools\SETUP-IOS-DEFINITIVO.bat
+
+   Se pedir, deixe criar o arquivo:
+   C:\Users\drluc\Downloads\deficit_ios_dist_private.key
+
+2) Abra esse arquivo no Bloco de Notas.
+   Selecione TUDO (Ctrl+A) e Copie (Ctrl+C).
+
+3) No navegador:
+   https://codemagic.io/apps
+   → clique no app deficit_calorico
+   → Environment variables (variaveis de ambiente)
+
+4) Botao "Add" ou "Add variable":
+   Nome:  CERTIFICATE_PRIVATE_KEY
+   Valor: COLE o que copiou (comeca com -----BEGIN PRIVATE KEY-----)
+   Marque: Secure (cadeado)
+
+   IMPORTANTE: NAO coloque dentro de um "grupo".
+   Tem que ser variavel do APP, lista principal.
+
+5) Save / Salvar
+
+6) Start new build → >>> USAR ESTE - iOS App Store <<<
+
+No log deve aparecer:
+   BUILD_SIGNING_V8
+   CERTIFICATE_PRIVATE_KEY: OK
+   Assinatura OK.
+
+═══════════════════════════════════════════════════════════════
