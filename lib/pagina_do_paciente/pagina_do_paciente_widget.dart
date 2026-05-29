@@ -297,13 +297,10 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
           ingestaoPainel,
         );
         final gorduraEmGanho = gorduraPainel.emGanho;
-        final gorduraLabel = gorduraEmGanho
-            ? 'Gordura a ganhar'
-            : (gorduraPainel.modoJejumTmb
-                ? 'Gordura que o TMB queima'
-                : 'Gordura a queimar');
+        final gorduraLabel =
+            gorduraEmGanho ? 'Gordura a ganhar' : 'Gordura a queimar';
         final gorduraSubtitulo = gorduraPainel.modoJejumTmb
-            ? 'por TMB − alimentação'
+            ? 'que o TMB queima · TMB − alimentação'
             : null;
         final mostrarTmbMenosAlimentacao = gorduraPainel.modoJejumTmb &&
             gorduraPainel.kcalTmbMenosIngestao > 0;
