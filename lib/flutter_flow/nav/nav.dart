@@ -87,10 +87,6 @@ String? _resolveAppRedirect(
   AppStateNotifier notifier,
   GoRouterState state,
 ) {
-  if (notifier.loading) {
-    return null;
-  }
-
   if (notifier.shouldRedirect) {
     final redirectLocation = notifier.getRedirectLocation();
     notifier.clearRedirectLocation();

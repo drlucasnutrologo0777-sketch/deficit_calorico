@@ -1,45 +1,73 @@
 ═══════════════════════════════════════════════════════════════
-  APPLE REJEITOU — O QUE ERA E O QUE FAZER
+  APPLE REJEITOU — 2.1.0 App Completeness (build 148)
 ═══════════════════════════════════════════════════════════════
 
-POR QUE REJEITOU (as fotos que voce mandou):
+Significa: o revisor NÃO conseguiu usar o app por completo.
+Causas comuns neste app:
 
-  2.3.8 Metadados errados
-  → Icone era o logo AZUL do FLUTTER (app incompleto / template).
-  → CORRIGIDO: icone do pessego (mesmo do app).
+  • Tela branca / app “travado” no iPad ao abrir
+  • Login com e-mail inválido (precisa ser e-mail, ex: user@dominio.com)
+  • Conta de teste NÃO colocada em “Informações para a revisão”
+  • Build antigo no GitHub (sem correções de splash / Firebase)
 
-  2.1.0 App incompleto
-  → No IPAD da Apple o app abria TELA BRANCA (voce nao tem iPad,
-    mas a Apple testa no iPad porque o app estava como iPhone+iPad).
-  → CORRIGIDO: app agora e so IPHONE na loja + tela preta ao abrir.
-
-NAO E GAMBIARRA DO CODEMAGIC. Era icone e iPad.
+NÃO reenvie o build 148. Use build 149 (ou maior) no TestFlight.
 
 ═══════════════════════════════════════════════════════════════
-  O QUE VOCE FAZ (sem PowerShell)
+  CORRIGIDO NO CÓDIGO (build 149)
 ═══════════════════════════════════════════════════════════════
 
-1) Codemagic: https://codemagic.io/apps
-   Start new build → >>> USAR ESTE - iOS App Store <<<
-   (build 142 — numero novo)
+  • Firebase com timeout — app abre mesmo se rede lenta
+  • Fundo escuro em toda a app (nunca branco vazio)
+  • Router não bloqueia no splash no iPad
+  • Ícone pêssego (flutter_launcher_icons)
 
-2) Quando terminar, TestFlight no iPhone:
-   - Icone tem que ser PESSEGO (nao Flutter azul)
-   - App abre login escuro
+═══════════════════════════════════════════════════════════════
+  PASSO 1 — Codemagic (depois que build 149 estiver no GitHub)
+═══════════════════════════════════════════════════════════════
 
-3) App Store Connect:
-   - Versao 1.0.2 → build 142
-   - Em "O que ha de novo": escreva que corrigiu icone e iPad
-   - Screenshots: use fotos do IPHONE (tela de login / painel)
-   - Nao use print de tela branca nem icone Flutter
-   - Em "Informacoes para a equipe de revisao" (notas), cole:
+  https://codemagic.io/apps
+  → Start new build
+  → workflow: >>> USAR ESTE - iOS App Store <<<
+  → branch: main
 
-     Conta de teste:
-     E-mail: ana.silva@demo-deficit.app
-     Senha: Demo2026!1
+  No log, confira: --build-number=149
 
-     (ou crie uma conta sua e passe e-mail/senha)
+═══════════════════════════════════════════════════════════════
+  PASSO 2 — App Store Connect (OBRIGATÓRIO para 2.1.0)
+═══════════════════════════════════════════════════════════════
 
-4) Enviar para revisao de novo.
+  Versão 1.0 → escolher build 149
+  → “Informações para a equipe de revisão”
+  → COLE EXATAMENTE ISTO:
+
+  ─────────────────────────────────────────────────────────
+  Conta de demonstração (login obrigatório):
+
+  E-mail: ana.silva@demo-deficit.app
+  Senha: Demo2026!1
+
+  Passos para testar:
+  1. Abrir o app (iPhone ou iPad).
+  2. Na tela de login, digitar o e-mail e senha acima.
+  3. Tocar em “Iniciar”.
+  4. O painel do paciente abre com TMB, ingestão e gasto calórico.
+
+  Não use nome no campo de e-mail — precisa ser o e-mail completo.
+  O app requer internet (Firebase) na primeira abertura.
+  ─────────────────────────────────────────────────────────
+
+  “O que há de novo” (exemplo):
+  Corrigimos tela em branco no iPad, splash e instruções de login
+  para a revisão. Build 149.
+
+═══════════════════════════════════════════════════════════════
+  PASSO 3 — Testar você antes de enviar
+═══════════════════════════════════════════════════════════════
+
+  No TestFlight (iPhone; iPad se tiver):
+  ✓ Ícone pêssego (não azul Flutter)
+  ✓ Abrir = fundo escuro + login
+  ✓ Login com ana.silva@demo-deficit.app / Demo2026!1
+  ✓ Painel carrega (não fica branco)
 
 ═══════════════════════════════════════════════════════════════

@@ -19,7 +19,6 @@ double calcularTmb(
   bool isMasculino,
   String nivelAtividade,
 ) {
-  // 1. Calcular a idade a partir da data de nascimento
   final hoje = DateTime.now();
   int idade = hoje.year - dataDeNascimento.year;
   if (hoje.month < dataDeNascimento.month ||
@@ -28,7 +27,6 @@ double calcularTmb(
     idade--;
   }
 
-  // Harris-Benedict revisada (peso kg, altura cm, idade anos).
   double resultado;
   if (isMasculino) {
     resultado = 66.5 + (13.75 * peso) + (5.003 * altura) - (6.75 * idade);
@@ -47,10 +45,9 @@ bool sexoEhMasculino(String? sexo) {
   return s.startsWith('m') ||
       s.contains('homem') ||
       s.contains('mascul') ||
-      s.contains('macul'); // typo comum no projeto
+      s.contains('macul');
 }
 
-/// Converte altura em metros (ex.: 1,75) para centímetros (175).
 double normalizarAlturaCm(double altura) {
   if (altura <= 0) {
     return 0;
@@ -61,7 +58,6 @@ double normalizarAlturaCm(double altura) {
   return altura;
 }
 
-/// Interpreta data digitada (dd/mm/aaaa, dd-mm-aaaa, etc.).
 DateTime? parseDataNascimentoTexto(String? texto) {
   final t = (texto ?? '').trim();
   if (t.isEmpty) {
@@ -128,7 +124,6 @@ double parseNumeroCampo(String? texto) {
   return double.tryParse(limpo) ?? 0;
 }
 
-/// TMB a partir do perfil (sem usar o campo `tmb` guardado).
 double? tmbCalculadaDoPerfil(UsersRecord? user) {
   if (user == null) {
     return null;
@@ -147,7 +142,6 @@ double? tmbCalculadaDoPerfil(UsersRecord? user) {
   );
 }
 
-/// TMB guardada no Firebase ou calculada a partir do perfil.
 double tmbDoUsuario(UsersRecord? user) {
   if (user == null) {
     return 0.0;
@@ -165,7 +159,6 @@ double tmbDoUsuario(UsersRecord? user) {
   return 0.0;
 }
 
-/// Perfil tem TMB utilizável (guardada, calculável ou via GET).
 bool perfilTemTmbUtilizavel(UsersRecord? user) {
   if (user == null) {
     return false;
@@ -177,7 +170,6 @@ double calculadoraGordura(double calorias) {
   return calorias / 9;
 }
 
-/// Saldo do dia: positivo = déficit (gasta mais do que come); negativo = superávit.
 double painelSaldoCaloricoDia(
   double tmb,
   double gastoDia,
@@ -186,7 +178,185 @@ double painelSaldoCaloricoDia(
   return (tmb + gastoDia) - ingestao;
 }
 
-/// Gordura a queimar/ganhar: só atividade vs ingestão (TMB mantém o corpo, não queima gordura).
+/// Déficit mostrado no painel: só aparece quando o saldo total supera o TMB.
+/// Superávit (saldo negativo) continua sendo exibido integralmente.
+double painelDeficitExibidoDia(
+  double tmb,
+  double gastoDia,
+  double ingestao,
+) {
+  final saldoTotal = painelSaldoCaloricoDia(tmb, gastoDia, ingestao);
+  if (saldoTotal < 0) {
+    return saldoTotal;
+  }
+  if (tmb <= 0) {
+    return saldoTotal > 0 ? saldoTotal : 0;
+  }
+  if (saldoTotal > tmb) {
+    return saldoTotal - tmb;
+  }
+  return 0;
+}
+
+class PainelSaldoExibido {
+  const PainelSaldoExibido({
+    required this.mostrarTmb,
+    required this.valorKcal,
+    required this.rotulo,
+    required this.modoVermelho,
+    required this.modoVerde,
+  });
+
+  final bool mostrarTmb;
+  final double valorKcal;
+  final String rotulo;
+  final bool modoVermelho;
+  final bool modoVerde;
+}
+
+/// Linha inferior: TMB só enquanto gasto e ingestão ≤ TMB.
+/// Ultrapassou → some o TMB; verde = gasto − TMB; vermelho = ingestão − TMB.
+PainelSaldoExibido painelSaldoExibidoDia(
+  double tmb,
+  double gastoDia,
+  double ingestao,
+) {
+  final saldoTotal = painelSaldoCaloricoDia(tmb, gastoDia, ingestao);
+
+  if (tmb > 0 && ingestao > tmb) {
+    if (saldoTotal < 0) {
+      return PainelSaldoExibido(
+        mostrarTmb: false,
+        valorKcal: saldoTotal,
+        rotulo: 'Déficit calórico atual',
+        modoVermelho: true,
+        modoVerde: false,
+      );
+    }
+    return PainelSaldoExibido(
+      mostrarTmb: false,
+      valorKcal: ingestao - tmb,
+      rotulo: 'Déficit calórico atual',
+      modoVermelho: true,
+      modoVerde: false,
+    );
+  }
+
+  if (tmb > 0 && gastoDia > tmb) {
+    final exibido = gastoDia - tmb;
+    return PainelSaldoExibido(
+      mostrarTmb: false,
+      valorKcal: exibido,
+      rotulo: 'Déficit calórico atual',
+      modoVermelho: false,
+      modoVerde: true,
+    );
+  }
+
+  if (tmb > 0) {
+    return PainelSaldoExibido(
+      mostrarTmb: true,
+      valorKcal: tmb,
+      rotulo: 'Déficit calórico atual',
+      modoVermelho: false,
+      modoVerde: false,
+    );
+  }
+
+  if (saldoTotal < 0) {
+    return PainelSaldoExibido(
+      mostrarTmb: false,
+      valorKcal: saldoTotal,
+      rotulo: 'Superávit calórico atual',
+      modoVermelho: true,
+      modoVerde: false,
+    );
+  }
+
+  return PainelSaldoExibido(
+    mostrarTmb: false,
+    valorKcal: saldoTotal > 0 ? saldoTotal : 0,
+    rotulo: rotuloSaldoCaloricoPainel(saldoTotal),
+    modoVermelho: false,
+    modoVerde: saldoTotal > 0,
+  );
+}
+
+String textoPainelSaldoExibido(PainelSaldoExibido saldo) {
+  if (saldo.mostrarTmb) {
+    return saldo.valorKcal.round().toString();
+  }
+  if (saldo.modoVermelho && saldo.valorKcal > 0) {
+    return '+${saldo.valorKcal.round()}';
+  }
+  return textoSaldoCaloricoPainel(saldo.valorKcal);
+}
+double painelGorduraOcultaTmbGrams(double tmb) {
+  if (tmb <= 0) {
+    return 0;
+  }
+  return tmb / 9;
+}
+
+class PainelGorduraVisivel {
+  const PainelGorduraVisivel({
+    required this.emGanho,
+    required this.gramas,
+    required this.mostrarQueimar,
+  });
+
+  final bool emGanho;
+  final double gramas;
+  final bool mostrarQueimar;
+}
+
+/// Gordura a ganhar se ingestão > TMB.
+/// Gordura a queimar (verde) se gasto > TMB — mesma base: gasto − TMB.
+PainelGorduraVisivel painelGorduraVisivelDia(
+  double tmb,
+  double gastoDia,
+  double ingestao,
+) {
+  if (tmb <= 0) {
+    final saldo = gastoDia - ingestao;
+    if (saldo < 0) {
+      return PainelGorduraVisivel(
+        emGanho: true,
+        gramas: gramasGorduraDeKcal(saldo),
+        mostrarQueimar: false,
+      );
+    }
+    return PainelGorduraVisivel(
+      emGanho: false,
+      gramas: gramasGorduraDeKcal(saldo),
+      mostrarQueimar: saldo > 0,
+    );
+  }
+
+  if (ingestao > tmb) {
+    return PainelGorduraVisivel(
+      emGanho: true,
+      gramas: gramasGorduraDeKcal(ingestao - tmb),
+      mostrarQueimar: false,
+    );
+  }
+
+  if (gastoDia > tmb) {
+    return PainelGorduraVisivel(
+      emGanho: false,
+      gramas: gramasGorduraDeKcal(gastoDia - tmb),
+      mostrarQueimar: true,
+    );
+  }
+
+  return const PainelGorduraVisivel(
+    emGanho: false,
+    gramas: 0,
+    mostrarQueimar: false,
+  );
+}
+
+@Deprecated('Use painelGorduraVisivelDia')
 double painelSaldoGorduraDia(
   double gastoDia,
   double ingestao,
@@ -194,12 +364,10 @@ double painelSaldoGorduraDia(
   return gastoDia - ingestao;
 }
 
-/// Gramas de gordura equivalentes às kcal (1 g ≈ 9 kcal).
 double gramasGorduraDeKcal(double kcal) {
   return kcal.abs() / 9;
 }
 
-/// Rótulo do saldo: negativo = superávit (vermelho), positivo = déficit (verde).
 String rotuloSaldoCaloricoPainel(double saldo) {
   if (saldo < -0.5) {
     return 'Superávit calórico atual';
@@ -210,8 +378,6 @@ String rotuloSaldoCaloricoPainel(double saldo) {
   return 'Saldo calórico do dia';
 }
 
-/// Valor formatado para o painel (evita cortar dígitos, ex.: −928 em vez de −028).
-/// Meta de déficit registada em **Programar déficit** no dia civil [hoje].
 bool metaDeficitDefinidaHoje(dynamic user, String hoje) {
   if (user == null || hoje.isEmpty) {
     return false;

@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -17,17 +20,36 @@ import 'flutter_flow/daily_dashboard_reset.dart';
 import 'services/local_notification_service.dart';
 import 'index.dart';
 
+Future<void> _initWithTimeout(
+  Future<void> future, {
+  Duration timeout = const Duration(seconds: 12),
+  String label = 'init',
+}) async {
+  try {
+    await future.timeout(timeout);
+  } catch (e, st) {
+    debugPrint('$label falhou ou expirou: $e\n$st');
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoRouter.optionURLReflectsImperativeAPIs = true;
   usePathUrlStrategy();
 
-  await initFirebase();
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+    debugPrint('FlutterError: ${details.exceptionAsString()}');
+  };
 
-  await FlutterFlowTheme.initialize();
+  await _initWithTimeout(initFirebase(), label: 'Firebase');
 
-  final appState = FFAppState(); // Initialize FFAppState
-  await appState.initializePersistedState();
+  await _initWithTimeout(FlutterFlowTheme.initialize(),
+      label: 'FlutterFlowTheme');
+
+  final appState = FFAppState();
+  await _initWithTimeout(appState.initializePersistedState(),
+      label: 'FFAppState');
 
   try {
     await LocalNotificationService.initialize()
@@ -97,13 +119,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         _appStateNotifier.update(user);
       });
     jwtTokenStream.listen((_) {});
+    _appStateNotifier.startShowingSplashImage();
     Future.delayed(
-      const Duration(milliseconds: 800),
+      const Duration(milliseconds: 600),
       () => _appStateNotifier.stopShowingSplashImage(),
     );
-    // Se Firebase/auth travar, nao deixa tela branca para sempre
     Future.delayed(
-      const Duration(seconds: 4),
+      const Duration(seconds: 2),
       () => _appStateNotifier.stopShowingSplashImage(),
     );
   }
@@ -143,6 +165,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       theme: ThemeData(
         brightness: Brightness.light,
         useMaterial3: false,
+        scaffoldBackgroundColor: const Color(0xFF0B0B0C),
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
@@ -150,6 +173,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         scaffoldBackgroundColor: const Color(0xFF0B0B0C),
       ),
       themeMode: ThemeMode.dark,
+      builder: (context, child) => ColoredBox(
+        color: const Color(0xFF0B0B0C),
+        child: child ?? const SizedBox.shrink(),
+      ),
       routerConfig: _router,
     );
   }

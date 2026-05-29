@@ -1,4 +1,4 @@
-import '/auth/firebase_auth/auth_util.dart';
+﻿import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -286,30 +286,38 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
         final ingestaoPainel = valueOrDefault(
             paginaDoPacienteUsersRecord.ingestaoCaloriasTotal, 0.0);
         final gastoPainel = paginaDoPacienteUsersRecord.caloriasTotalDia;
-        final saldoCaloricoDia = functions.painelSaldoCaloricoDia(
+        final saldoPainel = functions.painelSaldoExibidoDia(
           tmbPainel,
           gastoPainel,
           ingestaoPainel,
         );
-        // Gordura: sem TMB — só exercício/atividade vs o que comeu.
-        final saldoGorduraDia = functions.painelSaldoGorduraDia(
+        final gorduraPainel = functions.painelGorduraVisivelDia(
+          tmbPainel,
           gastoPainel,
           ingestaoPainel,
         );
-        final gorduraEmGanho = saldoGorduraDia < 0;
+        final gorduraEmGanho = gorduraPainel.emGanho;
         final gorduraLabel =
             gorduraEmGanho ? 'Gordura a ganhar' : 'Gordura a queimar';
-        final gorduraValorColor =
-            gorduraEmGanho ? Color(0xFFEF4444) : Color(0xFF2DDE58);
-        final gorduraUnidadeColor =
-            gorduraEmGanho ? Color(0xFFEF4444) : Color(0xFF0EDC63);
-        final gorduraGramasTexto = functions
-            .gramasGorduraDeKcal(saldoGorduraDia)
-            .toStringAsFixed(0);
-        final deficitValorColor =
-            gorduraEmGanho ? Color(0xFFEF4444) : Color(0xFF30D158);
-        final saldoRotulo = functions.rotuloSaldoCaloricoPainel(saldoCaloricoDia);
-        final saldoTexto = functions.textoSaldoCaloricoPainel(saldoCaloricoDia);
+        final gorduraValorColor = gorduraEmGanho
+            ? const Color(0xFFEF4444)
+            : (gorduraPainel.mostrarQueimar
+                ? const Color(0xFF2DDE58)
+                : const Color(0xFF5A5A5E));
+        final gorduraUnidadeColor = gorduraEmGanho
+            ? const Color(0xFFEF4444)
+            : (gorduraPainel.mostrarQueimar
+                ? const Color(0xFF0EDC63)
+                : const Color(0xFF5A5A5E));
+        final gorduraGramasTexto = gorduraPainel.gramas.toStringAsFixed(0);
+        final deficitValorColor = saldoPainel.modoVermelho
+            ? const Color(0xFFEF4444)
+            : (saldoPainel.modoVerde
+                ? const Color(0xFF30D158)
+                : const Color(0xFFC6A969));
+        final saldoRotulo = saldoPainel.rotulo;
+        final saldoTexto =
+            functions.textoPainelSaldoExibido(saldoPainel);
         final semTmbNoCalculo = tmbPainel <= 0;
         final metaHoje = functions.metaDeficitDefinidaHoje(
           paginaDoPacienteUsersRecord,
@@ -776,7 +784,8 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
                                     ),
                                   ],
                                 ),
-                                _cardTmbPainel(context, tmbPainel),
+                                if (tmbPainel <= 0)
+                                  _cardTmbPainel(context, tmbPainel),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       16.0, 0.0, 16.0, 0.0),
@@ -1062,265 +1071,200 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
                                             color: Color(0x1AFFFFFF),
                                           ),
                                           Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Meta  de déficit calorico hoje',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodySmall
-                                                        .override(
-                                                          font:
-                                                              GoogleFonts.inter(
-                                                            fontWeight:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodySmall
-                                                                    .fontWeight,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodySmall
-                                                                    .fontStyle,
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Meta de déficit calórico hoje',
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodySmall
+                                                          .override(
+                                                            font: GoogleFonts
+                                                                .inter(),
+                                                            color: const Color(
+                                                                0xFFA1A1A6),
+                                                            fontSize: 12.0,
                                                           ),
-                                                          color:
-                                                              Color(0xFFA1A1A6),
-                                                          fontSize: 12.0,
-                                                          letterSpacing: 0.0,
-                                                          fontWeight:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodySmall
-                                                                  .fontWeight,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodySmall
-                                                                  .fontStyle,
-                                                        ),
-                                                  ),
-                                                  Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: [
-                                                      Text(
-                                                        metaHoje
-                                                            ? metaKcalHoje
-                                                                .toStringAsFixed(
-                                                                    0)
-                                                            : '—',
-                                                        style: FlutterFlowTheme
-                                                                .of(context)
-                                                            .titleLarge
-                                                            .override(
-                                                              font: GoogleFonts
-                                                                  .interTight(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                              color: metaHoje
-                                                                  ? Colors.white
-                                                                  : Color(
-                                                                      0xFF5A5A5E),
-                                                              fontSize: 28.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
+                                                    ),
+                                                    FittedBox(
+                                                      fit: BoxFit.scaleDown,
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          Text(
+                                                            metaHoje
+                                                                ? metaKcalHoje
+                                                                    .toStringAsFixed(
+                                                                        0)
+                                                                : '—',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .titleLarge
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .interTight(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                  color: metaHoje
+                                                                      ? Colors
+                                                                          .white
+                                                                      : const Color(
+                                                                          0xFF5A5A5E),
+                                                                  fontSize: 28.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsetsDirectional
+                                                                    .fromSTEB(
                                                                     0.0,
                                                                     0.0,
                                                                     0.0,
                                                                     4.0),
-                                                        child: Text(
-                                                          'kcal',
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodySmall
-                                                              .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .inter(
-                                                                  fontWeight: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodySmall
-                                                                      .fontWeight,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodySmall
-                                                                      .fontStyle,
-                                                                ),
-                                                                color: Color(
-                                                                    0xFFA1A1A6),
-                                                                fontSize: 13.0,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodySmall
-                                                                    .fontWeight,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodySmall
-                                                                    .fontStyle,
-                                                              ),
-                                                        ),
-                                                      ),
-                                                    ].divide(
-                                                        SizedBox(width: 4.0)),
-                                                  ),
-                                                  if (!metaHoje)
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 4.0),
-                                                      child: Text(
-                                                        'Desafio opcional — use '
-                                                        'Programar déficit do dia',
-                                                        style: GoogleFonts.inter(
-                                                          color: Color(
-                                                              0xFF5A5A5E),
-                                                          fontSize: 11.0,
-                                                        ),
+                                                            child: Text(
+                                                              'kcal',
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodySmall
+                                                                  .override(
+                                                                    font: GoogleFonts
+                                                                        .inter(),
+                                                                    color: const Color(
+                                                                        0xFFA1A1A6),
+                                                                    fontSize:
+                                                                        13.0,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                        ].divide(const SizedBox(
+                                                            width: 4.0)),
                                                       ),
                                                     ),
-                                                ],
-                                              ),
-                                              Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: [
-                                                  Text(
-                                                    gorduraLabel,
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodySmall
-                                                        .override(
-                                                          font:
-                                                              GoogleFonts.inter(
-                                                            fontWeight:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodySmall
-                                                                    .fontWeight,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodySmall
-                                                                    .fontStyle,
-                                                          ),
-                                                          color:
-                                                              Color(0xFFA1A1A6),
-                                                          fontSize: 12.0,
-                                                          letterSpacing: 0.0,
-                                                          fontWeight:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodySmall
-                                                                  .fontWeight,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodySmall
-                                                                  .fontStyle,
-                                                        ),
-                                                  ),
-                                                  Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: [
-                                                      Text(
-                                                        gorduraGramasTexto,
-                                                        style: FlutterFlowTheme
-                                                                .of(context)
-                                                            .titleLarge
-                                                            .override(
-                                                              font: GoogleFonts
-                                                                  .interTight(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleLarge
-                                                                    .fontStyle,
-                                                              ),
-                                                              color:
-                                                                  gorduraValorColor,
-                                                              fontSize: 28.0,
-                                                              letterSpacing:
-                                                                  0.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontStyle: FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .titleLarge
-                                                                  .fontStyle,
-                                                            ),
-                                                      ),
+                                                    if (!metaHoje)
                                                       Padding(
                                                         padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
+                                                            const EdgeInsets
+                                                                .only(top: 4.0),
+                                                        child: Text(
+                                                          'Desafio opcional — use '
+                                                          'Programar déficit do dia',
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style:
+                                                              GoogleFonts.inter(
+                                                            color: const Color(
+                                                                0xFF5A5A5E),
+                                                            fontSize: 11.0,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(width: 10.0),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                      gorduraLabel,
+                                                      maxLines: 2,
+                                                      textAlign: TextAlign.end,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodySmall
+                                                          .override(
+                                                            font: GoogleFonts
+                                                                .inter(),
+                                                            color: const Color(
+                                                                0xFFA1A1A6),
+                                                            fontSize: 12.0,
+                                                          ),
+                                                    ),
+                                                    FittedBox(
+                                                      fit: BoxFit.scaleDown,
+                                                      alignment:
+                                                          Alignment.centerRight,
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          Text(
+                                                            gorduraGramasTexto,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .titleLarge
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .interTight(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                  color:
+                                                                      gorduraValorColor,
+                                                                  fontSize: 28.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsetsDirectional
+                                                                    .fromSTEB(
                                                                     0.0,
                                                                     0.0,
                                                                     0.0,
                                                                     4.0),
-                                                        child: Text(
-                                                          'g',
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodySmall
-                                                              .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .inter(
-                                                                  fontWeight: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodySmall
-                                                                      .fontWeight,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodySmall
-                                                                      .fontStyle,
-                                                                ),
-                                                                color:
-                                                                    gorduraUnidadeColor,
-                                                                fontSize: 13.0,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodySmall
-                                                                    .fontWeight,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodySmall
-                                                                    .fontStyle,
-                                                              ),
-                                                        ),
+                                                            child: Text(
+                                                              'g',
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodySmall
+                                                                  .override(
+                                                                    font: GoogleFonts
+                                                                        .inter(),
+                                                                    color:
+                                                                        gorduraUnidadeColor,
+                                                                    fontSize:
+                                                                        13.0,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                        ].divide(const SizedBox(
+                                                            width: 4.0)),
                                                       ),
-                                                    ].divide(
-                                                        SizedBox(width: 4.0)),
-                                                  ),
-                                                ],
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -1649,15 +1593,17 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.center,
                                                   children: [
-                                                    Icon(
-                                                      gorduraEmGanho
-                                                          ? Icons
-                                                              .trending_up_rounded
-                                                          : Icons
-                                                              .trending_down_rounded,
-                                                      color: deficitValorColor,
-                                                      size: 16.0,
-                                                    ),
+                                                    if (!saldoPainel.mostrarTmb)
+                                                      Icon(
+                                                        saldoPainel.modoVermelho
+                                                            ? Icons
+                                                                .trending_up_rounded
+                                                            : Icons
+                                                                .trending_down_rounded,
+                                                        color:
+                                                            deficitValorColor,
+                                                        size: 16.0,
+                                                      ),
                                                     Flexible(
                                                       child: Text(
                                                         saldoTexto,

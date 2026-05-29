@@ -1141,6 +1141,30 @@ class _PaginaCadastroWidgetState extends State<PaginaCadastroWidget> {
                                   isMultiSelect: false,
                                 ),
                               ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    4.0, 0.0, 4.0, 0.0),
+                                child: Text(
+                                  'Observação: a prática de exercícios de intensidade leve por menos de uma hora ao dia enquadra-se no nível sedentário.',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodySmall
+                                      .override(
+                                        font: GoogleFonts.inter(
+                                          fontWeight: FontWeight.normal,
+                                          fontStyle: FlutterFlowTheme.of(context)
+                                              .bodySmall
+                                              .fontStyle,
+                                        ),
+                                        color: Color(0xFFC6A969),
+                                        fontSize: 12.0,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FontWeight.normal,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodySmall
+                                            .fontStyle,
+                                      ),
+                                ),
+                              ),
                             ]
                                 .divide(SizedBox(height: 12.0))
                                 .addToStart(SizedBox(height: 8.0))
