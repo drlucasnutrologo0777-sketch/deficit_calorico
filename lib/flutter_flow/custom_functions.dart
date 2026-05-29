@@ -324,8 +324,26 @@ double painelGorduraOcultaTmbGrams(double tmb) {
   return tmb / 9;
 }
 
-/// Gordura do TMB que estava oculta: diminui conforme a ingestão sobe.
-double painelGorduraBasalVisivelGrams(double tmb, double ingestao) {
+/// Potencial diário de gordura do TMB (se não comer): TMB÷9, menos o que já comeu.
+bool painelGorduraQueimarVemDoTmb(
+  double tmb,
+  double gastoDia,
+  double ingestao,
+) {
+  return tmb > 0 && ingestao < tmb && gastoDia <= tmb;
+}
+
+double painelGorduraQueimarTmbGrams(
+  double tmb,
+  double gastoDia,
+  double ingestao,
+) {
+  if (!painelGorduraQueimarVemDoTmb(tmb, gastoDia, ingestao)) {
+    return 0;
+  }
+  return painelGorduraBasalVisivelGrams(tmb, ingestao);
+}
+
   final restante =
       painelGorduraOcultaTmbGrams(tmb) - gramasGorduraDeKcal(ingestao);
   return restante > 0 ? restante : 0;

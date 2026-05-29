@@ -297,6 +297,16 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
           ingestaoPainel,
         );
         final gorduraEmGanho = gorduraPainel.emGanho;
+        final gorduraVemDoTmb = functions.painelGorduraQueimarVemDoTmb(
+          tmbPainel,
+          gastoPainel,
+          ingestaoPainel,
+        );
+        final gorduraPotencialTmbGrams = functions.painelGorduraQueimarTmbGrams(
+          tmbPainel,
+          gastoPainel,
+          ingestaoPainel,
+        );
         final mostrarTopoTmbAlimentacao = functions.painelUsaTmbMenosAlimentacao(
           tmbPainel,
           gastoPainel,
@@ -307,23 +317,26 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
           gastoPainel,
           ingestaoPainel,
         );
-        final gorduraModoBasalTmb = saldoPainel.mostrarTmb &&
-            mostrarTopoTmbAlimentacao;
+        final gorduraModoBasalTmb = gorduraVemDoTmb;
         final gorduraLabel =
             gorduraEmGanho ? 'Gordura a ganhar' : 'Gordura a queimar';
-        final gorduraGramasTexto = gorduraPainel.gramas.toStringAsFixed(0);
+        final gorduraGramasTexto = gorduraVemDoTmb
+            ? gorduraPotencialTmbGrams.toStringAsFixed(0)
+            : gorduraPainel.gramas.toStringAsFixed(0);
+        final gorduraMostrarAtivo =
+            gorduraVemDoTmb || gorduraPainel.mostrarQueimar;
         final gorduraValorColor = gorduraEmGanho
             ? const Color(0xFFEF4444)
             : (gorduraModoBasalTmb
                 ? const Color(0xFFC6A969)
-                : (gorduraPainel.mostrarQueimar
+                : (gorduraMostrarAtivo
                     ? const Color(0xFF2DDE58)
                     : const Color(0xFF5A5A5E)));
         final gorduraUnidadeColor = gorduraEmGanho
             ? const Color(0xFFEF4444)
             : (gorduraModoBasalTmb
                 ? const Color(0xFFC6A969)
-                : (gorduraPainel.mostrarQueimar
+                : (gorduraMostrarAtivo
                     ? const Color(0xFF0EDC63)
                     : const Color(0xFF5A5A5E)));
         final deficitValorColor = saldoPainel.modoVermelho
