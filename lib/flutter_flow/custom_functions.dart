@@ -223,7 +223,15 @@ bool painelUsaTmbMenosAlimentacao(
   return tmb > 0 && ingestao < tmb && gastoDia <= tmb;
 }
 
-/// Linha inferior: TMB dourado só com ingestão abaixo da TMB.
+double painelKcalTmbMenosAlimentacao(
+  double tmb,
+  double ingestao,
+) {
+  final kcal = tmb - ingestao;
+  return kcal > 0 ? kcal : 0;
+}
+
+/// Linha inferior: TMB dourado = gordura a queimar do basal (TMB − alimentação).
 /// Ingestão ≥ TMB → déficit/gordura por atividade + alimentação (saldo do dia).
 PainelSaldoExibido painelSaldoExibidoDia(
   double tmb,
@@ -235,7 +243,7 @@ PainelSaldoExibido painelSaldoExibidoDia(
   if (painelUsaTmbMenosAlimentacao(tmb, gastoDia, ingestao)) {
     return PainelSaldoExibido(
       mostrarTmb: true,
-      valorKcal: tmb,
+      valorKcal: painelKcalTmbMenosAlimentacao(tmb, ingestao),
       rotulo: 'Déficit calórico atual',
       modoVermelho: false,
       modoVerde: false,
@@ -341,10 +349,10 @@ double painelTopoGorduraTmbMenosAlimentacao(
   if (!painelUsaTmbMenosAlimentacao(tmb, gastoDia, ingestao)) {
     return 0;
   }
-  return gramasGorduraDeKcal(tmb - ingestao);
+  return gramasGorduraDeKcal(painelKcalTmbMenosAlimentacao(tmb, ingestao));
 }
 
-/// Card do painel: lógica original (atividade + alimentação).
+/// Card: gordura a queimar do TMB enquanto ingestão < TMB; depois atividade + alimentação.
 PainelGorduraVisivel painelGorduraVisivelDia(
   double tmb,
   double gastoDia,
@@ -363,6 +371,15 @@ PainelGorduraVisivel painelGorduraVisivelDia(
       emGanho: false,
       gramas: gramasGorduraDeKcal(saldo),
       mostrarQueimar: saldo > 0,
+    );
+  }
+
+  if (painelUsaTmbMenosAlimentacao(tmb, gastoDia, ingestao)) {
+    final kcal = painelKcalTmbMenosAlimentacao(tmb, ingestao);
+    return PainelGorduraVisivel(
+      emGanho: false,
+      gramas: gramasGorduraDeKcal(kcal),
+      mostrarQueimar: true,
     );
   }
 
