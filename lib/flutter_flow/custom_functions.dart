@@ -243,7 +243,7 @@ PainelSaldoExibido painelSaldoExibidoDia(
   if (painelUsaTmbMenosAlimentacao(tmb, gastoDia, ingestao)) {
     return PainelSaldoExibido(
       mostrarTmb: true,
-      valorKcal: painelKcalTmbMenosAlimentacao(tmb, ingestao),
+      valorKcal: saldoTotal > 0 ? saldoTotal : 0,
       rotulo: 'Déficit calórico atual',
       modoVermelho: false,
       modoVerde: false,
@@ -401,17 +401,22 @@ PainelGorduraVisivel painelGorduraVisivelDia(
     );
   }
 
-  if (painelUsaTmbMenosAlimentacao(tmb, gastoDia, ingestao)) {
-    return PainelGorduraVisivel(
-      emGanho: false,
-      gramas: painelGorduraBasalVisivelGrams(tmb, ingestao),
-      mostrarQueimar: true,
-      modoJejumTmb: true,
-      kcalTmbMenosIngestao: painelKcalTmbMenosAlimentacao(tmb, ingestao),
-    );
-  }
-
   if (ingestao <= tmb && gastoDia <= tmb) {
+    final saldoTotal = painelSaldoCaloricoDia(tmb, gastoDia, ingestao);
+    if (saldoTotal < 0) {
+      return PainelGorduraVisivel(
+        emGanho: true,
+        gramas: gramasGorduraDeKcal(-saldoTotal),
+        mostrarQueimar: false,
+      );
+    }
+    if (saldoTotal > 0) {
+      return PainelGorduraVisivel(
+        emGanho: false,
+        gramas: gramasGorduraDeKcal(saldoTotal),
+        mostrarQueimar: true,
+      );
+    }
     return const PainelGorduraVisivel(
       emGanho: false,
       gramas: 0,
