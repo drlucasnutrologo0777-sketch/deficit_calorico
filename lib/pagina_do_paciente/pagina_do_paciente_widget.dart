@@ -297,8 +297,11 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
           ingestaoPainel,
         );
         final gorduraEmGanho = gorduraPainel.emGanho;
-        final gorduraLabel =
-            gorduraEmGanho ? 'Gordura a ganhar' : 'Gordura a queimar';
+        final gorduraLabel = gorduraEmGanho
+            ? 'Gordura a ganhar'
+            : (gorduraPainel.modoJejumTmb
+                ? 'Gordura que o TMB queima'
+                : 'Gordura a queimar');
         final gorduraValorColor = gorduraEmGanho
             ? const Color(0xFFEF4444)
             : (gorduraPainel.mostrarQueimar

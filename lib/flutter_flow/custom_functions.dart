@@ -314,11 +314,13 @@ class PainelGorduraVisivel {
     required this.emGanho,
     required this.gramas,
     required this.mostrarQueimar,
+    this.modoJejumTmb = false,
   });
 
   final bool emGanho;
   final double gramas;
   final bool mostrarQueimar;
+  final bool modoJejumTmb;
 }
 
 /// Gordura usa saldo real do dia (TMB + gasto − ingestão), não só comida vs TMB.
@@ -344,6 +346,18 @@ PainelGorduraVisivel painelGorduraVisivelDia(
   }
 
   if (ingestao <= tmb && gastoDia <= tmb) {
+    // Jejum / pouca ingestão: TMB (± gasto do dia) menos o que comeu → gordura a queimar.
+    if (ingestao < tmb) {
+      final saldoJejum = painelSaldoCaloricoDia(tmb, gastoDia, ingestao);
+      if (saldoJejum > 0) {
+        return PainelGorduraVisivel(
+          emGanho: false,
+          gramas: gramasGorduraDeKcal(saldoJejum),
+          mostrarQueimar: true,
+          modoJejumTmb: true,
+        );
+      }
+    }
     return const PainelGorduraVisivel(
       emGanho: false,
       gramas: 0,
