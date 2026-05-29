@@ -307,19 +307,25 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
           gastoPainel,
           ingestaoPainel,
         );
+        final gorduraModoBasalTmb = saldoPainel.mostrarTmb &&
+            mostrarTopoTmbAlimentacao;
         final gorduraLabel =
             gorduraEmGanho ? 'Gordura a ganhar' : 'Gordura a queimar';
         final gorduraGramasTexto = gorduraPainel.gramas.toStringAsFixed(0);
         final gorduraValorColor = gorduraEmGanho
             ? const Color(0xFFEF4444)
-            : (gorduraPainel.mostrarQueimar
-                ? const Color(0xFF2DDE58)
-                : const Color(0xFF5A5A5E));
+            : (gorduraModoBasalTmb
+                ? const Color(0xFFC6A969)
+                : (gorduraPainel.mostrarQueimar
+                    ? const Color(0xFF2DDE58)
+                    : const Color(0xFF5A5A5E)));
         final gorduraUnidadeColor = gorduraEmGanho
             ? const Color(0xFFEF4444)
-            : (gorduraPainel.mostrarQueimar
-                ? const Color(0xFF0EDC63)
-                : const Color(0xFF5A5A5E));
+            : (gorduraModoBasalTmb
+                ? const Color(0xFFC6A969)
+                : (gorduraPainel.mostrarQueimar
+                    ? const Color(0xFF0EDC63)
+                    : const Color(0xFF5A5A5E)));
         final deficitValorColor = saldoPainel.modoVermelho
             ? const Color(0xFFEF4444)
             : (saldoPainel.modoVerde

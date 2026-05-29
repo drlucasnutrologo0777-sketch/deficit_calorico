@@ -324,6 +324,13 @@ double painelGorduraOcultaTmbGrams(double tmb) {
   return tmb / 9;
 }
 
+/// Gordura do TMB que estava oculta: diminui conforme a ingestão sobe.
+double painelGorduraBasalVisivelGrams(double tmb, double ingestao) {
+  final restante =
+      painelGorduraOcultaTmbGrams(tmb) - gramasGorduraDeKcal(ingestao);
+  return restante > 0 ? restante : 0;
+}
+
 class PainelGorduraVisivel {
   const PainelGorduraVisivel({
     required this.emGanho,
@@ -349,7 +356,7 @@ double painelTopoGorduraTmbMenosAlimentacao(
   if (!painelUsaTmbMenosAlimentacao(tmb, gastoDia, ingestao)) {
     return 0;
   }
-  return gramasGorduraDeKcal(painelKcalTmbMenosAlimentacao(tmb, ingestao));
+  return painelGorduraBasalVisivelGrams(tmb, ingestao);
 }
 
 /// Card: gordura a queimar do TMB enquanto ingestão < TMB; depois atividade + alimentação.
@@ -375,11 +382,12 @@ PainelGorduraVisivel painelGorduraVisivelDia(
   }
 
   if (painelUsaTmbMenosAlimentacao(tmb, gastoDia, ingestao)) {
-    final kcal = painelKcalTmbMenosAlimentacao(tmb, ingestao);
     return PainelGorduraVisivel(
       emGanho: false,
-      gramas: gramasGorduraDeKcal(kcal),
+      gramas: painelGorduraBasalVisivelGrams(tmb, ingestao),
       mostrarQueimar: true,
+      modoJejumTmb: true,
+      kcalTmbMenosIngestao: painelKcalTmbMenosAlimentacao(tmb, ingestao),
     );
   }
 
