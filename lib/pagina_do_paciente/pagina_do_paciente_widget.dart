@@ -693,73 +693,61 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
                                                     vertical: 2,
                                                   ),
                                                   child: mostrarTopoTmbAlimentacao
-                                                      ? FittedBox(
-                                                          fit: BoxFit.scaleDown,
-                                                          alignment: Alignment
-                                                              .centerLeft,
-                                                          child: Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .min,
+                                                      ? Text.rich(
+                                                          TextSpan(
+                                                            style: GoogleFonts
+                                                                .inter(
+                                                              fontSize: 11.5,
+                                                              height: 1.35,
+                                                            ),
                                                             children: [
-                                                              Text(
-                                                                'TMB ${tmbPainel.toStringAsFixed(0)}',
-                                                                style: GoogleFonts
-                                                                    .inter(
-                                                                  color: const Color(
+                                                              TextSpan(
+                                                                text:
+                                                                    'TMB ${tmbPainel.toStringAsFixed(0)}: ',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: Color(
                                                                       0xFFC6A969),
-                                                                  fontSize:
-                                                                      12.0,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w700,
                                                                 ),
                                                               ),
-                                                              Text(
-                                                                '  ·  ',
-                                                                style: GoogleFonts
-                                                                    .inter(
-                                                                  color: const Color(
-                                                                      0xFF5A5A5E),
-                                                                  fontSize:
-                                                                      12.0,
-                                                                ),
-                                                              ),
-                                                              Text(
-                                                                'Gordura a queimar (TMB − alimentação)',
-                                                                style: GoogleFonts
-                                                                    .inter(
-                                                                  color: const Color(
+                                                              const TextSpan(
+                                                                text:
+                                                                    'sua taxa metabólica basal tem potencial de queimar ',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Color(
                                                                       0xFFA1A1A6),
-                                                                  fontSize:
-                                                                      11.0,
                                                                 ),
                                                               ),
-                                                              Text(
-                                                                '  ·  ',
-                                                                style: GoogleFonts
-                                                                    .inter(
-                                                                  color: const Color(
-                                                                      0xFF5A5A5E),
-                                                                  fontSize:
-                                                                      12.0,
-                                                                ),
-                                                              ),
-                                                              Text(
-                                                                '${topoGorduraGramas.toStringAsFixed(0)} g',
-                                                                style: GoogleFonts
-                                                                    .inter(
-                                                                  color: const Color(
+                                                              TextSpan(
+                                                                text:
+                                                                    '${topoGorduraGramas.toStringAsFixed(0)} g',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: Color(
                                                                       0xFF30D158),
-                                                                  fontSize:
-                                                                      12.0,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .w700,
+                                                                ),
+                                                              ),
+                                                              const TextSpan(
+                                                                text:
+                                                                    ' de gordura em repouso e em jejum.',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Color(
+                                                                      0xFFA1A1A6),
                                                                 ),
                                                               ),
                                                             ],
                                                           ),
+                                                          maxLines: 3,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
                                                         )
                                                       : Row(
                                                           mainAxisSize:
