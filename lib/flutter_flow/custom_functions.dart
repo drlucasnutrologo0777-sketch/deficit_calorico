@@ -215,7 +215,9 @@ class PainelSaldoExibido {
 }
 
 /// Linha inferior: TMB só enquanto gasto e ingestão ≤ TMB.
-/// Ultrapassou → some o TMB; verde = gasto − TMB; vermelho = ingestão − TMB.
+/// Gasto > TMB → verde = gasto − TMB.
+/// Ingestão > TMB → vermelho só se o dia fechar em superávit (TMB+gasto−ingestão < 0).
+/// Comeu acima da TMB mas gasto compensou → verde com saldo real do dia.
 PainelSaldoExibido painelSaldoExibidoDia(
   double tmb,
   double gastoDia,
@@ -223,43 +225,52 @@ PainelSaldoExibido painelSaldoExibidoDia(
 ) {
   final saldoTotal = painelSaldoCaloricoDia(tmb, gastoDia, ingestao);
 
-  if (tmb > 0 && ingestao > tmb) {
-    if (saldoTotal < 0) {
-      return PainelSaldoExibido(
-        mostrarTmb: false,
-        valorKcal: saldoTotal,
-        rotulo: 'Déficit calórico atual',
-        modoVermelho: true,
-        modoVerde: false,
-      );
-    }
-    return PainelSaldoExibido(
-      mostrarTmb: false,
-      valorKcal: ingestao - tmb,
-      rotulo: 'Déficit calórico atual',
-      modoVermelho: true,
-      modoVerde: false,
-    );
-  }
-
-  if (tmb > 0 && gastoDia > tmb) {
-    final exibido = gastoDia - tmb;
-    return PainelSaldoExibido(
-      mostrarTmb: false,
-      valorKcal: exibido,
-      rotulo: 'Déficit calórico atual',
-      modoVermelho: false,
-      modoVerde: true,
-    );
-  }
-
-  if (tmb > 0) {
+  if (tmb > 0 && ingestao <= tmb && gastoDia <= tmb) {
     return PainelSaldoExibido(
       mostrarTmb: true,
       valorKcal: tmb,
       rotulo: 'Déficit calórico atual',
       modoVermelho: false,
       modoVerde: false,
+    );
+  }
+
+  if (tmb > 0 && gastoDia > tmb && ingestao <= tmb) {
+    return PainelSaldoExibido(
+      mostrarTmb: false,
+      valorKcal: gastoDia - tmb,
+      rotulo: 'Déficit calórico atual',
+      modoVermelho: false,
+      modoVerde: true,
+    );
+  }
+
+  if (tmb > 0 && ingestao > tmb) {
+    if (saldoTotal > 0) {
+      return PainelSaldoExibido(
+        mostrarTmb: false,
+        valorKcal: saldoTotal,
+        rotulo: 'Déficit calórico atual',
+        modoVermelho: false,
+        modoVerde: true,
+      );
+    }
+    return PainelSaldoExibido(
+      mostrarTmb: false,
+      valorKcal: saldoTotal,
+      rotulo: 'Superávit calórico atual',
+      modoVermelho: true,
+      modoVerde: false,
+    );
+  }
+
+  if (tmb > 0 && gastoDia > tmb) {
+    return PainelSaldoExibido(
+      mostrarTmb: false,
+      valorKcal: gastoDia - tmb,
+      rotulo: 'Déficit calórico atual',
+      modoVermelho: false,
+      modoVerde: true,
     );
   }
 
@@ -310,8 +321,7 @@ class PainelGorduraVisivel {
   final bool mostrarQueimar;
 }
 
-/// Gordura a ganhar se ingestão > TMB.
-/// Gordura a queimar (verde) se gasto > TMB — mesma base: gasto − TMB.
+/// Gordura usa saldo real do dia (TMB + gasto − ingestão), não só comida vs TMB.
 PainelGorduraVisivel painelGorduraVisivelDia(
   double tmb,
   double gastoDia,
@@ -333,18 +343,36 @@ PainelGorduraVisivel painelGorduraVisivelDia(
     );
   }
 
-  if (ingestao > tmb) {
-    return PainelGorduraVisivel(
-      emGanho: true,
-      gramas: gramasGorduraDeKcal(ingestao - tmb),
+  if (ingestao <= tmb && gastoDia <= tmb) {
+    return const PainelGorduraVisivel(
+      emGanho: false,
+      gramas: 0,
       mostrarQueimar: false,
     );
   }
 
-  if (gastoDia > tmb) {
+  final saldoTotal = painelSaldoCaloricoDia(tmb, gastoDia, ingestao);
+
+  if (saldoTotal < 0) {
+    return PainelGorduraVisivel(
+      emGanho: true,
+      gramas: gramasGorduraDeKcal(-saldoTotal),
+      mostrarQueimar: false,
+    );
+  }
+
+  if (gastoDia > tmb && ingestao <= tmb) {
     return PainelGorduraVisivel(
       emGanho: false,
       gramas: gramasGorduraDeKcal(gastoDia - tmb),
+      mostrarQueimar: true,
+    );
+  }
+
+  if (saldoTotal > 0) {
+    return PainelGorduraVisivel(
+      emGanho: false,
+      gramas: gramasGorduraDeKcal(saldoTotal),
       mostrarQueimar: true,
     );
   }
