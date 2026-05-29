@@ -302,6 +302,11 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
             : (gorduraPainel.modoJejumTmb
                 ? 'Gordura que o TMB queima'
                 : 'Gordura a queimar');
+        final gorduraSubtitulo = gorduraPainel.modoJejumTmb
+            ? 'por TMB − alimentação'
+            : null;
+        final mostrarTmbMenosAlimentacao = gorduraPainel.modoJejumTmb &&
+            gorduraPainel.kcalTmbMenosIngestao > 0;
         final gorduraValorColor = gorduraEmGanho
             ? const Color(0xFFEF4444)
             : (gorduraPainel.mostrarQueimar
@@ -760,6 +765,22 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
                                                   ),
                                                 ),
                                               ),
+                                              if (mostrarTmbMenosAlimentacao)
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 4.0),
+                                                  child: Text(
+                                                    '${tmbPainel.toStringAsFixed(0)} − ${ingestaoPainel.toStringAsFixed(0)} = ${gorduraPainel.kcalTmbMenosIngestao.toStringAsFixed(0)} kcal',
+                                                    style: GoogleFonts.inter(
+                                                      color: const Color(
+                                                          0xFF30D158),
+                                                      fontSize: 12.0,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
                                             ],
                                           ),
                                         ),
@@ -1208,6 +1229,26 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
                                                             fontSize: 12.0,
                                                           ),
                                                     ),
+                                                    if (gorduraSubtitulo != null)
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets.only(
+                                                                top: 2.0),
+                                                        child: Text(
+                                                          gorduraSubtitulo,
+                                                          maxLines: 1,
+                                                          textAlign:
+                                                              TextAlign.end,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: GoogleFonts
+                                                              .inter(
+                                                            color: const Color(
+                                                                0xFF5A5A5E),
+                                                            fontSize: 10.0,
+                                                          ),
+                                                        ),
+                                                      ),
                                                     FittedBox(
                                                       fit: BoxFit.scaleDown,
                                                       alignment:
