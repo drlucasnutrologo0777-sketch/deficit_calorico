@@ -118,9 +118,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       ..listen((user) {
         _appStateNotifier.update(user);
       });
-    jwtTokenStream.listen((_) {});
-    _appStateNotifier.startShowingSplashImage();
-    Future.delayed(
+    jwtTokenStream.listen((_) {});    Future.delayed(
       const Duration(milliseconds: 600),
       () => _appStateNotifier.stopShowingSplashImage(),
     );
