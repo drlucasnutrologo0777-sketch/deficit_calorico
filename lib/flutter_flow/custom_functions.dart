@@ -344,6 +344,8 @@ double painelGorduraQueimarTmbGrams(
   return painelGorduraBasalVisivelGrams(tmb, ingestao);
 }
 
+/// Gordura do TMB que estava oculta: diminui conforme a ingestão sobe.
+double painelGorduraBasalVisivelGrams(double tmb, double ingestao) {
   final restante =
       painelGorduraOcultaTmbGrams(tmb) - gramasGorduraDeKcal(ingestao);
   return restante > 0 ? restante : 0;
