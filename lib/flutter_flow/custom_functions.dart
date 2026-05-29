@@ -367,7 +367,7 @@ class PainelGorduraVisivel {
   final double kcalTmbMenosIngestao;
 }
 
-/// Gramas só para a linha extra abaixo do nome (TMB − alimentação).
+/// Linha abaixo do nome: potencial fixo do TMB (TMB÷9), sem exibir TMB−ingestão.
 double painelTopoGorduraTmbMenosAlimentacao(
   double tmb,
   double gastoDia,
@@ -376,7 +376,7 @@ double painelTopoGorduraTmbMenosAlimentacao(
   if (!painelUsaTmbMenosAlimentacao(tmb, gastoDia, ingestao)) {
     return 0;
   }
-  return painelGorduraBasalVisivelGrams(tmb, ingestao);
+  return painelGorduraOcultaTmbGrams(tmb);
 }
 
 /// Card: gordura a queimar do TMB enquanto ingestão < TMB; depois atividade + alimentação.
