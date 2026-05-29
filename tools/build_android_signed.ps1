@@ -38,20 +38,21 @@ try {
     if ($shaVal -eq $wrongSha1) { throw "CERTIFICADO ERRADO 75:B4" }
     if ($shaVal -ne $playSha1) { throw "SHA1 errado: $shaVal" }
 
-    $dest = Join-Path $desktop "ENVIAR-NA-PLAY-130-86-2A.aab"
+    $dest = Join-Path $desktop "ENVIAR-NA-PLAY-build${buildNum}-$(Get-Date -Format 'yyyyMMdd-HHmm').aab"
     Copy-Item $signed $dest -Force
 
+    $aabName = Split-Path $dest -Leaf
     @"
 UNICO ARQUIVO PARA A PLAY STORE
 ================================
-ENVIAR-NA-PLAY-130-86-2A.aab
+$aabName
 build: $buildNum
 SHA1: $playSha1
 
 PASSOS:
 1. Play Console > apague o rascunho inteiro
 2. Nova versao
-3. Envie SOMENTE: ENVIAR-NA-PLAY-130-86-2A.aab
+3. Envie SOMENTE: $aabName
 
 Se der erro 75:B4 voce escolheu arquivo errado.
 Arquivos antigos estao em: Downloads\NAO-ENVIAR-75B4
