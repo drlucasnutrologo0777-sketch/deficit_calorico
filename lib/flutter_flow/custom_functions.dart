@@ -214,10 +214,17 @@ class PainelSaldoExibido {
   final bool modoVerde;
 }
 
-/// Linha inferior: TMB só enquanto gasto e ingestão ≤ TMB.
-/// Gasto > TMB → verde = gasto − TMB.
-/// Ingestão > TMB → vermelho só se o dia fechar em superávit (TMB+gasto−ingestão < 0).
-/// Comeu acima da TMB mas gasto compensou → verde com saldo real do dia.
+/// TMB − alimentação só enquanto a ingestão do dia está **abaixo** da TMB.
+bool painelUsaTmbMenosAlimentacao(
+  double tmb,
+  double gastoDia,
+  double ingestao,
+) {
+  return tmb > 0 && ingestao < tmb && gastoDia <= tmb;
+}
+
+/// Linha inferior: TMB dourado só com ingestão abaixo da TMB.
+/// Ingestão ≥ TMB → déficit/gordura por atividade + alimentação (saldo do dia).
 PainelSaldoExibido painelSaldoExibidoDia(
   double tmb,
   double gastoDia,
@@ -225,7 +232,7 @@ PainelSaldoExibido painelSaldoExibidoDia(
 ) {
   final saldoTotal = painelSaldoCaloricoDia(tmb, gastoDia, ingestao);
 
-  if (tmb > 0 && ingestao <= tmb && gastoDia <= tmb) {
+  if (painelUsaTmbMenosAlimentacao(tmb, gastoDia, ingestao)) {
     return PainelSaldoExibido(
       mostrarTmb: true,
       valorKcal: tmb,
@@ -325,7 +332,19 @@ class PainelGorduraVisivel {
   final double kcalTmbMenosIngestao;
 }
 
-/// Gordura usa saldo real do dia (TMB + gasto − ingestão), não só comida vs TMB.
+/// Gramas só para a linha extra abaixo do nome (TMB − alimentação).
+double painelTopoGorduraTmbMenosAlimentacao(
+  double tmb,
+  double gastoDia,
+  double ingestao,
+) {
+  if (!painelUsaTmbMenosAlimentacao(tmb, gastoDia, ingestao)) {
+    return 0;
+  }
+  return gramasGorduraDeKcal(tmb - ingestao);
+}
+
+/// Card do painel: lógica original (atividade + alimentação).
 PainelGorduraVisivel painelGorduraVisivelDia(
   double tmb,
   double gastoDia,
@@ -348,20 +367,6 @@ PainelGorduraVisivel painelGorduraVisivelDia(
   }
 
   if (ingestao <= tmb && gastoDia <= tmb) {
-    // Jejum / pouca ingestão: TMB (± gasto do dia) menos o que comeu → gordura a queimar.
-    if (ingestao < tmb) {
-      final saldoJejum = painelSaldoCaloricoDia(tmb, gastoDia, ingestao);
-      final kcalTmbAlimentacao = tmb - ingestao;
-      if (saldoJejum > 0) {
-        return PainelGorduraVisivel(
-          emGanho: false,
-          gramas: gramasGorduraDeKcal(saldoJejum),
-          mostrarQueimar: true,
-          modoJejumTmb: true,
-          kcalTmbMenosIngestao: kcalTmbAlimentacao,
-        );
-      }
-    }
     return const PainelGorduraVisivel(
       emGanho: false,
       gramas: 0,

@@ -297,13 +297,19 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
           ingestaoPainel,
         );
         final gorduraEmGanho = gorduraPainel.emGanho;
+        final mostrarTopoTmbAlimentacao = functions.painelUsaTmbMenosAlimentacao(
+          tmbPainel,
+          gastoPainel,
+          ingestaoPainel,
+        );
+        final topoGorduraGramas = functions.painelTopoGorduraTmbMenosAlimentacao(
+          tmbPainel,
+          gastoPainel,
+          ingestaoPainel,
+        );
         final gorduraLabel =
             gorduraEmGanho ? 'Gordura a ganhar' : 'Gordura a queimar';
-        final gorduraSubtitulo = gorduraPainel.modoJejumTmb
-            ? 'que o TMB queima · TMB − alimentação'
-            : null;
-        final mostrarTmbMenosAlimentacao = gorduraPainel.modoJejumTmb &&
-            gorduraPainel.kcalTmbMenosIngestao > 0;
+        final gorduraGramasTexto = gorduraPainel.gramas.toStringAsFixed(0);
         final gorduraValorColor = gorduraEmGanho
             ? const Color(0xFFEF4444)
             : (gorduraPainel.mostrarQueimar
@@ -314,7 +320,6 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
             : (gorduraPainel.mostrarQueimar
                 ? const Color(0xFF0EDC63)
                 : const Color(0xFF5A5A5E));
-        final gorduraGramasTexto = gorduraPainel.gramas.toStringAsFixed(0);
         final deficitValorColor = saldoPainel.modoVermelho
             ? const Color(0xFFEF4444)
             : (saldoPainel.modoVerde
@@ -664,120 +669,175 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
                                                 borderRadius:
                                                     BorderRadius.circular(6),
                                                 child: Padding(
-                                                  padding: EdgeInsets.symmetric(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
                                                     vertical: 2,
                                                   ),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Text(
-                                                        'TMB: ',
-                                                        style: FlutterFlowTheme
-                                                                .of(context)
-                                                            .bodyMedium
-                                                            .override(
-                                                              font: GoogleFonts
-                                                                  .inter(
-                                                                fontWeight:
-                                                                    FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontWeight,
-                                                                fontStyle:
-                                                                    FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontStyle,
+                                                  child: mostrarTopoTmbAlimentacao
+                                                      ? FittedBox(
+                                                          fit: BoxFit.scaleDown,
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              Text(
+                                                                'TMB ${tmbPainel.toStringAsFixed(0)}',
+                                                                style: GoogleFonts
+                                                                    .inter(
+                                                                  color: const Color(
+                                                                      0xFFC6A969),
+                                                                  fontSize:
+                                                                      12.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                ),
                                                               ),
-                                                              color: Color(
-                                                                  0xFFA1A1A6),
-                                                              fontSize: 13.0,
-                                                              letterSpacing:
-                                                                  0.0,
-                                                            ),
-                                                      ),
-                                                      Text(
-                                                        tmbPainel > 0
-                                                            ? tmbPainel
-                                                                .toStringAsFixed(
-                                                                    0)
-                                                            : 'Calcular',
-                                                        style: FlutterFlowTheme
-                                                                .of(context)
-                                                            .bodyMedium
-                                                            .override(
-                                                              font: GoogleFonts
-                                                                  .inter(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
+                                                              Text(
+                                                                '  ·  ',
+                                                                style: GoogleFonts
+                                                                    .inter(
+                                                                  color: const Color(
+                                                                      0xFF5A5A5E),
+                                                                  fontSize:
+                                                                      12.0,
+                                                                ),
                                                               ),
-                                                              color: tmbPainel >
-                                                                      0
-                                                                  ? Color(
-                                                                      0xFFC6A969)
-                                                                  : Colors
-                                                                      .white,
-                                                              fontSize: 13.0,
-                                                              letterSpacing:
-                                                                  0.0,
-                                                            ),
-                                                      ),
-                                                      Text(
-                                                        tmbPainel > 0
-                                                            ? ' kcal'
-                                                            : '',
-                                                        style: FlutterFlowTheme
-                                                                .of(context)
-                                                            .bodyMedium
-                                                            .override(
-                                                              font: GoogleFonts
-                                                                  .inter(
-                                                                fontWeight:
-                                                                    FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontWeight,
+                                                              Text(
+                                                                'Gordura a queimar (TMB − alimentação)',
+                                                                style: GoogleFonts
+                                                                    .inter(
+                                                                  color: const Color(
+                                                                      0xFFA1A1A6),
+                                                                  fontSize:
+                                                                      11.0,
+                                                                ),
                                                               ),
-                                                              color: Color(
-                                                                  0xFFA1A1A6),
-                                                              fontSize: 13.0,
-                                                            ),
-                                                      ),
-                                                      if (tmbPainel <= 0)
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 4),
-                                                          child: Icon(
-                                                            Icons
-                                                                .chevron_right_rounded,
-                                                            size: 16,
-                                                            color: Color(
-                                                                0xFFC6A969),
+                                                              Text(
+                                                                '  ·  ',
+                                                                style: GoogleFonts
+                                                                    .inter(
+                                                                  color: const Color(
+                                                                      0xFF5A5A5E),
+                                                                  fontSize:
+                                                                      12.0,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                '${topoGorduraGramas.toStringAsFixed(0)} g',
+                                                                style: GoogleFonts
+                                                                    .inter(
+                                                                  color: const Color(
+                                                                      0xFF30D158),
+                                                                  fontSize:
+                                                                      12.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
+                                                        )
+                                                      : Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            Text(
+                                                              'TMB: ',
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    font: GoogleFonts
+                                                                        .inter(
+                                                                      fontWeight:
+                                                                          FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontWeight,
+                                                                      fontStyle:
+                                                                          FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontStyle,
+                                                                    ),
+                                                                    color: const Color(
+                                                                        0xFFA1A1A6),
+                                                                    fontSize:
+                                                                        13.0,
+                                                                    letterSpacing:
+                                                                        0.0,
+                                                                  ),
+                                                            ),
+                                                            Text(
+                                                              tmbPainel > 0
+                                                                  ? tmbPainel
+                                                                      .toStringAsFixed(
+                                                                          0)
+                                                                  : 'Calcular',
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    font: GoogleFonts
+                                                                        .inter(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                    ),
+                                                                    color: tmbPainel >
+                                                                            0
+                                                                        ? const Color(
+                                                                            0xFFC6A969)
+                                                                        : Colors
+                                                                            .white,
+                                                                    fontSize:
+                                                                        13.0,
+                                                                    letterSpacing:
+                                                                        0.0,
+                                                                  ),
+                                                            ),
+                                                            Text(
+                                                              tmbPainel > 0
+                                                                  ? ' kcal'
+                                                                  : '',
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    font: GoogleFonts
+                                                                        .inter(
+                                                                      fontWeight:
+                                                                          FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontWeight,
+                                                                    ),
+                                                                    color: const Color(
+                                                                        0xFFA1A1A6),
+                                                                    fontSize:
+                                                                        13.0,
+                                                                  ),
+                                                            ),
+                                                            if (tmbPainel <= 0)
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                    left: 4),
+                                                                child: Icon(
+                                                                  Icons
+                                                                      .chevron_right_rounded,
+                                                                  size: 16,
+                                                                  color: const Color(
+                                                                      0xFFC6A969),
+                                                                ),
+                                                              ),
+                                                          ],
                                                         ),
-                                                    ],
-                                                  ),
                                                 ),
                                               ),
-                                              if (mostrarTmbMenosAlimentacao)
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 4.0),
-                                                  child: Text(
-                                                    '${tmbPainel.toStringAsFixed(0)} − ${ingestaoPainel.toStringAsFixed(0)} = ${gorduraPainel.kcalTmbMenosIngestao.toStringAsFixed(0)} kcal',
-                                                    style: GoogleFonts.inter(
-                                                      color: const Color(
-                                                          0xFF30D158),
-                                                      fontSize: 12.0,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
-                                                  ),
-                                                ),
                                             ],
                                           ),
                                         ),
@@ -1226,26 +1286,6 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
                                                             fontSize: 12.0,
                                                           ),
                                                     ),
-                                                    if (gorduraSubtitulo != null)
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets.only(
-                                                                top: 2.0),
-                                                        child: Text(
-                                                          gorduraSubtitulo,
-                                                          maxLines: 1,
-                                                          textAlign:
-                                                              TextAlign.end,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: GoogleFonts
-                                                              .inter(
-                                                            color: const Color(
-                                                                0xFF5A5A5E),
-                                                            fontSize: 10.0,
-                                                          ),
-                                                        ),
-                                                      ),
                                                     FittedBox(
                                                       fit: BoxFit.scaleDown,
                                                       alignment:
