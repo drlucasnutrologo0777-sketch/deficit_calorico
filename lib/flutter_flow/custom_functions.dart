@@ -214,7 +214,12 @@ class PainelSaldoExibido {
   final bool modoVerde;
 }
 
-/// TMB − alimentação só enquanto a ingestão do dia está **abaixo** da TMB.
+/// Aviso educativo abaixo do nome: sempre que houver TMB (fixo, como o valor da TMB).
+bool painelMostraAvisoTopoTmb(double tmb) {
+  return tmb > 0;
+}
+
+/// TMB − alimentação: só para lógica do card (ingestão < TMB e gasto ≤ TMB).
 bool painelUsaTmbMenosAlimentacao(
   double tmb,
   double gastoDia,
@@ -367,13 +372,13 @@ class PainelGorduraVisivel {
   final double kcalTmbMenosIngestao;
 }
 
-/// Linha abaixo do nome: potencial fixo do TMB (TMB÷9), sem exibir TMB−ingestão.
+/// Linha abaixo do nome: potencial fixo do TMB (TMB÷9), igual ao valor da TMB.
 double painelTopoGorduraTmbMenosAlimentacao(
   double tmb,
   double gastoDia,
   double ingestao,
 ) {
-  if (!painelUsaTmbMenosAlimentacao(tmb, gastoDia, ingestao)) {
+  if (!painelMostraAvisoTopoTmb(tmb)) {
     return 0;
   }
   return painelGorduraOcultaTmbGrams(tmb);

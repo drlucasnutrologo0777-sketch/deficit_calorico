@@ -297,11 +297,8 @@ class _PaginaDoPacienteWidgetState extends State<PaginaDoPacienteWidget> {
           ingestaoPainel,
         );
         final gorduraEmGanho = gorduraPainel.emGanho;
-        final mostrarTopoTmbAlimentacao = functions.painelUsaTmbMenosAlimentacao(
-          tmbPainel,
-          gastoPainel,
-          ingestaoPainel,
-        );
+        final mostrarTopoTmbAlimentacao =
+            functions.painelMostraAvisoTopoTmb(tmbPainel);
         final topoGorduraGramas = functions.painelTopoGorduraTmbMenosAlimentacao(
           tmbPainel,
           gastoPainel,
